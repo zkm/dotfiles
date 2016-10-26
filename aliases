@@ -1,0 +1,10 @@
+# Unix
+alias c="clear"
+alias ll="ls -al"
+
+# TMUX
+alias tl='tmux list-sessions'
+alias tk='tmux kill-session -t'
+
+# Set neovim as vim
+# alias vim='nvim'
