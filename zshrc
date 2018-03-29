@@ -1,6 +1,7 @@
 export ZSH=~/.oh-my-zsh
 ZSH_THEME="corvae-ruby"
-plugins=(git)
+plugins=(git git-extras jira jsontools last-working-dir sudo httpie nvm-auto brew)
+
 export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 source $ZSH/oh-my-zsh.sh
 
