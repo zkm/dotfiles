@@ -1,22 +1,36 @@
-export ZSH=~/.oh-my-zsh
-ZSH_THEME="corvae-ruby"
-plugins=(git git-extras jira jsontools last-working-dir sudo httpie nvm-auto brew)
+# Load configs
+for config in ~/.zsh/configs/*; do
+  source $config
+done
 
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-source $ZSH/oh-my-zsh.sh
+# Load functions
+for function in ~/.zsh/functions/*; do
+  source $function
+done
 
-export PATH="$PATH:/usr/local/sbin:$PATH"
+# Add dotfiles bin to path
+export PATH=$PATH:~/dotfiles/bin
 
-alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
-alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
-alias killFinder='killall Finder /System/Library/CoreServices/Finder.app'
-alias gx='open -a GitX .'
-alias rsrd='rails server -e remote_development'
-alias killRuby='pkill -9 ruby'
+# Source aliases.
+[[ -f ~/.aliases ]] && source ~/.aliases
 
-rubies/ruby-2.3.0/bin:~/.rvm/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/MacGPG2/bin:~/.vimpkg/bin
+# Makes color constants available
+autoload -U colors
+colors
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+# Enable colored output from ls, etc. on FreeBSD-based systems
+export CLICOLOR=1
 
-#PHP Shell Version
-export PATH=/usr/local/php5/bin:$PATH
+# Add .bin to the PATH
+export PATH="$HOME/.bin:$PATH"
+
+# Source fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+autoload -Uz compinit && compinit
+
+# Brew Install. /usr/local/opt/asdf/libexec/asdf.sh
+# echo -e "\n. $(brew --prefix asdf)/libexec/asdf.sh" >> ${ZDOTDIR:-~}/.zshrc
+# . /usr/local/opt/asdf/libexec/asdf.sh
+#. $HOME/.asdf/asdf.sh
+#. $HOME/.asdf/completions/asdf.bash

@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Find all files, sorted uniquely, that contain a given string.
+
+ag $1 | awk '{ print $1 }' | sed -e 's/[0-9]//g' -e 's/:://g' | uniq | sort;

@@ -5,10 +5,5 @@ git_prompt_info() {
     echo " %{$fg_bold[green]%}$current_branch%{$reset_color%}"
   fi
 }
-
-#setopt promptsubst
-#PS1='${SSH_CONNECTION+"%{$fg_bold[green]%}%n@%m:"}%{$fg_bold[blue]%}%c%{$reset_color%}$(git_prompt_info) %# '
-
-export ZSH=~/.oh-my-zsh
-ZSH_THEME="corvae-ruby"
-source $ZSH/oh-my-zsh.sh
+setopt promptsubst
+PS1='${SSH_CONNECTION+"%{$fg_bold[green]%}%n@%m:"}%{$fg_bold[blue]%}%c%{$reset_color%}$(git_prompt_info) %# '
