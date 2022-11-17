@@ -1,4 +1,4 @@
-call plug#begin('~/.vim/bundle')
+call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
   Plug 'altercation/vim-colors-solarized'
   Plug 'christoomey/vim-system-copy'
   Plug 'christoomey/vim-tmux-navigator'

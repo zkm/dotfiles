@@ -5,3 +5,7 @@ alias ll="ls -al"
 # TMUX
 alias tl='tmux list-sessions'
 alias tk='tmux kill-session -t'
+
+# Neovim
+alias vim="nvim"
+alias vi="nvim"
