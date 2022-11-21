@@ -17,6 +17,8 @@ brew install asdf
 brew install the_silver_searcher
 brew install --cask iterm2
 brew install git
+brew install --cask spectacle
+brew install --cask flycut
 
 echo "set runtimepath^=~/.vim runtimepath+=~/.vim/after" > ~/.config/init.vim
 echo "let &packpath = &runtimepath" >> ~/.config/init.vim

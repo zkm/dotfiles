@@ -33,6 +33,9 @@ export PATH=$PATH:~/dotfiles/bin
 autoload -U colors
 colors
 
+# Enable colored output from ls, etc. on FreeBSD-based systems
+export CLICOLOR=1
+
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
