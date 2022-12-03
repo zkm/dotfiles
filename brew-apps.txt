@@ -1,0 +1,10 @@
+asdf
+the_silver_searcher
+git
+fortune
+cowsay
+ffmpeg
+imagemagick
+tmux
+neovim
+stats
