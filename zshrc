@@ -36,7 +36,7 @@ colors
 # Enable colored output from ls, etc. on FreeBSD-based systems
 export CLICOLOR=1
 
-export NVM_DIR=~/.nvm
+export NVM_DIR="$HOME/.nvm"
 source $(brew --prefix nvm)/nvm.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -45,3 +45,8 @@ source $(brew --prefix nvm)/nvm.sh
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 export PATH="/usr/local/sbin:$PATH"
+
+# Python check
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi

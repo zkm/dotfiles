@@ -9,3 +9,13 @@ alias tk='tmux kill-session -t'
 # Neovim
 alias vim="nvim"
 alias vi="nvim"
+
+# Cake PHP
+alias cake="docker-compose exec -u $(id -u ${USER}):$(id -g ${USER}) php-fpm bin/cake"
+alias fpm="docker-compose exec -u $(id -u ${USER}):$(id -g ${USER}) php-fpm"
+alias phpfpmcomposer="docker-compose exec -u $(id -u ${USER}):$(id -g ${USER}) php-fpm composer"
+
+# Files/Folders 
+alias projects="${HOME}/Projects/"
+alias workspace="${HOME}/Workspace/"
+alias virtualmachines="${HOME}/VMs/"
