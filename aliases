@@ -22,5 +22,9 @@ alias virtualmachines="${HOME}/VMs/"
 
 # Git
 alias g="git"
+alias gco="git checkout"
+alias gb="git branch"
+alias gc="git commit"
+alias gs="git status"
 alias gbpurge='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "staging" | xargs -n 1 git branch -d'
 # git fetch -p && git branch --merged | grep -v '*' | grep -v 'master' | xargs git branch -d
