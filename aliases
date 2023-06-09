@@ -19,6 +19,7 @@ alias phpfpmcomposer="docker-compose exec -u $(id -u ${USER}):$(id -g ${USER}) p
 alias projects="${HOME}/Projects/"
 alias workspace="${HOME}/Workspace/"
 alias virtualmachines="${HOME}/VMs/"
+alias code-library="${HOME}/code-library"
 
 # Git
 alias g="git"

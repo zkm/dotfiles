@@ -1,3 +1,3 @@
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
+typeset -g POWERLEVEL10K_INSTANT_PROMPT=off
 fortune | cowsay -f tux
 
