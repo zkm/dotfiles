@@ -1,0 +1,21 @@
+{
+    "activationMessage": "Su copia de PHP Tools no ha sido activada. Por favor, introduzca su clave de licencia.",
+    "expired": "Su licencia actual ha expirado. Por favor introduzca una nueva clave de licencia.",
+    "enterKey": "Tengo mi clave de licencia",
+    "requestTrial": "Ir a versión de prueba",
+    "trialMail": "Su e-mail",
+    "trialPrompt": "Por favor introduzca su e-mail. Recibirá su clave de licencia en unos minutos. Para más información, por favor visite www.devsense.com",
+    "invalidMail": "El email que ingresó no es válido",
+    "info": "Más información",
+    "purchase": "Compra",
+    "promptText": "Por favor introduzca su clave de licencia. Ésta será activada en línea. Para más información, visite www.devsense.com",
+    "placeHolder": "Clave de licencia",
+    "offlineFailed": "Licencia inválida o vencida.",
+    "serverTimeout": "La conexión con el servidor de activación ha finalizado.",
+    "connectionError": "El servidor de activación no puede ser contactado.",
+    "unknownError": "Error de activación.",
+    "accessDenied": "El servidor de activación no se encuentra disponible en este momento.",
+    "internalError": "Error interno de activación del servidor.",
+    "invalidLicenseKey": "La licencia introducida no es válida.",
+    "activationSucceeded": "Activación exitosa. ¡Gracias por utilizar PHP Tools!"
+}

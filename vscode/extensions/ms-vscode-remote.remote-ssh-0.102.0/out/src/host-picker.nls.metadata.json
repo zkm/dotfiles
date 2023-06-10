@@ -1,0 +1,18 @@
+{
+	"messages": [
+		"Configure SSH Hosts...",
+		"{0} Add New SSH Host...",
+		"Select configured SSH host or enter user@host"
+	],
+	"keys": [
+		"configureHostsTitle",
+		"addHostTitle",
+		{
+			"key": "configureHostsDescription",
+			"comment": [
+				"Translate user@host such that both user and host are translated but joined by an \"@\" sign."
+			]
+		}
+	],
+	"filePath": "src/host-picker"
+}

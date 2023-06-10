@@ -1,0 +1,29 @@
+{
+    "phptools.activate.title": "Aktivovat Licenci",
+    "phptools.requesttrial.title": "Vyzkoušet Premium ...",
+    "phptools.todo.search.title": "Prohledat TODO ...",
+    "phptools.selectPhpVersion.title": "Vybrat verzi PHP ...",
+
+    "capabilities.virtualWorkspaces.description": "Ve virtuální složce, IntelliSense a prohledávání symbolů může být omezené.",
+
+    "activationMessage": "Vaše kopie PHP Tools není aktivována. Prosím zadejte svůj licenční klíč.",
+    "expired": "Vaše aktivace expirovala. Prosím zadejte obnovený licenční klíč.",
+    "enterKey": "Klíč mám",
+    "requestTrial": "Vyzkoušet",
+    "buyLicense": "Koupit",
+    "purchase": "Koupit",
+    "trialMail": "Váš e-mail",
+    "trialPrompt": "Prosím zadejte e-mail. Zkušební klíč obdržíte během okamžiku. Pro více informací navštivte www.devsense.com",
+    "invalidMail": "Zadaný e-mail není správný",
+    "info": "Více informací",
+    "promptText": "Prosím zadejte svůj licenční klíč, bude aktivován online. Pro více informací navštivte www.devsense.com",
+    "placeHolder": "Licenční klíč",
+    "offlineFailed": "Licenční klíč je neplatný nebo expiroval.",
+    "serverTimeout": "Navazování spojení se serverem trvalo příliš dlouho.",
+    "connectionError": "Aktivační server je nedostupný.",
+    "unknownError": "Neznámá chyba.",
+    "accessDenied": "Licenční klíč není povolen.",
+    "internalError": "Aktivační server hlasí vnitřní chybu.",
+    "invalidLicenseKey": "Zadaný licenční klíč je nesprávný.",
+    "activationSucceeded": "Aktivace byla úspěšná! Děkujeme, že používáte PHP Tools."
+}

@@ -1,0 +1,21 @@
+{
+    "activationMessage": "お使いのPHPツールのコピーは有効になっていません。ライセンスキーをご入力してください。",
+    "expired": "現在のお使いのライセンスは期限切れです。新しいライセンスキーをご入力してください。",
+    "enterKey": "ライセンスキーがあります。",
+    "requestTrial": "試用版を受ける",
+    "trialMail": "お客様のメール",
+    "trialPrompt": "お使いのメールアドレスをご入力してください。数分で試用ライセンスキーをご受信します。詳細についてはwww.devsense.comをご覧ください。",
+    "invalidMail": "入力したメールアドレスが無効です",
+    "info": "詳細について",
+    "purchase": "購入する",
+    "promptText": "お使いのライセンスキーをご入力してください。オンラインで有効になります。詳細についてはwww.devsense.comをご覧ください。",
+    "placeHolder": "ライセンスキー",
+    "offlineFailed": "ライセンスが無効または期限切れです。",
+    "serverTimeout": "アクティベーションサーバーへの接続がタイムアウトしました。",
+    "connectionError": "アクティベーションサーバーにアクセスできません。",
+    "unknownError": "起動エラー",
+    "accessDenied": "この時点ではアクティベーションサーバーは利用できません。",
+    "internalError": "アクティベーションサーバーの内部エラー。",
+    "invalidLicenseKey": "入力したメールアドレスが無効です。",
+    "activationSucceeded": "ライセンス認証は成功しました。PHPツールをご利用いただきありがとうございます!"
+}

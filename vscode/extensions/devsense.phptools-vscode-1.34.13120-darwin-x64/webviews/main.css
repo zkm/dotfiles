@@ -1,0 +1,81 @@
+body {
+    background-color: var(--vscode-editor-background);
+}
+
+img {
+    max-width: 100%;
+}
+
+h2, h3, h4 {
+    /*text-decoration: underline;*/
+    text-transform: capitalize;
+    margin: 2em 0;
+}
+
+#subtitle {
+    font-size: 1em;
+    color: var(--vscode-textPreformat-foreground);
+}
+
+#content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2em;
+}
+
+#footer {
+    margin: 0;
+    padding: 1.5em 0;
+    text-align: left;
+}
+
+#btn-activate {
+    vertical-align: middle;
+    margin: 2em 0;
+}
+
+#features {
+    margin: 1em 0.2em;
+    white-space: break-spaces;
+    display: inline;
+}
+
+#features .label {
+    color: var(--vscode-textPreformat-foreground);
+    font-weight: normal;
+}
+
+#features .feature {
+    padding: 0;
+    white-space: nowrap;
+    display: inline;
+}
+
+#features .dimmed {
+    color: var(--vscode-disabledForeground);
+    text-decoration: line-through;
+}
+
+.row {
+    display: flex;
+}
+
+.column {
+    flex: 50%;
+}
+
+.above-footer {
+    margin:2em 0;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.v-middle {
+    vertical-align: middle;
+}
+
+.hidden {
+    display: none;
+}

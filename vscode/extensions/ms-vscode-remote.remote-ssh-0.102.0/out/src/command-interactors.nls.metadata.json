@@ -1,0 +1,15 @@
+{
+	"messages": [
+		"Port forwarding is disabled",
+		"Client-side server download failed",
+		"Client-side server download failed",
+		"Client-side server download failed"
+	],
+	"keys": [
+		"errorPortForwardingDisabled",
+		"errorClientSideServerDownload",
+		"errorClientSideServerDownload",
+		"errorClientSideServerDownload"
+	],
+	"filePath": "src/command-interactors"
+}

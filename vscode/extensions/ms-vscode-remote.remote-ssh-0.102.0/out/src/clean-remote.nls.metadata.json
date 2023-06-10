@@ -1,0 +1,13 @@
+{
+	"messages": [
+		"Killed VS Code Server on {0}.",
+		"Failed to kill VS Code Server on {0}.",
+		"Open Logs"
+	],
+	"keys": [
+		"successKillMessage",
+		"failedKillMessage",
+		"openLogsAction"
+	],
+	"filePath": "src/clean-remote"
+}

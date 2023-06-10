@@ -1,0 +1,1 @@
+{"warnNeverAgainAction":"Nicht mehr anzeigen","nonWindowsSshWarn":"Es wurde keine nicht unter Windows installierte SSH gefunden. Kennwortaufforderungen werden möglicherweise nicht ordnungsgemäß angezeigt! Deaktivieren Sie bei Bedarf `remote.SSH.useLocalServer`.","learnMoreAction":"Weitere Informationen","warnSshInstallNotFound":"Es wurde keine SSH-Installation gefunden"}

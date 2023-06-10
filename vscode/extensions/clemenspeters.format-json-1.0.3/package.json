@@ -1,0 +1,62 @@
+{
+	"name": "format-json",
+	"displayName": "JSON formatter",
+	"version": "1.0.3",
+	"publisher": "ClemensPeters",
+	"description": "Convert file to file type json and format content.",
+	"author": {
+		"name": "Clemens Peters"
+	},
+	"categories": [
+		"Formatters"
+	],
+	"icon": "images/icon.png",
+	"galleryBanner": {
+		"color": "#C80000",
+		"theme": "dark"
+	},
+	"activationEvents": [
+		"onCommand:extension.formatJSON"
+	],
+	"engines": {
+		"vscode": "^1.44.0"
+	},
+	"main": "./out/extension",
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.formatJSON",
+				"title": "Format JSON"
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "tsc -p ./",
+		"compile": "tsc -watch -p ./"
+	},
+	"devDependencies": {
+		"@types/mocha": "^2.2.32",
+		"@types/node": "^14.14.6",
+		"@types/vscode": "^1.44.0",
+		"mocha": "^2.3.3",
+		"typescript": "^4.0.5",
+		"vsce": "^2.15.0"
+	},
+	"license": "ISC",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/clemenspeters/vscode-extension-format-json.git"
+	},
+	"homepage": "https://github.com/clemenspeters/vscode-extension-format-json/blob/master/README.md",
+	"__metadata": {
+		"id": "4c6c3577-adb4-4059-8588-3a1be7883e98",
+		"publisherId": "8d7d8b28-8993-4047-8b3d-42ba5ead02bb",
+		"publisherDisplayName": "Clemens Peters",
+		"targetPlatform": "undefined",
+		"isApplicationScoped": false,
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"installedTimestamp": 1676341480220,
+		"preRelease": false
+	}
+}

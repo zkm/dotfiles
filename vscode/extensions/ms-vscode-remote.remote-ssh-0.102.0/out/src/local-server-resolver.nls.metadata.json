@@ -1,0 +1,11 @@
+{
+	"messages": [
+		"Waiting for other windows to connect",
+		"Detected Windows host, need to reconnect"
+	],
+	"keys": [
+		"progressWaitOtherWindows",
+		"progressDetectedWindows"
+	],
+	"filePath": "src/local-server-resolver"
+}

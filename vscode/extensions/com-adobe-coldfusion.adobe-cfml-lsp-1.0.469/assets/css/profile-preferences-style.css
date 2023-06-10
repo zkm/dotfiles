@@ -1,0 +1,371 @@
+:root {
+    --bg-color-1: var( --vscode-button-background );
+    --bg-color-2: var( --vscode-dropdown-background );
+    --bg-color-3: var( --vscode-editor-background );
+    --bg-color-4: var( --vscode-menu-separatorBackground );
+    --bg-color-5: var( --vscode-textLink-activeForeground );
+    --fore-color-1: var( --vscode-button-foreground );
+    --fore-color-2: var( --vscode-dropdown-foreground );
+    --fore-color-3: var( --vscode-editor-foreground );
+    --fore-color-4: var( --vscode-editorLink-activeForeground );
+
+    /* --f-size-1: var( --vscode-editor-font-size ); */
+  }
+
+body,
+.card,
+.modal-body,
+.modal-header,
+.modal-footer {
+    background-color: var(--bg-color-3);
+    color: var(--fore-color-3);
+}
+
+button.btn, a.btn:not(.btn-secondary) {
+    background-color: var( --bg-color-1 );
+    color: var( --fore-color-1 );
+    /* border: none; */
+    /* height: 30px; */
+    font-size: var(--vscode-editor-font-size);
+}
+
+.btn.btn-secondary {
+    background-color: var(--bg-color-3);
+}
+
+button.btn:hover, a.btn:hover, .btn-secondary:hover {
+    background-color: var(--vscode-input-placeholderForeground) !important;
+    color: var( --fore-color-2 );
+}
+
+hr {
+    background-color: var(--vscode-menu-separatorBackground);
+}
+
+.nav-pills .nav-link.active {
+    background-color: transparent;
+    color: var( --bg-color-5 ) !important;
+    font-weight: bold;
+    border-bottom: 3px solid var(--bg-color-5) !important;
+    border-radius: 0;
+}
+ul.sub-menus .nav-link.active {
+    color: var( --bg-color-5 ) !important;
+    border: none !important;
+}
+
+#tabs-profilePreferences .nav-pills .nav-link:not(.active),
+#tabs-profilePreferences a:not(.btn-secondary, #createNewProfileBtn, .reloadDictionary),
+.nav-pills .show>.nav-link {
+    color: var(--vscode-settings-textInputForeground) !important;
+    border-color: var(--bg-color-1) !important;
+}
+
+#tabs-profilePreferences a,
+.nav-pills .show>.nav-link {
+    color: var(--fore-color-2) !important;
+}
+
+#tabs-profilePreferences #syntaxColoringKeyWords ul {
+    color: var(--vscode-badge-background) !important;
+    list-style: none;
+    font-weight: bold;
+}
+
+#syntaxColoringKeyWords .caret-down {
+    transform: rotate(90deg);
+}
+
+#tabs-profilePreferences #syntaxColoringKeyWords {
+    max-height: 500px;
+}
+
+#tabs-profilePreferences #syntaxColoringKeyWords i {
+    margin-right: 10px;
+}
+
+#syntaxColoringForm .syntaxColoringMenu {
+    padding-left: 4%;
+}
+
+#tabs-profilePreferences .btn.disabled {
+    color: var(--vscode-input-background) !important;
+    background-color: var(--vscode-foreground);
+    border-color: var(--vscode-foreground);
+}
+
+#tabs-profilePreferences .questionMark:before {
+    content: '?';
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    width: 15px;
+    height: 15px;
+    font-size: 13px;
+    line-height: 1.8ex;
+    border-radius: 50%;
+    padding: 1px;
+    color: var(--vscode-scrollbar-shadow);
+    background: var(--vscode-inputOption-activeForeground);
+}
+
+#tabs-profilePreferences a#restoreBtn,
+#confirmChangeActiveProfile a,
+#createNewProfileSection a:not( .btn-secondary ),
+#createNewProfileBtn, .reloadDictionary,
+.reloadDict {
+    background-color: var(--bg-color-1);
+    border-color: var(--bg-color-1) !important;
+    color: var(--vscode-inputOption-activeForeground) !important;
+}
+
+#tabs-profilePreferences .removeBtn {
+    color: var(--vscode-foreground) !important;
+}
+
+#tabs-profilePreferences button.btn:not(.btn-primary) {
+    background-color: var(--vscode-input-background) !important;
+    height: 100% !important;
+    color: var(--fore-color-2) !important;
+    border: 1px solid;
+}
+
+#tabs-profilePreferences .selectedTagList,
+#tabs-profilePreferences .keyWordSection {
+    background-color: var(--vscode-list-hoverBackground) !important;
+}
+
+.form-check {
+    padding-left: 2.5em;
+}
+
+
+
+#addEditorChanges hr {
+    margin: 0.5rem !important;
+}
+
+.codeAssistDicVersion, .charToUseWhenQuoteAttribute {
+    padding-left: 25px !important;
+}
+
+.autoQuoteAttribute {
+    margin-left: 12px;
+}
+
+#endtagonnewline, #xmlstyletaglist {
+    height: 200px !important;
+}
+
+.charQuoteAttribute {
+    display: contents;
+}
+.subHeaderLabel {
+    padding: 1px 0px 5px 10px;
+}
+.innerSubLabel {
+    font-size: 90%;
+}
+
+div.flex-column {
+    border-radius: 20px;
+    background-color: var(--vscode-input-background);
+    padding: 0px 0px 0px 20px;
+    width: auto;
+    height: 455px;
+    color: var(--vscode-input-background);
+}
+
+div.flex-column>.nav-link {
+    padding: 0;
+    color: var(--fore-color-3) !important;
+}
+
+#pills-formatter .tab-content {
+    margin-top: 0px !important;
+    border-radius: 20px;
+    background-color: var(--bg-color-3);
+    padding: 15px;
+    font-size: var(--vscode-font-size);
+}
+
+#tab-controls {
+    border-radius: 20px;
+    background-color: var(--bg-color-3);
+}
+
+.tab-content>textarea {
+    resize: vertical;
+    min-height: 430px;
+}
+
+#general-code-block {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.hide,
+.dropdown-toggle:after,
+.preview-prev {
+    display: none;
+}
+
+.show {
+    display: block !important;
+}
+
+.dots {
+    width: 18px;
+    height: 2px;
+    background: var(--vscode-settings-textInputForeground);
+    margin: 10px 0 0 3px;
+}
+
+.dots:before {
+    display: block;
+    content: "";
+    width: 18px;
+    height: 2px;
+    box-shadow: 0 -4px 0 0 var(--vscode-settings-textInputForeground), 0 4px 0 0 var(--vscode-settings-textInputForeground);
+}
+
+.moreActions {
+    padding: .2rem 0 .5rem 0 !important;
+}
+
+.scrollBar {
+    height: 160px;
+    overflow-x: scroll;
+    overflow-y: scroll;
+}
+
+.disableOutlineView {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.outLineView {
+    display: contents;
+}
+
+.outlineTagListArea {
+    background-color: var(--vscode-inputOption-activeForeground);
+    color: var(--vscode-input-background);
+    height: 250px !important;
+    margin-top: 5px;
+    overflow-y: scroll;
+}
+
+#taglist {
+    list-style-type: none;
+}
+
+.outlineTagIcon {
+    height: 25px;
+    background: url("../icons/profile-preferences/outline_tag.gif") no-repeat left;
+    padding: 0px 20px 4px 20px;
+}
+
+span.label.active,
+span.label:hover {
+    background-color: var(--vscode-foreground);
+    color: var(--bg-color-3);
+    border-radius: 3px;
+}
+
+.closeBtn,
+#syntaxColoringKeyWords ul {
+    cursor: pointer !important;
+}
+
+button.btn {
+    min-width: 85px;
+}
+
+.btnGray {
+    border: none;
+}
+
+.CodeMirror {
+    height: 430px !important;
+}
+
+#pills-tab .dropdown-menu,
+.sub-menus.nav-link.active,
+.sub-menus.show>.nav-link{
+    background-color: var( --vscode-quickInput-background ) !important;
+}
+
+/* .dropdown-item.active,
+.dropdown-item:active {
+    background-color: var( --bg-color-1 ) !important;
+    color: var( --fore-color-1 ) !important;
+} */
+
+.codeAssistDelay {
+    margin-left: 16px;
+}
+
+.validateInput {
+    min-width: 60px;
+}
+
+
+.dropbtn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropbtn:hover,
+.dropbtn:focus {
+    background-color: #3e8e41;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-content > .scroll {
+    position: absolute;
+    background-color: var( --vscode-editorWidget-background );
+    z-index: 15;
+}
+
+.dropdown-content label {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown label:hover {
+    background-color: var(--vscode-checkbox-foreground);
+}
+.findLabels:hover{
+    background-color: var(--vscode-textLink-foreground);
+    cursor: pointer;
+}
+
+div.scroll {
+    max-height: 230px;
+    overflow: auto;
+}
+
+.mark{
+    background-color: var( --vscode-searchEditor-findMatchBackground );
+    color: var(--vscode-foreground );
+}
+.scrollBar .form-check .form-check-label {
+    transition: all 1.0s ease-out 0s;
+}
+
+.vscode-high-contrast .mark{
+    border: 1px dashed #f38518;
+}
+
+.vscode-high-contrast-light .mark {
+    border:1px dashed #0f4a85;
+}

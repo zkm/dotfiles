@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+		<Metadata>
+			<Identity Language="en-US" Id="adobe-cfml-lsp" Version="1.0.469" Publisher="com-adobe-coldfusion" />
+			<DisplayName>Adobe ColdFusion Builder</DisplayName>
+			<Description xml:space="preserve">Extension to help ColdFusion developers to manage projects, debug code, scan files for vulnerabilities and much more.</Description>
+			<Tags>cfml,keybindings,linters,debuggers,Adobe,theme,icon-theme,snippet,__ext_cfm,__ext_cfc,__ext_cfml,__ext_cfr</Tags>
+			<Categories>Programming Languages,Snippets,Debuggers</Categories>
+			<GalleryFlags>Public</GalleryFlags>
+			
+			<Properties>
+				<Property Id="Microsoft.VisualStudio.Code.Engine" Value="^1.66.0" />
+				<Property Id="Microsoft.VisualStudio.Code.ExtensionDependencies" Value="" />
+				<Property Id="Microsoft.VisualStudio.Code.ExtensionPack" Value="" />
+				<Property Id="Microsoft.VisualStudio.Code.ExtensionKind" Value="workspace" />
+				<Property Id="Microsoft.VisualStudio.Code.LocalizedLanguages" Value="" />
+				
+				
+				<Property Id="Microsoft.VisualStudio.Services.Links.Source" Value="https://www.adobe.com/go/cfb_ext_gs_vscode" />
+				<Property Id="Microsoft.VisualStudio.Services.Links.Getstarted" Value="https://www.adobe.com/go/cfb_ext_gs_vscode" />
+				<Property Id="Microsoft.VisualStudio.Services.Links.Repository" Value="https://www.adobe.com/go/cfb_ext_gs_vscode" />
+				
+				<Property Id="Microsoft.VisualStudio.Services.Links.Learn" Value="https://www.adobe.com/go/cfb_ext_gs_vscode" />
+				
+				
+				<Property Id="Microsoft.VisualStudio.Services.GitHubFlavoredMarkdown" Value="true" />
+				
+				
+			</Properties>
+			
+			<Icon>extension/assets/icons/common/cf_appicons_256.png</Icon>
+		</Metadata>
+		<Installation>
+			<InstallationTarget Id="Microsoft.VisualStudio.Code"/>
+		</Installation>
+		<Dependencies/>
+		<Assets>
+			<Asset Type="Microsoft.VisualStudio.Code.Manifest" Path="extension/package.json" Addressable="true" />
+			<Asset Type="Microsoft.VisualStudio.Services.Content.Details" Path="extension/README.md" Addressable="true" />
+<Asset Type="Microsoft.VisualStudio.Services.Icons.Default" Path="extension/assets/icons/common/cf_appicons_256.png" Addressable="true" />
+		</Assets>
+	</PackageManifest>

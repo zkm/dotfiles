@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<profile name="Default" systemprofile = "true">
+    <codeassist dictionaryVersion="ColdFusion2023">
+        <autoactivation enabled="true" delay="50" />
+        <autoinsert singleProposal="false" autoCloseTag="true" insertClosingTagOnNewLine="true" autoQuote="true" appendspace="true" insertequalsign="true" enablesqlcodeassist="true" inserttagattributes="true">
+
+        <quotecharacter>
+            <![CDATA["]]>
+        </quotecharacter>
+        </autoinsert>
+        <filter cycleproposal="true" filterproposalwithtext = "false" />
+    </codeassist>
+
+    <generaleditor showToolBar="true" highlightcolor="192,192,192" pairmatching="both" enablewordwrap = "true" trimspacebeforesave="false" >
+        <newfilesettings type="CFM" defaultName="Untitled_cfm">
+            <defaultContent><![CDATA[]]></defaultContent>
+        </newfilesettings>
+        <newfilesettings type="CFC" defaultName="Untitled_cfc">
+            <defaultContent><![CDATA[]]></defaultContent>
+        </newfilesettings>
+    </generaleditor>
+
+    <keys>
+    	<command name="com.adobe.ide.coldfusion.shorucut.tagwizard" contextID="com.adobe.editor.cfml.context" key="M1+SHIFT+T"/>
+        <command name="com.adobe.ide.coldfusion.shorucut.cfoutput" contextID="com.adobe.editor.cfml.context" key="M1+T O"/>
+		<command name="com.adobe.ide.coldfusion.shortcut.cfcomment" contextID="com.adobe.editor.cfml.context" key="M1+T M"/>
+		<command name="com.adobe.ide.coldfusion.shortcut.cfscriptcomment" contextID="com.adobe.editor.cfml.context" key="M1+Shift+8"/>
+		<command name="com.adobe.ide.coldfusion.shortcut.cfdump" contextID="com.adobe.editor.cfml.context" key="M1+T D"/>
+		<command name="com.adobe.ide.coldfusion.shortcut.cfsinglequote" contextID="com.adobe.editor.cfml.context" key="M1+'"/>
+		<command name="com.adobe.ide.coldfusion.shortcut.cfdoublequote" contextID="com.adobe.editor.cfml.context" key="M1+Shift+'"/>
+		<command name="com.adobe.ide.coldfusion.shortcut.cfhash" contextID="com.adobe.editor.cfml.context" key="M1+T H"/>
+		<command name="com.adobe.ide.coldfusion.shortcut.cftrycatch" contextID="com.adobe.editor.cfml.context" key="M1+T T"/>
+		<command name="com.adobe.ide.coldfusion.shortcut.upper" contextID="com.adobe.editor.cfml.context" key="M1+Shift+U"/>
+		<command name="com.adobe.ide.coldfusion.shortcut.lower" contextID="com.adobe.editor.cfml.context" key="M1+Shift+L"/>
+		<command name="com.adobe.ide.coldfusion.snippets.shorucut.insert" contextID="com.adobe.snippet.context" key="M1+J"/>
+		<command name="com.adobe.ide.coldfusion.shortcut.cfset" contextID="com.adobe.editor.cfml.context" key="M1+T ="/>
+        <command name="com.adobe.ide.coldfusion.shortcut.cfabort" contextID="com.adobe.editor.cfml.context" key="M1+T A"/>
+        <command name="com.adobe.ide.coldfusion.shortcut.cfscript" contextID="com.adobe.editor.cfml.context" key="M1+T S"/>
+        <command name="com.adobe.ide.editor.cfml.sql.editor.command" contextID="com.adobe.editor.cfml.context" key="M1+ALT+W S"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.opencfprojecthandler" contextID="org.eclipse.ui.contexts.window" key="M1+ALT+W P"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.opencfmcmd" contextID="org.eclipse.ui.contexts.window" key="M1+ALT+W M"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.opencfccmd" contextID="org.eclipse.ui.contexts.window" key="M1+ALT+W C"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.opencficmd" contextID="org.eclipse.ui.contexts.window" key="M1+ALT+W W"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.addserver" contextID="org.eclipse.ui.contexts.window" key="M1+ALT+W A"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.launchInBrowser" contextID="org.eclipse.ui.contexts.window" key="M1+ALT+E"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.rdsquerycmd" contextID="org.eclipse.ui.contexts.window" key="M1+ALT+W R"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.importcfproject" contextID="org.eclipse.ui.contexts.window" key="M1+ALT+W I"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.select_tag_block.command" contextID="org.eclipse.ui.contexts.window" key="M1+ALT+B"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.installExtension" contextID="org.eclipse.ui.contexts.window" key="M1+SHIFT+E I"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.anchorCmd" contextID="com.adobe.editor.cfml.context" key="M1+T L"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.brCmd" contextID="com.adobe.editor.cfml.context" key="M1+T R"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.nbspCmd" contextID="com.adobe.editor.cfml.context" key="M1+T N"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.pCmd" contextID="com.adobe.editor.cfml.context" key="M1+T P"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.htmlCommentCmd" contextID="com.adobe.editor.cfml.context" key="M1+T /"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.strongCmd" contextID="com.adobe.editor.cfml.context" key="M1+T K"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.boldCmd" contextID="com.adobe.editor.cfml.context" key="M1+T B"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.italicCmd" contextID="com.adobe.editor.cfml.context" key="M1+T I"/>
+        <command name="com.adobe.ide.editor.cfml.format" contextID="com.adobe.editor.cfml.context" key="M1+SHIFT+F"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.go_to_next_member.command" contextID="com.adobe.editor.cfml.context" key="M1+SHIFT+ARROW_DOWN"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.go_to_prev_member.command" contextID="com.adobe.editor.cfml.context" key="M1+SHIFT+ARROW_UP"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.importExtension" contextID="org.eclipse.ui.contexts.window" key="M1+SHIFT+E M"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.jumpToNextAttr" contextID="com.adobe.editor.cfml.context" key="M1+]"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.jumpToPrevAttr" contextID="com.adobe.editor.cfml.context" key="M1+["/>
+        <command name="com.adobe.ide.coldfusion.keyboard.reloadExtension" contextID="org.eclipse.ui.contexts.window" key="M1+SHIFT+E R"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.fold_selection.command" contextID="com.adobe.editor.cfml.context" key="M1+ALT+F"/>
+        <command name="com.adobe.ide.coldfusion.keyboard.jump_matching_tag.command" contextID="com.adobe.editor.cfml.context" key="M1+ALT+M"/>
+        <command name="com.adobe.ide.coldfusion.shortcut.cfscriptsinglelinecomment" contextID="com.adobe.editor.cfml.context" key="M1+/"/>
+    </keys>
+
+    <outline showAllTags="true">
+        <taglist>
+            <![CDATA[cfscript,cfcomponent,cffunction,cfinterface ]]>
+        </taglist>
+    </outline>
+
+    <typing>
+    	<insert autoinsertmatchingchar="true" autoinsertdqoutes="true" autoinsertsqoutes="true" autoinsertroundbracket="true" autoinsertsquarebracket="true" autoinsertcurlybracket="true" autoinserthash="true" />
+    	<close autoclosetags="autoendwithslash" />
+    	<indent autoindentcarriagereturn="true" autoindenttyping="true" replacewhitespace="true" />
+   	</typing>
+    <!-- <typing autoinsertmatchingchar="true" modifyPair="automodify" autoindent="autoindent" /> -->
+
+    <colorization>
+    	<colorprefinfo id="DEFAULT" keyword="Default" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="STRING" keyword="String" foreground="0,128,0"></colorprefinfo>
+
+    	<colorprefinfo id="__CATEGORY__" keyword="CF" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="CF_BUILT_IN_FUNCTIONS" keyword="Built-in Function" foreground="11,148,150"></colorprefinfo>
+
+    	<colorprefinfo id="__CATEGORY__" keyword="CFML" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="CFML_TAG" keyword="Tag" foreground="0,0,255"></colorprefinfo>
+    	<colorprefinfo id="CFML_TAG_ATTRIBUTE_NAME" keyword="Attribute Name" foreground="154,41,10"></colorprefinfo>
+    	<colorprefinfo id="CFML_TAG_ATTRIBUTE_VALUE" keyword="Attribute Value" foreground="45,45,247"></colorprefinfo>
+    	<colorprefinfo id="CFML_TAG_COMMENT" keyword="Comment" foreground="0,0,0" backgroundcolorenabled="true" background="255,255,153"></colorprefinfo>
+
+    	<colorprefinfo id="__CATEGORY__" keyword="HTML" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="HTML_TAG" keyword="Tag" foreground="153,0,0"></colorprefinfo>
+    	<colorprefinfo id="HTML_TAG_ATTRIBUTE_NAME" keyword="Attribute Name" foreground="255,0,0"></colorprefinfo>
+    	<colorprefinfo id="HTML_TAG_ATTRIBUTE_VALUE" keyword="Attribute Value" foreground="0,0,255"></colorprefinfo>
+    	<colorprefinfo id="HTML_COMMENT" keyword="Comment" foreground="0,128,0"></colorprefinfo>
+
+    	<colorprefinfo id="__CATEGORY__" keyword="CFScript" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="CFS_BRACKET" keyword="Bracket" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="CFS_BOOLEAN" keyword="Boolean" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="CFS_COMMENT" keyword="Comment" foreground="0,0,0" backgroundcolorenabled="true" background="255,255,153"></colorprefinfo>
+    	<colorprefinfo id="CFS_FUNCTION_KEYWORD" keyword="Function" foreground="51,153,102" bold="true"></colorprefinfo>
+    	<colorprefinfo id="CFS_NUMBER" keyword="Number" foreground="255,128,0"></colorprefinfo>
+    	<colorprefinfo id="CFS_OPERATOR" keyword="Operator" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="CFS_RESERVED_WORDS" keyword="Reserved" foreground="0,51,255" bold="true"></colorprefinfo>
+    	<colorprefinfo id="CFS_STRING" keyword="String" foreground="0,128,128"></colorprefinfo>
+    	<colorprefinfo id="CFS_IDENTIFIER" keyword="Identifier" foreground="0,0,0"></colorprefinfo>
+
+    	<colorprefinfo id="__CATEGORY__" keyword="JavaScript" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="JS_BRACKET" keyword="Brackets" foreground="92,92,92"></colorprefinfo>
+    	<colorprefinfo id="JS_CLIENT_KEYWORD" keyword="Client Side Keywords" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="JS_COMMENT" keyword="Comments" foreground="0,128,0"></colorprefinfo>
+    	<colorprefinfo id="JS_FUNCTION_KEYWORD" keyword="Function" foreground="0,0,192" bold="true"></colorprefinfo>
+    	<colorprefinfo id="JS_NUMBER" keyword="Number" foreground="0,64,128"></colorprefinfo>
+    	<colorprefinfo id="JS_OPERATOR" keyword="Operator" foreground="92,92,92"></colorprefinfo>
+    	<colorprefinfo id="JS_RESERVED_WORDS" keyword="Reserved Word" foreground="0,0,192" bold="true"></colorprefinfo>
+    	<colorprefinfo id="JS_STRING" keyword="String" foreground="0,92,0"></colorprefinfo>
+    	<colorprefinfo id="JS_IDENTIFIER" keyword="Identifier" foreground="0,0,255"></colorprefinfo>
+
+    	<colorprefinfo id="__CATEGORY__" keyword="CSS" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="CSS_BRACKET" keyword="Brackets" foreground="0,0,0" bold="true"></colorprefinfo>
+    	<colorprefinfo id="CSS_KEYWORD" keyword="CSS Keywords" foreground="0,0,255"></colorprefinfo>
+    	<colorprefinfo id="CSS_COMMENT" keyword="Comments" foreground="0,128,0"></colorprefinfo>
+    	<colorprefinfo id="CSS_SELECTOR" keyword="CSS Selector" foreground="163,21,21"></colorprefinfo>
+    	<colorprefinfo id="CSS_PROPERTY" keyword="CSS Property" foreground="163,21,21"></colorprefinfo>
+    	<colorprefinfo id="CSS_PROPERTY_VALUE" keyword="CSS Property Value" foreground="0,0,255"></colorprefinfo>
+    	<colorprefinfo id="CSS_NUMBER" keyword="Number" foreground="0,0,255"></colorprefinfo>
+    	<colorprefinfo id="CSS_STRING" keyword="String" foreground="0,0,255" itallic="true"></colorprefinfo>
+    	<colorprefinfo id="CSS_IMPORTANT_PROPERTY" keyword="Important Property" foreground="0,0,255"></colorprefinfo>
+
+    	<colorprefinfo id="__CATEGORY__" keyword="SQL" foreground="0,0,0"></colorprefinfo>
+    	<colorprefinfo id="SQL_COMMENT" keyword="Comment" foreground="128,128,128"></colorprefinfo>
+    	<colorprefinfo id="SQL_KEYWORD" keyword="Keyword" foreground="128,0,0" bold="true"></colorprefinfo>
+    	<colorprefinfo id="SQL_TEXT" keyword="Text" foreground="0,0,0"></colorprefinfo>
+    </colorization>
+
+    <syntaxchecking enablesyntaxchecking="true" enablequickfix="false" erroronsaveonly="false" />
+
+	<tasktags>
+		<tag name="TODO" priority="Normal"></tag>
+		<tag name="FIXME" priority="High"></tag>
+    </tasktags>
+
+	<formatting>
+		<setting id="com.adobe.ide.editor.cfml.formatting.blanklineafterscriptblock" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.blanklinebeforefunctiondeclaration" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.wrapstructinitializers" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.maxcolumnwidth" value="100"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebetweenstructinitializers" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.blanklineafterswitchblock" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.attributecase" value="0"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.blanklinebeforeswitchblock" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.endtagonnewline" value="cfcatch,cfelse,cfelseif,cffinally"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.wrapattributes" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.wraparrayinitializers" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.blanklineafterfunctiondeclaration" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.blanklinebeforescriptblock" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.bracespositiontryblock" value="1"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.numberofextrablanklinestoretain" value="1"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebeforeendtag" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.tagcase" value="0"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.bracespositioncomponentdeclaration" value="1"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebetweenfunctionparams" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.putcfoutputonnewline" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.wrapifconditions" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.blanklineafterfunctionarguments" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.wrapfunctionparams" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.wrapenabled" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.maxatributesperline" value="4"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebetweenstatementsinforloop" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.tabsize" value="4"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.tabcount" value="1"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.bracespositionswitchblock" value="1"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.wraptext" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebetweenarguments" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebetweenoperators" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebetweenasignments" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.wrapcomments" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.xmlstyletaglist" value="cfargument,cfproperty"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.tabpolicy" value="2"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.bracespositionifblock" value="1"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.bracespositionelseblock" value="1"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebetweenarrayinitializers" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.blanklineafterpropertiesdeclaration" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.bracespositionfunctiondeclaration" value="1"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebeforeopeningcurlybrace" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebeforeopeningroundbrace" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacearoundarrayandstructinitializers" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.blanklinebeforeelseandelseif" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.bracespositionothercontrolsblock" value="1"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacearoundfunctionparams" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacearoundfunctionarguments" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebetweenfunctionarguments" value="true"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spaceafterarrayinitializers" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spaceafterstructinitializers" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebetweenforloop" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebeforeendingtag" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebeforeopencurlybrace" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.spacebeforeopenroundbrace" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.blanklineafterpropertiesdecl" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.blanklineafterelseifonnewline" value="false"/>
+		<setting id="com.adobe.ide.editor.cfml.formatting.wrapfunctionargs" value="false"/>
+	</formatting>
+
+</profile>

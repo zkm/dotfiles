@@ -1,0 +1,182 @@
+<h1 id="amazon-toolkit"><a id="top"></a>Amazon Toolkit</h1>
+<p>The Amazon Toolkit extension for Amazon Cloud9 that enables you to interact with <a href="https://aws.amazon.com/what-is-aws/">Amazon Web Services (Amazon)</a>.
+See the <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/toolkit-welcome.html">user guide</a> for complete documentation.</p>
+<p>Try the <a href="https://docs.aws.amazon.com/code-samples/latest/catalog/welcome.html">Amazon Code Sample Catalog</a> to start coding with the Amazon SDK.</p>
+<h1 id="features"><a id="features"></a>Features</h1>
+<ul>
+<li><a href="#ui-components-aws-expl">Amazon Explorer</a><ul>
+<li>API Gateway</li>
+<li>App Runner</li>
+<li>CloudFormation stacks</li>
+<li><a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/cloudwatch-logs-toolkit.html">CloudWatch Logs</a></li>
+<li>ECR</li>
+<li><a href="https://docs.aws.amazon.com/toolkit-for-vscode/latest/userguide/ecs-exec.html">ECS</a></li>
+<li>IoT explorer</li>
+<li>Lambda functions</li>
+<li>S3 explorer</li>
+</ul>
+</li>
+<li><a href="#ui-components-dev-tools">Developer Tools</a><ul>
+<li><a href="#ui-components-cdk-expl">CDK Explorer</a></li>
+<li><a href="#codewhisperer">CodeWhisperer</a></li>
+</ul>
+</li>
+<li><a href="#sam-and-lambda">Amazon Serverless Applications (SAM)</a></li>
+<li><a href="#aws-commands"><code>Amazon:</code> Commands</a></li>
+</ul>
+<hr>
+<h2 id="amazon-explorer"><a id="ui-components-aws-expl"></a>Amazon Explorer</h2>
+<p>The <strong>Amazon Explorer</strong> provides access to the Amazon services that you can work with when using the Toolkit. To see the <strong>Amazon Explorer</strong>, choose the <strong>Amazon</strong> icon in the <strong>Activity bar</strong>.</p>
+<h2 id="overview-amazon-explorer"><img src="!!EXTENSIONROOT!!/resources/marketplace/cloud9/overview-aws-explorer-cn.png" alt="Overview, Amazon Explorer"></h2>
+<h2 id="developer-tools"><a id="ui-components-dev-tools"></a>Developer Tools</h2>
+<p>The <strong>Developer Tools</strong> panel is a section for developer-focused tooling curated for working in an IDE. The <strong>Developer Tools</strong> panel can be found underneath the <strong>Amazon Explorer</strong> when the <strong>Amazon icon</strong> is selected in the <strong>Activity bar</strong>.</p>
+<h2 id="-return-to-top-">{ <a href="#top">Return to Top</a> }</h2>
+<h2 id="cdk-explorer"><a id="ui-components-cdk-expl"></a>CDK Explorer</h2>
+<p>The <strong>Amazon CDK Explorer</strong> enables you to work with <a href="https://aws.amazon.com/cdk/">Amazon Cloud Development Kit (CDK)</a> applications. It shows a top-level view of your CDK applications that have been sythesized in your workspace.</p>
+<p>With the CDK explorer, you can navigate the CDK application&#39;s infrastructure stacks, resources, and policies.</p>
+<p>For full details see the <a href="https://docs.aws.amazon.com/toolkit-for-vscode/latest/userguide/cdk-explorer.html">Amazon CDK Explorer</a> in the user guide.</p>
+<p>{ <a href="#top">Return to Top</a> }</p>
+<h2 id="amazon-codewhisperer"><a id="codewhisperer"></a>Amazon CodeWhisperer</h2>
+<p><strong>Amazon CodeWhisperer</strong> provides inline code suggestions using machine learning and natural language processing on the contents of your current file. Supported languages include: Java, Python and Javascript.</p>
+<p>Once enabled, CodeWhisperer will provide code suggestions automatically and can also be requested manually using option+c (mac) / alt+c (PC). To accept a suggestion and add it to your file, press Tab, Enter or click on it. To dismiss a suggestion, press escape or keep typing.</p>
+<p>For more information, see <a href="https://aws.amazon.com/codewhisperer">Amazon CodeWhisperer</a> in our user guide.</p>
+<h2 id="-return-to-top--1">{ <a href="#top">Return to Top</a> }</h2>
+<h2 id="-amazon-serverless-applications"><a id="sam-and-lambda"></a> Amazon Serverless Applications</h2>
+<p>The Amazon Toolkit enables you to develop <a href="https://aws.amazon.com/serverless/">Amazon serverless applications</a> locally. It also provides <em>Inline Actions</em> in Cloud9 to do the following:</p>
+<ul>
+<li>Use SAM (serverless application model) templates to build and debug your locally developed Amazon serverless applications.</li>
+<li>Run selected <a href="https://aws.amazon.com/lambda/">Amazon Lambda</a> functions.</li>
+</ul>
+<p>To start debugging with a SAM template, click the <code>Add Debug Configuration</code> <em>Inline Action</em> in the template file.</p>
+<p><img src="!!EXTENSIONROOT!!/resources/marketplace/cloud9/Codelens-YAML-template.png" alt="Add Debug Configuration Template"></p>
+<h6 id="the-inline-action-indicator-in-the-sam-template-allows-you-to-add-a-debug-configuration-for-the-serverless-application">The <em>Inline Action</em> indicator in the SAM template allows you to add a debug configuration for the serverless application.</h6></h6>
+<p>Alternatively, you can run and debug just the Amazon Lambda function and exclude other resources defined by the SAM template. Again, use an <em>Inline Action</em> indicator for an Amazon Lambda-function handler. (A <em>handler</em> is a function that Lambda calls to start execution of a Lambda function.)</p>
+<p><img src="!!EXTENSIONROOT!!/resources/marketplace/cloud9/Codelens-direct-function.png" alt="Add Debug Configuration Direct"></p>
+<h6 id="the-inline-action-indicator-in-the-application-file-lets-you-add-a-debug-configuration-for-a-selected-amazon-lambda-function">The <em>Inline Action</em> indicator in the application file lets you add a debug configuration for a selected Amazon Lambda function.</h6>
+<p>When you run a debug session, the status and results are shown in the <strong>Amazon Toolkit</strong> output channel. If the toolkit does not have an open <strong>Amazon Toolkit</strong> output channel, one can be created with the New Tab button.</p>
+<p><img src="!!EXTENSIONROOT!!/resources/marketplace/cloud9/sam-configure-and-run-still-cn.png" alt="Configure and Run"></p>
+<h6 id="after-a-local-run-is-complete-the-output-appears-in-the-output-tab">After a local run is complete, the output appears in the <strong>OUTPUT</strong> tab.</h6>
+<p>When you&#39;re satisfied with performance, you can <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/deploy-serverless-app.html">deploy your serverless application</a>. The SAM template is converted to a CloudFormation template, which is then used to deploy all the application&#39;s assets to the Amazon Cloud.</p>
+<h3 id="supported-runtimes">Supported runtimes</h3>
+<p>The Toolkit <em>local SAM debugging</em> feature supports these runtimes:</p>
+<ul>
+<li>JavaScript (Node.js 12.x, 14.x)</li>
+<li>Python (3.7, 3.8, 3.9, 3.10)</li>
+</ul>
+<p>For more information see <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/serverless-apps-toolkit.html">Working with Amazon Serverless Applications</a> in the user guide.</p>
+<p>{ <a href="#top">Return to Top</a> }</p>
+<hr>
+<h2 id="amazon-commands"><a id="aws-commands"></a><code>Amazon:</code> Commands</h2>
+<p>The Toolkit provides commands (prefixed with <code>Amazon:</code>) to the Amazon Cloud9 <em>Go to Anything panel</em>, available by clicking the search bar and typing &quot;.&quot; or via hotkey.</p>
+<table>
+<thead>
+<tr>
+<th align="left">OS</th>
+<th align="left">Hotkey</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Windows</td>
+<td align="left"><code>CTRL-.</code></td>
+</tr>
+<tr>
+<td align="left">macOS</td>
+<td align="left"><code>CMD-.</code></td>
+</tr>
+</tbody></table>
+<p><img src="!!EXTENSIONROOT!!/resources/marketplace/cloud9/open-commands-cn.png" alt="Go to Anything panel"></p>
+<table>
+<thead>
+<tr>
+<th align="left">Amazon Command</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>Amazon: About Toolkit</code></td>
+<td align="left">Displays information about the Amazon Toolkit.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Add SAM Debug Configuration</code></td>
+<td align="left">Creates an <code>aws-sam</code> Debug Configuration from a function in the given source file</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Connect to Amazon</code></td>
+<td align="left">Select or create a connection to Amazon.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Create a new Issue on Github</code></td>
+<td align="left">Opens the Amazon Toolkit&#39;s <a href="https://github.com/aws/aws-toolkit-vscode/issues/new/choose">New Issue page on Github</a>.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Create Credentials Profile</code></td>
+<td align="left">Creates an Amazon credentials profile.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Create Lambda SAM Application</code></td>
+<td align="left">Generates code files for a new Amazon serverless Lambda application. For more information, see <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/latest/user-guide/create-sam.html">Creating a Serverless Application</a> in the user guide.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Create new CloudFormation Template</code></td>
+<td align="left">Creates a new starter Cloudformation Template</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Create new SAM Template</code></td>
+<td align="left">Creates a new starter SAM Template</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Deploy SAM Application</code></td>
+<td align="left">Deploys a local serverless application to an Amazon account. For more information, see <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/deploy-serverless-app.html">Deploying a Serverless Application</a> in the user guide.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Edit Credentials</code></td>
+<td align="left">Opens the <code>~/.aws/credentials</code> or <code>~/.aws/config</code> file for editing.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Edit SAM Debug Configuration</code></td>
+<td align="left">Shows a tool that helps you create, edit, run, and debug a SAM <em>launch config</em> (<code>type:aws-sam</code>).</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Detect SAM CLI</code></td>
+<td align="left">Checks whether the Toolkit can communicate correctly with the Amazon SAM CLI that is installed.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Show or Hide Regions</code></td>
+<td align="left">Adds or removes Amazon Regions in the <strong>Amazon Explorer</strong>.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Sign out</code></td>
+<td align="left">Disconnect the Toolkit from the current Amazon connection.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Submit Quick Feedback...</code></td>
+<td align="left">Submit a private, one-way message and sentiment to the Amazon Toolkit dev team. For larger issues that warrant conversations or bugfixes, please submit an issue in Github with the <strong>Amazon: Create a New Issue on Github</strong> command.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: Toggle SAM hints in source files</code></td>
+<td align="left">Toggles Amazon SAM-related Inline Actions in source files</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: View Toolkit Logs</code></td>
+<td align="left">Displays log files that contain general Toolkit diagnostic information.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: View Quick Start</code></td>
+<td align="left">Open this quick-start guide.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: View Toolkit Documentation</code></td>
+<td align="left">Opens the <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/toolkit-welcome.html">user guide</a> for the Toolkit.</td>
+</tr>
+<tr>
+<td align="left"><code>Amazon: View Source on GitHub</code></td>
+<td align="left">Opens the <a href="https://github.com/aws/aws-toolkit-vscode">GitHub repository</a> for the Toolkit.</td>
+</tr>
+</tbody></table>
+<p>{ <a href="#top">Return to Top</a> }</p>
+<hr>
+<h1 id="get-help"><a id="get-help"></a>Get help</h1>
+<p>For additional details on how to use the Amazon Toolkit, see the <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/toolkit-welcome.html">user guide</a>.</p>
+<p>To report issues with the Toolkit or to propose Toolkit code changes, see the <a href="https://github.com/aws/aws-toolkit-vscode">aws/aws-toolkit-vscode</a> repository on GitHub.</p>
+<p>You can also <a href="https://aws.amazon.com/contact-us/">contact Amazon</a> directly.</p>
+<p>{ <a href="#top">Return to Top</a> }</p>

@@ -1,0 +1,11 @@
+{
+	"messages": [
+		"Initializing VS Code Server",
+		"Connect to VS Code Server - retry {0}"
+	],
+	"keys": [
+		"progressInitServer",
+		"progressConnectRetry"
+	],
+	"filePath": "src/resolver"
+}

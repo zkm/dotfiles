@@ -1,0 +1,17 @@
+{
+	"messages": [
+		"The file '{0}' does not exist relative your filesystem root.",
+		"Select the port that corresponds to the server that you want to stop",
+		"Tried to open preview on invalid URI",
+		"All Servers",
+		"non-workspace files"
+	],
+	"keys": [
+		"fileDNE",
+		"selectPort",
+		"badURL",
+		"allServers",
+		"nonWorkspaceFiles"
+	],
+	"filePath": "src/manager"
+}

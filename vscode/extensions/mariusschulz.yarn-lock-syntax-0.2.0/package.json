@@ -1,0 +1,57 @@
+{
+	"name": "yarn-lock-syntax",
+	"displayName": "Syntax Highlighting for yarn.lock files",
+	"description": "Syntax highlighting for yarn.lock files",
+	"version": "0.2.0",
+	"publisher": "mariusschulz",
+	"license": "MIT",
+	"icon": "icons/yarn-logo-128x128.png",
+	"repository": {
+		"url": "https://github.com/mariusschulz/vscode-yarn-lock-syntax"
+	},
+	"engines": {
+		"vscode": "^1.28.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"keywords": [
+		"yarn",
+		"yarn.lock",
+		"syntax",
+		"highlighting"
+	],
+	"contributes": {
+		"languages": [
+			{
+				"id": "yarnlock",
+				"aliases": [
+					"yarn.lock",
+					"yarnlock"
+				],
+				"extensions": [
+					"yarn.lock"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "yarnlock",
+				"scopeName": "text.yarnlock",
+				"path": "./syntaxes/yarnlock.tmLanguage.json"
+			}
+		]
+	},
+	"__metadata": {
+		"id": "b44254a5-aaf6-4ce2-8bbc-9a3f5aa21a02",
+		"publisherId": "33dc2167-6e64-49fe-ae2b-b95404488883",
+		"publisherDisplayName": "Marius Schulz",
+		"targetPlatform": "undefined",
+		"isApplicationScoped": false,
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"installedTimestamp": 1676341456307,
+		"preRelease": false
+	}
+}

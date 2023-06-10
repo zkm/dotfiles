@@ -1,0 +1,25 @@
+{
+	"messages": [
+		"Config file to save in",
+		"Open Config",
+		"Connect",
+		"Host added!",
+		"Enter SSH Connection Command",
+		"SSH host name cannot begin with {0}",
+		"SSH user name cannot begin with {0}",
+		"SSH host name cannot include the character {0}",
+		"SSH user name cannot include the character {0}"
+	],
+	"keys": [
+		"configFileSaveDescription",
+		"openConfigAction",
+		"connectAction",
+		"infoHostAdded",
+		"inputSshCommand",
+		"errorHostNamePrefix",
+		"errorUserNamePrefix",
+		"errorHostNameInvalidChar",
+		"errorUserNameInvalidChar"
+	],
+	"filePath": "src/ssh-hosts"
+}

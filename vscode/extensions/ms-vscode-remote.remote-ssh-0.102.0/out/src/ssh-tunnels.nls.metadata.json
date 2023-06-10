@@ -1,0 +1,21 @@
+{
+	"messages": [
+		"Failed to find a free local port: {0}",
+		"Waiting for port forwarding to be ready",
+		"Error establishing tunnel ({0}).",
+		"Show details in terminal",
+		"Setting up SSH tunnel",
+		"Max wait time exhausted",
+		"Setting up SSH tunnel"
+	],
+	"keys": [
+		"errorFailedToFindFreePort",
+		"progressWaitingForPortForwarding",
+		"errorEstablishingTunnel",
+		"showDetailsTerminalAction",
+		"infoSettingUpTunnel",
+		"maxWaitTimeExhausted",
+		"progressSettingUpTunnel"
+	],
+	"filePath": "src/ssh-tunnels"
+}

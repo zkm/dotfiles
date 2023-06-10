@@ -1,0 +1,13 @@
+{
+	"messages": [
+		"Failed to download VS Code Server locally",
+		"Downloading VS Code Server locally",
+		"Copying VS Code Server to host with scp"
+	],
+	"keys": [
+		"errorFailServerDownload",
+		"progressDownloadServerLocally",
+		"progressCopyServerScp"
+	],
+	"filePath": "src/local-install"
+}

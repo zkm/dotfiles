@@ -1,0 +1,11 @@
+<svg id="I_C_O_N_S" data-name="I C O N S" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <defs>
+    <style>
+      .fill {
+        fill: #6e6e6e;
+      }
+    </style>
+  </defs>
+  <path class="fill" d="M8,22V18.672a.5.5,0,0,1,.866-.341L16,26,8.866,33.669A.5.5,0,0,1,8,33.328V30H1a1,1,0,0,1-1-1V23a1,1,0,0,1,1-1Z"/>
+  <path class="fill" d="M33,2H3A1,1,0,0,0,2,3V20H4V16H22v4H13.15015l1.86047,2H22v4H18a1.99425,1.99425,0,0,1-.53564,1.36218L16.87109,28H22v4H14v2H33a1.00013,1.00013,0,0,0,1-1V3A1,1,0,0,0,33,2ZM32,32H24V28h8Zm0-6H24V22h8Zm0-6H24V16h8Zm0-6H4V4H32Z"/>
+</svg>

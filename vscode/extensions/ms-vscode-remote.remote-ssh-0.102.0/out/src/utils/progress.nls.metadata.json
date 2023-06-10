@@ -1,0 +1,11 @@
+{
+	"messages": [
+		"Downloading VS Code Server",
+		"Installing VS Code Server"
+	],
+	"keys": [
+		"downloadingServer",
+		"installingServer"
+	],
+	"filePath": "src/utils/progress"
+}

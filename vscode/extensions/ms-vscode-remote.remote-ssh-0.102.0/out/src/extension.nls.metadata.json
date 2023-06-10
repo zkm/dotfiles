@@ -1,0 +1,13 @@
+{
+	"messages": [
+		"Setting up SSH Host {0}",
+		"Could not establish connection to \"{0}\": {1}",
+		"Could not establish connection to \"{0}\""
+	],
+	"keys": [
+		"progressNotifTitle",
+		"errorCannotConnectWithReason",
+		"errorCannotConnectNoReason"
+	],
+	"filePath": "src/extension"
+}

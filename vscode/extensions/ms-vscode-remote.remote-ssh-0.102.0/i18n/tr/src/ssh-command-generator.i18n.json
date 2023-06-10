@@ -1,0 +1,1 @@
+{"warnNeverAgainAction":"Bir Daha Gösterme","nonWindowsSshWarn":"Yüklenmiş Windows olmayan SSH bulunamadı. Parola istemleri düzgün görüntülenmeyebilir! Gerekirse `remote.SSH.useLocalServer` ayarını devre dışı bırakın.","learnMoreAction":"Daha Fazla Bilgi","warnSshInstallNotFound":"SSH yüklemesi bulunamadı"}

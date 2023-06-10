@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Microsoft.AspNetCore.Razor.LanguageServer.Protocol</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.AspNetCore.Razor.LanguageServer.Protocol.IDelegatedParams">
+            <summary>
+            Interface for delegated params that enables sharing of code in DefaultRazorLanguageServerCustomMessageTarget
+            </summary>
+        </member>
+    </members>
+</doc>

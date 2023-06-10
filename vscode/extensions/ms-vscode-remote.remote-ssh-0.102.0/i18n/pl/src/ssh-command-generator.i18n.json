@@ -1,0 +1,1 @@
+{"warnNeverAgainAction":"Nie pokazuj ponownie","nonWindowsSshWarn":"Nie można odnaleźć zainstalowanego protokołu SSH innego niż Windows. Monity o hasło mogą nie być wyświetlane poprawnie! Wyłącz `remote.SSH.useLocalServer` w razie potrzeby.","learnMoreAction":"Dowiedz się więcej","warnSshInstallNotFound":"Nie można odnaleźć instalacji SSH"}

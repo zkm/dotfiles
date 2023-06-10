@@ -1,0 +1,1 @@
+{"warnNeverAgainAction":"再表示しない","nonWindowsSshWarn":"インストールされている Windows 標準以外の SSH が見つかりませんでした。パスワード プロンプトが正しく表示されない可能性があります! 必要な場合、`remote.SSH.useLocalServer` を無効にしてください。","learnMoreAction":"詳細情報","warnSshInstallNotFound":"SSH インストールが見つかりませんでした"}

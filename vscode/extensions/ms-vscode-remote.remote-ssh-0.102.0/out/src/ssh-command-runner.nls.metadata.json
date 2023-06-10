@@ -1,0 +1,23 @@
+{
+	"messages": [
+		"Enter passphrase for ssh key {0}",
+		"Enter password for {0}",
+		"Enter password",
+		"\"{0}\" has fingerprint \"{1}\".",
+		"Are you sure you want to continue?",
+		"Are you sure you want to continue connecting?",
+		"Continue",
+		"Cancel"
+	],
+	"keys": [
+		"inputPassphrase",
+		"inputPasswordUser",
+		"inputPassword",
+		"infoFingerprintAction",
+		"areYouSureActionHostKey",
+		"areYouSureActionDifferingHost",
+		"continueAction",
+		"cancelAction"
+	],
+	"filePath": "src/ssh-command-runner"
+}

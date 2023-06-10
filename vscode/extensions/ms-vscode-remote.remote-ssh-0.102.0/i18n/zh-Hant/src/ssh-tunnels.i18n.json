@@ -1,0 +1,1 @@
+{"errorFailedToFindFreePort":"找不到可用本機連接埠: {0}","progressWaitingForPortForwarding":"正在等候連接埠轉送準備就緒","errorEstablishingTunnel":"建立通道 ({0}) 時發生錯誤。","showDetailsTerminalAction":"在終端機中顯示詳細資料","infoSettingUpTunnel":"正在設定 SSH 通道","maxWaitTimeExhausted":"最長等待時間已耗盡","progressSettingUpTunnel":"正在設定 SSH 通道"}

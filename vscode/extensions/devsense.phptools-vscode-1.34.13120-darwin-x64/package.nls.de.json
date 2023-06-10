@@ -1,0 +1,23 @@
+{
+    "activationMessage": "Ihre Kopie der PHP-Tools ist nicht aktiviert. Bitte geben Sie Ihren Lizenzschlüssel ein.",
+    "expired": "Ihre aktuelle Lizenz ist abgelaufen. Bitte geben Sie einen neuen Lizenzschlüssel ein.",
+    "enterKey": "Ich habe den Lizenzschlüssel",
+    "requestTrial": "Probieren Sie es aus",
+    "trialMail": "Ihre E-Mail",
+    "trialPrompt": "Geben Sie bitte Ihre Email-Adresse ein. Sie erhalten den Testlizenzschlüssel in wenigen Minuten. Weitere Informationen finden Sie unter www.devsense.com",
+    "invalidMail": "Eingegebene E-Mail-Adresse ist nicht gültig",
+    "info": "Mehr Informationen",
+    "purchase": "Einkauf",
+    "promptText": "Bitte geben Sie Ihren Lizenzschlüssel ein. Es wird online aktiviert. Weitere Informationen finden Sie unter www.devsense.com",
+    "placeHolder": "Lizenzschlüssel",
+    "offlineFailed": "Lizenz ungültig oder abgelaufen.",
+    "serverTimeout": "Verbindung zum Aktivierungsserver Timeout.",
+    "connectionError": "Aktivierungsserver ist nicht erreichbar.",
+    "unknownError": "Aktivierungsfehler",
+    "accessDenied": "Der Aktivierungsserver ist zurzeit nicht verfügbar.",
+    "internalError": "Aktivierungsserver interner Fehler.",
+    "invalidLicenseKey": "Der eingegebene Lizenzschlüssel ist nicht gültig.",
+    "activationSucceeded": "Aktivierung erfolgreich abgeschlossen. Vielen Dank, dass Sie PHP-Tools verwenden!",
+
+    "PhpunitXmlMissing": "In Ihrem Arbeitsbereich gefundene Tests. Erstellen Sie 'phpunit.xml', um den Test Explorer zu aktivieren?"
+}

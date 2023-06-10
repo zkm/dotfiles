@@ -1,0 +1,172 @@
+{
+	"name": "prisma-insider",
+	"displayName": "Prisma - Insider",
+	"description": "This is the Insider Build of the Prisma VSCode extension (only use it if you are also using the dev version of the CLI).",
+	"version": "31.0.2296",
+	"license": "Apache-2.0",
+	"icon": "logo_white.png",
+	"engines": {
+		"vscode": "^1.56.0"
+	},
+	"publisher": "Prisma",
+	"categories": [
+		"Programming Languages"
+	],
+	"dependencies": {
+		"@prisma/language-server": "31.0.2296",
+		"checkpoint-client": "1.1.24",
+		"env-paths": "2.2.1",
+		"minimatch": "6.2.0",
+		"vscode-languageclient": "7.0.0",
+		"watcher": "1.2.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/prisma/language-tools.git",
+		"directory": "packages/vscode"
+	},
+	"scripts": {
+		"build": "tsc -p ./",
+		"watch": "npm run build -- -w",
+		"test": "rm -rf ./dist && npm run build && node dist/src/__test__/runTest true",
+		"vscode:prepublish": "npm run build",
+		"package": "vsce package"
+	},
+	"main": "./dist/src/extension.js",
+	"activationEvents": [
+		"onLanguage:prisma"
+	],
+	"contributes": {
+		"languages": [
+			{
+				"id": "prisma",
+				"aliases": [
+					"Prisma",
+					"prisma"
+				],
+				"icon": {
+					"light": "./prisma_icon.svg",
+					"dark": "./prisma_icon.svg"
+				},
+				"extensions": [
+					".prisma"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "prisma",
+				"scopeName": "source.prisma",
+				"path": "./syntaxes/prisma.tmLanguage.json"
+			},
+			{
+				"injectTo": [
+					"source.js",
+					"source.ts",
+					"source.js.jsx",
+					"source.jsx",
+					"source.tsx",
+					"source.vue"
+				],
+				"scopeName": "inline.prisma",
+				"path": "./syntaxes/prisma-inlined.json",
+				"embeddedLanguages": {
+					"meta.embedded.block.prisma": "prisma"
+				}
+			},
+			{
+				"injectTo": [
+					"source.js",
+					"source.ts",
+					"source.js.jsx",
+					"source.jsx",
+					"source.tsx",
+					"source.vue"
+				],
+				"scopeName": "source.ts.prismaClientRawSQL",
+				"path": "./syntaxes/prismaClientRawSQL.json",
+				"embeddedLanguages": {
+					"meta.embedded.block.sql": "sql"
+				}
+			},
+			{
+				"scopeName": "markdown.prisma.codeblock",
+				"path": "./syntaxes/prisma.markdown.json",
+				"injectTo": [
+					"text.html.markdown"
+				],
+				"embeddedLanguages": {
+					"meta.embedded.block.prisma": "prisma"
+				}
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "Prisma",
+			"properties": {
+				"prisma.fileWatcher": {
+					"scope": "window",
+					"type": "boolean",
+					"default": true,
+					"description": "Enable, when checked, the File Watcher functionality for Prisma Client."
+				},
+				"prisma.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "off",
+					"description": "Setting for logging between the VS Code extension and the language server."
+				}
+			}
+		},
+		"commands": [
+			{
+				"command": "prisma.restartLanguageServer",
+				"title": "Restart Language Server",
+				"category": "Prisma"
+			},
+			{
+				"command": "prisma.filewatcherEnable",
+				"title": "Enable the File Watcher functionality for Prisma Client.",
+				"category": "Prisma"
+			},
+			{
+				"command": "prisma.filewatcherDisable",
+				"title": "Disable the File Watcher functionality for Prisma Client.",
+				"category": "Prisma"
+			}
+		]
+	},
+	"devDependencies": {
+		"@types/glob": "8.1.0",
+		"@types/mocha": "10.0.1",
+		"@types/vscode": "1.56.0",
+		"@vscode/test-electron": "2.3.2",
+		"is-ci": "3.0.1",
+		"mocha": "10.2.0",
+		"ovsx": "0.8.1",
+		"typescript": "5.1.3",
+		"@vscode/vsce": "2.19.0"
+	},
+	"gitHead": "7d51b157647fe1705813a30d1a77b8ccf136b8d4",
+	"publishConfig": {
+		"access": "public"
+	},
+	"preview": true,
+	"__metadata": {
+		"id": "225804c9-dd24-47a8-930d-d8776872df56",
+		"publisherId": "2397d6f3-c7f1-4b03-9029-414f731a68ec",
+		"publisherDisplayName": "Prisma",
+		"targetPlatform": "undefined",
+		"isApplicationScoped": false,
+		"updated": true,
+		"isPreReleaseVersion": false,
+		"installedTimestamp": 1686362586217,
+		"preRelease": false
+	}
+}

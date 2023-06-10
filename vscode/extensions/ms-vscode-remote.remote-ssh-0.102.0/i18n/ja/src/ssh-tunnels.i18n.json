@@ -1,0 +1,1 @@
+{"errorFailedToFindFreePort":"空きローカル ポートが見つかりませんでした: {0}","progressWaitingForPortForwarding":"ポート転送の準備ができるまで待機しています","errorEstablishingTunnel":"トンネルの確立中にエラーが発生しました ({0})。","showDetailsTerminalAction":"ターミナルに詳細を表示する","infoSettingUpTunnel":"SSH トンネルを設定する","maxWaitTimeExhausted":"最大待機時間を使い切りました","progressSettingUpTunnel":"SSH トンネルを設定する"}

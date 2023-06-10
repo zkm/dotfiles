@@ -1,0 +1,43 @@
+{
+	"name": "php-pack",
+	"displayName": "PHP Extension Pack",
+	"description": "Everything you need for PHP development",
+	"version": "1.0.3",
+	"publisher": "xdebug",
+	"engines": {
+		"vscode": "^1.26.0"
+	},
+	"categories": [
+		"Other",
+		"Extension Packs"
+	],
+	"galleryBanner": {
+		"color": "#6682BA",
+		"theme": "dark"
+	},
+	"icon": "logo.png",
+	"homepage": "https://github.com/zobo/vscode-php-pack/blob/main/README.md",
+	"bugs": {
+		"url": "https://github.com/zobo/vscode-php-pack/issues"
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/zobo/vscode-php-pack"
+	},
+	"extensionPack": [
+		"xdebug.php-debug",
+		"zobo.php-intellisense"
+	],
+	"__metadata": {
+		"id": "1a9300c9-36a6-44d1-9d09-ada3641b8727",
+		"publisherId": "0162ddc5-cb52-4b88-97e2-5272419cd6cd",
+		"publisherDisplayName": "Xdebug",
+		"targetPlatform": "undefined",
+		"isApplicationScoped": false,
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"installedTimestamp": 1676341497353,
+		"preRelease": false
+	}
+}

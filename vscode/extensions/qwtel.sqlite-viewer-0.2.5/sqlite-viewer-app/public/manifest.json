@@ -1,0 +1,89 @@
+{
+  "short_name": "SQLite Viewer Web",
+  "name": "SQLite Viewer Web",
+  "description": "A free online SQLite Explorer, inspired by DB Browser for SQLite and Airtable.",
+  "icons": [
+    {
+      "__os": "Mac",
+      "src": "logo_512_mac.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "__os": "Mac",
+      "src": "logo_512_mac.webp",
+      "type": "image/webp",
+      "sizes": "512x512"
+    },
+    {
+      "__os": "Windows",
+      "src": "logo_512_windows.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
+      "__os": "Windows",
+      "src": "logo_512_windows.webp",
+      "type": "image/webp",
+      "sizes": "512x512"
+    },
+    {
+      "__os": "any",
+      "src": "logo_512_maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "__os": "any",
+      "src": "logo_512_maskable.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "maskable"
+    },
+    {
+      "src": "logo_512_maskable.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "logo_512_maskable.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    },
+    {
+      "__os": "any",
+      "src": "favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ],
+  "id": "/?source=app",
+  "start_url": ".?source=app",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay"],
+  "background_color": "#fefefe",
+  "color_scheme_dark": {
+    "background_color": "#161618"
+  },
+  "file_handlers": [
+    {
+      "action": ".?source=app&open-with",
+      "name": "SQLite Database",
+      "accept": {
+        "application/vnd.sqlite3": [
+          ".sqlite",
+          ".sqlite3",
+          ".db",
+          ".db3"
+        ],
+        "application/x-sqlite3": [
+          ".sqlite",
+          ".sqlite3",
+          ".db",
+          ".db3"
+        ]
+      }
+    }
+  ]
+}

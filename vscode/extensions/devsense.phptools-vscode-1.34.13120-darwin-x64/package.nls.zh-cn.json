@@ -1,0 +1,21 @@
+{
+    "activationMessage": "您的PHP工具副本未激活。请输入您的许可证密钥。",
+    "expired": "您当前的许可证已过期。请输入新的许可证密钥。",
+    "enterKey": "我有许可证密钥",
+    "requestTrial": "试用",
+    "trialMail": "您的电子邮件",
+    "trialPrompt": "请输入您的电子邮件地址。您将在几分钟内收到试用许可证密钥。有关更多信息，请访问www.devsense.com",
+    "invalidMail": "输入的电子邮件地址无效",
+    "info": "更多信息",
+    "purchase": "购买",
+    "promptText": "请输入您的许可证密钥。您将在几分钟内收到试用许可证密钥。有关更多信息，请访问www.devsense.com",
+    "placeHolder": "许可证密钥",
+    "offlineFailed": "许可证无效或已过期。",
+    "serverTimeout": "连接到激活服务器超时。",
+    "connectionError": "无法访问激活服务器。",
+    "unknownError": "激活错误",
+    "accessDenied": "此时激活服务器不可用。",
+    "internalError": "激活服务器内部错误。",
+    "invalidLicenseKey": "输入的许可证密钥无效。",
+    "activationSucceeded": "激活成功。感谢您使用PHP工具!"
+}
