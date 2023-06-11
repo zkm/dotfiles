@@ -1,9 +1,0 @@
-{
-	"messages": [
-		"Couldn't download IntelliCode model. Please check your network connectivity or firewall settings."
-	],
-	"keys": [
-		"downloadModelError"
-	],
-	"filePath": "models\\ModelProvider"
-}

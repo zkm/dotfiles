@@ -1,9 +1,0 @@
-{
-	"messages": [
-		"Server Started on Port {0}"
-	],
-	"keys": [
-		"serverStartedOnPort"
-	],
-	"filePath": "src/server/serverGrouping"
-}
