@@ -39,3 +39,5 @@ colors
 
 # Enable colored output from ls, etc. on FreeBSD-based systems
 export CLICOLOR=1
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
