@@ -1,1 +1,0 @@
-{"warnNeverAgainAction":"Больше не показывать","nonWindowsSshWarn":"Не удалось найти установленный SSH, отличный от Windows. Запросы пароля могут отображаться неправильно! При необходимости отключите `remote.SSH.useLocalServer`.","learnMoreAction":"Дополнительные сведения","warnSshInstallNotFound":"Не удалось найти установку SSH"}

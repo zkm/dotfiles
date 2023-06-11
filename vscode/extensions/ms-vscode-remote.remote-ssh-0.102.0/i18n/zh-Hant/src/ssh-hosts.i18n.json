@@ -1,1 +1,0 @@
-{"configFileSaveDescription":"要儲存的設定檔","openConfigAction":"開啟設定","connectAction":"連線","infoHostAdded":"已新增主機!","inputSshCommand":"輸入 SSH 連線命令","errorHostNamePrefix":"SSH 主機名稱的開頭不得為 {0}","errorUserNamePrefix":"SSH 使用者名稱的開頭不得為 {0}","errorHostNameInvalidChar":"SSH 使用者名稱不能包含字元 {0}","errorUserNameInvalidChar":"SSH 使用者名稱不能包含字元 {0}"}

@@ -1,1 +1,0 @@
-{"warnNeverAgainAction":"不要再顯示","nonWindowsSshWarn":"找不到已安裝的非 Windows SSH。密碼提示可能無法正確顯示! 停用 `remote.SSH.useLocalServer` (如果需要)。","learnMoreAction":"深入了解","warnSshInstallNotFound":"找不到 SSH 安裝"}

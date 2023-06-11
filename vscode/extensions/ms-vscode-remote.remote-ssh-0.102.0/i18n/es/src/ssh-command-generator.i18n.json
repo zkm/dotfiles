@@ -1,1 +1,0 @@
-{"warnNeverAgainAction":"No volver a mostrar","nonWindowsSshWarn":"No se encontró ningún SSH instalado que no fuera de Windows. Es posible que las solicitudes de contraseña no se muestren correctamente. Deshabilite `remote.SSH.useLocalServer` si es necesario.","learnMoreAction":"Más información","warnSshInstallNotFound":"No se pudo encontrar una instalación SSH"}

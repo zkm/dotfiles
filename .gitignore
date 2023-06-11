@@ -1,1 +1,4 @@
 .DS_Store
+.cache
+vscode/*
+!vscode/extensions/extensions.json

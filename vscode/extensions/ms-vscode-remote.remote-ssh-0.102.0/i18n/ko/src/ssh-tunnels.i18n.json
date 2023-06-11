@@ -1,1 +1,0 @@
-{"errorFailedToFindFreePort":"여유 로컬 포트를 찾지 못했습니다: {0}","progressWaitingForPortForwarding":"포트 전달이 준비될 때까지 기다리는 중","errorEstablishingTunnel":"터널({0})을 설정하는 동안 오류가 발생했습니다.","showDetailsTerminalAction":"터미널에 세부 정보 표시","infoSettingUpTunnel":"SSH 터널 설정","maxWaitTimeExhausted":"최대 대기 시간 모두 사용","progressSettingUpTunnel":"SSH 터널 설정"}

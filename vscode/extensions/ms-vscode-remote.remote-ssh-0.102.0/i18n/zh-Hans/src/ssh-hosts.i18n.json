@@ -1,1 +1,0 @@
-{"configFileSaveDescription":"配置要保存的文件","openConfigAction":"打开配置","connectAction":"连接","infoHostAdded":"已添加主机!","inputSshCommand":"输入 SSH 连接命令","errorHostNamePrefix":"SSH 主机名不能以 {0} 开头","errorUserNamePrefix":"SSH 用户名不能以 {0} 开头","errorHostNameInvalidChar":"SSH 主机名不能包含字符 {0}","errorUserNameInvalidChar":"SSH 用户名不能包含字符 {0}"}

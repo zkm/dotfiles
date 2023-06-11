@@ -1,1 +1,0 @@
-{"warnNeverAgainAction":"不再显示","nonWindowsSshWarn":"找不到安装的非 Windows SSH。密码提示可能无法正确显示! 禁用 `remote.SSH.useLocalServer`(如果需要)。","learnMoreAction":"了解详细信息","warnSshInstallNotFound":"找不到 SSH 安装"}

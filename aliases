@@ -1,6 +1,6 @@
 # Unix
 alias c="clear"
-alias ll="ls -al"
+alias ll="ls -lsa"
 
 # TMUX
 alias tl='tmux list-sessions'
@@ -16,10 +16,10 @@ alias fpm="docker-compose exec -u $(id -u ${USER}):$(id -g ${USER}) php-fpm"
 alias phpfpmcomposer="docker-compose exec -u $(id -u ${USER}):$(id -g ${USER}) php-fpm composer"
 
 # Files/Folders 
-alias projects="${HOME}/Projects/"
-alias workspace="${HOME}/Workspace/"
-alias virtualmachines="${HOME}/VMs/"
-alias code-library="${HOME}/code-library"
+alias projects="${HOME}/Documents/projects/"
+alias workspace="${HOME}/Documents/workspace/"
+alias virtualmachines="${HOME}/Documents/virtualmachines/"
+alias code-library="${HOME}/Documents/code-library"
 
 # Git
 alias g="git"

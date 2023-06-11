@@ -1,1 +1,0 @@
-{"warnNeverAgainAction":"Znovu nezobrazovat","nonWindowsSshWarn":"Nepodařilo se najít nainstalované SSH jiné než Windows. Výzvy k zadání hesla se nemusí zobrazit správně! V případě potřeby zakažte `remote.SSH.useLocalServer`.","learnMoreAction":"Další informace","warnSshInstallNotFound":"Nepovedlo se najít instalaci SSH."}
