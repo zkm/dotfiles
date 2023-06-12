@@ -1,6 +1,6 @@
 # Unix
 alias c="clear"
-alias ll="ls -lsa"
+alias ll="ls -al"
 
 # TMUX
 alias tl='tmux list-sessions'
