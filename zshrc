@@ -36,3 +36,4 @@ colors
 export CLICOLOR=1
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
