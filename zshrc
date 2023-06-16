@@ -23,10 +23,9 @@ source ${HOMEBREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 export NVM_DIR="$HOME/.nvm"
 
 # This loads nvm
-[ -s "${HOMEBREW_PREFIX}/nvm/nvm.sh" ] && \. "${HOMEBREW_PREFIX}/nvm/nvm.sh"  
-
- # This loads nvm bash_completion
-[ -s "${HOMEBREW_PREFIX}/nvm/etc/bash_completion.d/nvm" ] && \. "${HOMEBREW_PREFIX}/nvm/etc/bash_completion.d/nvm" 
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  
+# This loads nvm bash_completion
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
 
 # Makes color constants available
 autoload -U colors
@@ -37,3 +36,6 @@ export CLICOLOR=1
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
