@@ -1,41 +1,40 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Enable Powerlevel10k instant prompt
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# History in cache directory:
+# History Configuration
 HISTSIZE=10000
 SAVEHIST=10000
 HISTFILE=~/.cache/zsh/history
 
-# Source aliases.
+# Source aliases
 [[ -f ~/.aliases ]] && source ~/.aliases
 
-# theme/plugins
-source ~/.dotfiles/powerlevel10k/powerlevel10k.zsh-theme
-source ${HOMEBREW_PREFIX}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ${HOMEBREW_PREFIX}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# Enable colored output from ls on FreeBSD-based systems
+export CLICOLOR=1
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# FZF Configuration
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+
+# Powerlevel10k Theme
+source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # Load NVM
 export NVM_DIR="$HOME/.nvm"
 
-# This loads nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  
-# This loads nvm bash_completion
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  
+# Load nvm.sh and nvm bash_completion
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# Makes color constants available
-autoload -U colors
-colors
+# Enable Zsh autocompletion
+autoload -U compinit && compinit
+zstyle ':completion:*' matcher-list 'r:|=*' 'm:{a-zA-Z}={A-Za-z}'
 
-# Enable colored output from ls, etc. on FreeBSD-based systems
-export CLICOLOR=1
+# 1Password (op) Command-Line Completion
+eval "$(op completion zsh)"
+compdef _op op
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+# Add RVM to PATH for scripting
 export PATH="$PATH:$HOME/.rvm/bin"
