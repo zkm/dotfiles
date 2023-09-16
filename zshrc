@@ -20,6 +20,7 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 # Powerlevel10k Theme
 source ~/powerlevel10k/powerlevel10k.zsh-theme
+source ~/.p10k.zsh
 
 # Load NVM
 export NVM_DIR="$HOME/.nvm"
