@@ -31,6 +31,6 @@ ln -s $(pwd)/vimrc ~/.vimrc
 ln -s $(pwd)/vimrc.plugs ~/.vimrc.plugs
 
 echo "Installing vim-plug and plugins for neovim..."
-sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.vim/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-nvim +PluginInstall +qall;
+vim +PlugInstall +qall;
