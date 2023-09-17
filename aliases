@@ -7,8 +7,8 @@ alias tl='tmux list-sessions'
 alias tk='tmux kill-session -t'
 
 # Neovim
-# alias vim="nvim"
-# alias vi="nvim"
+alias vim="nvim"
+alias vi="nvim"
 
 # Cake PHP
 alias cake="docker-compose exec -u $(id -u ${USER}):$(id -g ${USER}) php-fpm bin/cake"

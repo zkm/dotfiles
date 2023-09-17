@@ -1,3 +1,5 @@
+source .p10k.zsh
+
 eval "$(/opt/homebrew/bin/brew shellenv)"
 typeset -g POWERLEVEL10K_INSTANT_PROMPT=off
 neofetch

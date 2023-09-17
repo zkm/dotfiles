@@ -67,6 +67,11 @@ function setup_neovim() {
     # echo "lua require('config')" >> ~/.config/nvim/init.vim
 }
 
+function setup_p10k() {
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
+    echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+}
+
 function create_dotfiles() {
     echo "Creating dotfiles..."
     ln -s $(pwd)/aliases ~/.aliases
@@ -77,6 +82,8 @@ function create_dotfiles() {
     ln -s $(pwd)/bin ~/.bin
     ln -s $(pwd)/zshrc ~/.zshrc
     ln -s $(pwd)/tmux.conf ~/.tmux.conf
+    ln -s $(pwd)/p10k.zsh ~/.p10k.zsh
+    ln -s $(pwd)/zprofile ~/.zprofile
 }
 
 function setup_vim_plug() {
@@ -119,6 +126,7 @@ else
 fi
 
 setup_neovim
+setup_p10k
 create_dotfiles
 setup_vim_plug
 install_copilot
