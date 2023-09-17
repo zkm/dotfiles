@@ -1,16 +1,23 @@
-# aliases
-alias mv='nocorrect mv'
-alias cp='nocorrect cp'
-alias rm='rm'
-alias mkdir='nocorrect mkdir'
+# Load configs
+for config in ~/.zsh/configs/*; do
+  source $config
+done
 
-alias ls="ls --color=auto"
-alias ll="ls --color -l"
-alias la="ls --color -la"
-alias lt="ls --sort=time"
-alias lat="ls --color -la --sort=time"
+# Load functions
+for function in ~/.zsh/functions/*; do
+  source $function
+done
 
-alias rh='fc -R'
+# Add dotfiles bin to path
+export PATH=$PATH:~/dotfiles/bin
+
+if [[ "$(uname)" == "Darwin" ]]; then
+  # Homebrew
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# Source aliases.
+[[ -f ~/.aliases ]] && source ~/.aliases
 
 autoload run-help
 
@@ -197,3 +204,26 @@ export NVM_DIR="$HOME/.nvm"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+source ~/.powerlevel10k/powerlevel10k.zsh-theme
+
+# Add .bin to the PATH
+export PATH="$HOME/.bin:$PATH"
+
+# Source fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+if [[ "$(uname)" == "Darwin" ]]; then
+  if type brew &>/dev/null
+  then
+    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+    autoload -Uz compinit
+    compinit
+  fi
+
+  export PATH="$PATH:$HOME/.local/bin"
+  . /opt/homebrew/opt/asdf/libexec/asdf.sh
+fi
+
+source ~/.powerlevel10k/powerlevel10k.zsh-theme
+source ~/.powerlevel10k/powerlevel10k.zsh-theme

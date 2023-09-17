@@ -27,3 +27,16 @@ alias gc="git commit"
 alias gs="git status"
 alias gbpurge='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "staging" | xargs -n 1 git branch -d'
 # git fetch -p && git branch --merged | grep -v '*' | grep -v 'master' | xargs git branch -d
+
+alias mv='nocorrect mv'
+alias cp='nocorrect cp'
+alias rm='rm'
+alias mkdir='nocorrect mkdir'
+
+alias ls="ls --color=auto"
+alias ll="ls --color -l"
+alias la="ls --color -la"
+alias lt="ls --sort=time"
+alias lat="ls --color -la --sort=time"
+
+alias rh='fc -R'
