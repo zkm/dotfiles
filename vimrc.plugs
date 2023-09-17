@@ -1,10 +1,13 @@
 call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
-  Plug 'altercation/vim-colors-solarized'
   Plug 'christoomey/vim-system-copy'
   Plug 'christoomey/vim-tmux-navigator'
+  Plug 'dense-analysis/ale'
   Plug 'elixir-lang/vim-elixir'
+  Plug 'ericbn/vim-solarized'
+  Plug 'evanleck/vim-svelte', {'branch': 'main'}
   Plug 'fatih/vim-go'
   Plug 'flowtype/vim-flow'
+  Plug 'github/copilot.vim'
   Plug 'janko-m/vim-test'
   Plug 'jgdavey/tslime.vim'
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -12,12 +15,13 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
   Plug 'junegunn/vim-easy-align'
   Plug 'mxw/vim-jsx'
   Plug 'othree/es.next.syntax.vim'
+  Plug 'othree/html5.vim'
   Plug 'othree/javascript-libraries-syntax.vim'
   Plug 'othree/yajs.vim'
+  Plug 'pangloss/vim-javascript'
   Plug 'pbrisbin/vim-mkdir'
   Plug 'powerline/powerline'
   Plug 'rust-lang/rust.vim'
-  # Plug 'scrooloose/nerdtree'
   Plug 'preservim/nerdtree'
   Plug 'slim-template/vim-slim'
   Plug 'thoughtbot/vim-rspec'
@@ -35,5 +39,5 @@ call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
   Plug 'tpope/vim-surround'
   Plug 'vim-airline/vim-airline'
   Plug 'vim-airline/vim-airline-themes'
-  Plug 'vim-ruby/vim-ruby'
+  Plug 'williamboman/mason.nvim'
 call plug#end()
