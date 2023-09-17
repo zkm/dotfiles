@@ -83,7 +83,13 @@ function create_dotfiles() {
 
 function setup_p10k() {
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
-    echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+    
+    # Check if the source line already exists in ~/.zshrc
+    if ! grep -qxF 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' ~/.zshrc; then
+        echo 'source ~/.powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
+    else
+        echo 'Powerlevel10k source line already exists in ~/.zshrc. Skipping.'
+    fi
 }
 
 
@@ -125,8 +131,36 @@ else
     fi
 fi
 
+function install_fonts() {
+    echo "Installing fonts..."
+    
+    # Example: Install Fira Code fonts
+    if [[ -d "fonts/Fira_Code" ]]; then
+        echo "Installing Fira Code fonts..."
+        mkdir -p ~/.local/share/fonts/Fira_Code
+        cp -r fonts/Fira_Code/* ~/.local/share/fonts/Fira_Code/
+    fi
+
+    # Example: Install MesloLGS NF fonts
+    if [[ -d "fonts/MesloLGS NF" ]]; then
+        echo "Installing MesloLGS NF fonts..."
+        mkdir -p ~/.local/share/fonts/MesloLGS_NF
+        cp -r fonts/MesloLGS\ NF/* ~/.local/share/fonts/MesloLGS_NF/
+    fi
+    
+    # Add more font installations as needed
+    
+    # Refresh the font cache (Linux)
+    if [[ -x "$(command -v fc-cache)" ]]; then
+        fc-cache -f -v
+    fi
+    
+    echo "Fonts installed successfully."
+}
+
 setup_neovim
 create_dotfiles
 setup_p10k
 setup_vim_plug
 install_copilot
+install_fonts

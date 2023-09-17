@@ -204,7 +204,6 @@ export NVM_DIR="$HOME/.nvm"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
-source ~/.powerlevel10k/powerlevel10k.zsh-theme
 
 # Add .bin to the PATH
 export PATH="$HOME/.bin:$PATH"
@@ -225,5 +224,4 @@ if [[ "$(uname)" == "Darwin" ]]; then
   . /opt/homebrew/opt/asdf/libexec/asdf.sh
 fi
 
-source ~/.powerlevel10k/powerlevel10k.zsh-theme
 source ~/.powerlevel10k/powerlevel10k.zsh-theme
