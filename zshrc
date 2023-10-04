@@ -220,6 +220,6 @@ if [[ "$(uname)" == "Darwin" ]]; then
   . /opt/homebrew/opt/asdf/libexec/asdf.sh
 fi
 
-export PATH="$PATH:$HOME/.composer/vendor/bin"
+export PATH="$PATH:$HOME/.config/composer/vendor/bin"
 
 source ~/.powerlevel10k/powerlevel10k.zsh-theme
