@@ -16,3 +16,5 @@
   user = zkm
 [core]
   editor = /opt/homebrew/bin/nvim
+[safe]
+	directory = /home/zkm/Developer/localhost

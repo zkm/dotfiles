@@ -65,10 +65,6 @@ fi
 
 zle -N fake-enter; bindkey "^X^H" fake-enter
 
-# colors
-autoload -U colors
-colors
-
 #cdpath=(. ~)
 DIRSTACKSIZE=60
 
