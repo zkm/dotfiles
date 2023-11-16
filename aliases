@@ -40,3 +40,7 @@ alias lt="ls --sort=time"
 alias lat="ls --color -la --sort=time"
 
 alias rh='fc -R'
+
+# Drush in short
+alias d='vendor/bin/drush'
+alias xmp='cd /Applications/XAMPP'
