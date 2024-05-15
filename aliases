@@ -1,10 +1,38 @@
-# Unix
+# General Shortcuts
 alias c="clear"
-alias ll="ls -al"
+alias ls="ls --color=auto"
+alias ll="ls --color=auto -l"
+alias la="ls --color=auto -la"
+alias lt="ls --sort=time"
+alias lat="ls --color=auto -la --sort=time"
 
-# TMUX
-alias tl='tmux list-sessions'
-alias tk='tmux kill-session -t'
+# System Management
+alias update='sudo apt update'
+alias clean='sudo apt clean && sudo apt autoremove'
+alias status='systemctl status'
+restart() { sudo systemctl restart "$1"; }
+
+# Networking Tools
+alias nets='ip a'
+alias ports='sudo netstat -tulnp'
+
+# Disk and File Management
+alias du='du -sh'
+alias df='df -h'
+alias dutop='du -ahx . | sort -rh | head -10'
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+
+# Log Management
+alias syslog='sudo tail -100 /var/log/messages'
+alias logs='cd /var/log'
+
+# TMUX Sessions (Conditional on TMUX's availability)
+if command -v tmux &> /dev/null; then
+    alias tl='tmux list-sessions'
+    alias tk='tmux kill-session -t'
+fi
 
 # Neovim
 alias vim="nvim"
@@ -28,15 +56,47 @@ alias gs="git status"
 alias gbpurge='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "staging" | xargs -n 1 git branch -d'
 # git fetch -p && git branch --merged | grep -v '*' | grep -v 'master' | xargs git branch -d
 
-alias mv='nocorrect mv'
-alias cp='nocorrect cp'
-alias rm='rm'
-alias mkdir='nocorrect mkdir'
+# Python
+alias python="python3"
 
-alias ls="ls --color=auto"
-alias ll="ls --color -l"
-alias la="ls --color -la"
-alias lt="ls --sort=time"
-alias lat="ls --color -la --sort=time"
+# Docker Aliases
+alias d='docker'
+alias dc='docker-compose'
+alias di='docker images'
+alias dps='docker ps'
+alias dstop='docker stop'
+alias dstart='docker start'
+alias dlogs='docker logs'
+alias dexec='docker exec -it'
+alias dclean='docker system prune -a'
+alias dcompose='docker-compose'
 
-alias rh='fc -R'
+# Docker Compose Aliases
+alias dcu='docker-compose up'
+alias dcub='docker-compose up --build'
+alias dcd='docker-compose down'
+alias dcr='docker-compose run'
+alias dcps='docker-compose ps'
+alias dclogs='docker-compose logs'
+
+# Docker Cleanup Aliases
+alias dclean-all='docker system prune -a --volumes'
+alias dclean-images='docker image prune'
+alias dclean-containers='docker container prune'
+alias dclean-volumes='docker volume prune'
+alias dclean-networks='docker network prune'
+
+# Docker Utility Aliases
+alias dcp='docker cp'
+alias dinfo='docker info'
+alias dinspect='docker inspect'
+alias dlogs-tail='docker logs --tail'
+alias dstats='docker stats'
+
+# Docker Swarm Aliases (if applicable)
+alias dswarm-init='docker swarm init'
+alias dswarm-join='docker swarm join --token'
+alias dswarm-leave='docker swarm leave'
+alias dswarm-nodes='docker node ls'
+alias dswarm-services='docker service ls'
+alias pip='pip3'
