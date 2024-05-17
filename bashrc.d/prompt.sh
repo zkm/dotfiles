@@ -82,7 +82,7 @@ construct_rprompt() {
 PS1=''
 
 # Set the right prompt
-PROMPT_COMMAND='RPROMPT=$(construct_rprompt); LPROMPT=$(construct_lprompt); printf "\033[s\033[999C\033[100D%s\033[u" "${RPROMPT}"; printf "\033[s\033[0G%s\033[u" "${LPROMPT}"'
+PROMPT_COMMAND='LPROMPT=$(construct_lprompt); RPROMPT=$(construct_rprompt); printf "\033[s\033[999C\033[100D%s\033[u" "${RPROMPT}"; printf "\033[s\033[0G%s\033[u" "${LPROMPT}"'
 
 # Add a new line for the prompt
 PS1+="\n❯ "
