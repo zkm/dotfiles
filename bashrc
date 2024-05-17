@@ -1,4 +1,7 @@
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
 
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# Source all files in ~/.bashrc.d
+for file in ~/.bashrc.d/*.sh; do
+  [ -r "$file" ] && source "$file"
+done
