@@ -15,4 +15,4 @@
 [github]
   user = zkm
 [core]
-  editor = /opt/homebrew/bin/nvim
+  editor = /usr/bin/nvim
