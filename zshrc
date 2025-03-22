@@ -74,3 +74,5 @@ if command -v nvm &> /dev/null; then
 fi
 
 export DRUSH_LAUNCHER_FALLBACK="/srv/http/drupal"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
