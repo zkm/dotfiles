@@ -20,3 +20,4 @@ be sure that you have a terminal profile named Default.
 * rbenv and the ruby-build plugin
 * tmux
 * vim-plug
+* fastfetch
