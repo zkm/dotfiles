@@ -1,0 +1,48 @@
+    OpenRGB v0.9
+    Commit:  from 
+    Launched: 20250317_160612
+====================================================================================================
+
+1002  |Info:    ------------------------------------------------------
+1002  |Info:    |               Start device detection               |
+1002  |Info:    ------------------------------------------------------
+1002  |Info:    Initializing HID interfaces: Success
+1006  |Info:    ------------------------------------------------------
+1007  |Info:    |             Detecting I2C interfaces               |
+1007  |Info:    ------------------------------------------------------
+1007  |Info:    Registering I2C interface: /dev/i2c-3 Device 1002:73DF Subsystem: 1EAE:6710
+1007  |Warning: [i2c_smbus_linux] Failed to read i2c device PCI device ID
+1007  |Info:    Registering I2C interface: /dev/i2c-10 Device 0000:0000 Subsystem: 0000:0000
+1007  |Info:    Registering I2C interface: /dev/i2c-1 Device 0000:0000 Subsystem: 0000:0000
+1007  |Warning: [i2c_smbus_linux] Failed to read i2c device PCI device ID
+1007  |Info:    Registering I2C interface: /dev/i2c-8 Device 0000:0000 Subsystem: 0000:0000
+1007  |Info:    Registering I2C interface: /dev/i2c-6 Device 1002:73DF Subsystem: 1EAE:6710
+1007  |Info:    Registering I2C interface: /dev/i2c-4 Device 1002:73DF Subsystem: 1EAE:6710
+1007  |Info:    Registering I2C interface: /dev/i2c-2 Device 1002:73DF Subsystem: 1EAE:6710
+1007  |Info:    Registering I2C interface: /dev/i2c-0 Device 0000:0000 Subsystem: 0000:0000
+1007  |Warning: [i2c_smbus_linux] Failed to read i2c device PCI device ID
+1007  |Info:    Registering I2C interface: /dev/i2c-9 Device 0000:0000 Subsystem: 0000:0000
+1007  |Info:    Registering I2C interface: /dev/i2c-7 Device 1002:73DF Subsystem: 1EAE:6710
+1007  |Info:    Registering I2C interface: /dev/i2c-5 Device 1002:73DF Subsystem: 1EAE:6710
+1007  |Info:    ------------------------------------------------------
+1007  |Info:    |               Detecting I2C devices                |
+1007  |Info:    ------------------------------------------------------
+1314  |Info:    ------------------------------------------------------
+1314  |Info:    |               Detecting I2C PCI devices            |
+1314  |Info:    ------------------------------------------------------
+1314  |Info:    ------------------------------------------------------
+1314  |Info:    |               Detecting HID devices                |
+1314  |Info:    ------------------------------------------------------
+1490  |Info:    [B650 EAGLE AX] Registering RGB controller
+3802  |Info:    [G502 LIGHTSPEED Wireless Gaming Mouse] Registering RGB controller
+3802  |Info:    ------------------------------------------------------
+3802  |Info:    |            Detecting libusb HID devices            |
+3802  |Info:    ------------------------------------------------------
+3855  |Info:    ------------------------------------------------------
+3855  |Info:    |              Detecting other devices               |
+3855  |Info:    ------------------------------------------------------
+3861  |Info:    ------------------------------------------------------
+3861  |Info:    |                Detection completed                 |
+3861  |Info:    ------------------------------------------------------
+83996 |Info:    Found file: Stealth.orp attempting to validate header
+83996 |Info:    Valid v4 profile found for Stealth

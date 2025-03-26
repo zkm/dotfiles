@@ -33,6 +33,11 @@ export HSA_OVERRIDE_GFX_VERSION=10.3.0
 # rbenv (Ruby Version Manager)
 export PATH="$HOME/.rbenv/bin:$PATH"
 
+# pyenv (Python Version Manager)
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+
 # Node Version Manager (NVM)
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -74,5 +79,6 @@ if command -v nvm &> /dev/null; then
 fi
 
 export DRUSH_LAUNCHER_FALLBACK="/srv/http/drupal"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

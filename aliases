@@ -105,3 +105,8 @@ alias gbpurge='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "
 # 🎨 System Info (Fastfetch > Neofetch)
 # ==============================
 alias neofetch="fastfetch"
+
+alias matrix="cmatrix"
+
+alias vim="nvim"
+alias vi="nvim"
