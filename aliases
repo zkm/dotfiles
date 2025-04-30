@@ -1,47 +1,45 @@
 # ==============================
-# 🖥️  UNIX Commands
+# 🖥️  Basic Commands
 # ==============================
 alias c="clear"
 
 # ==============================
-# 📂 File & Folder Navigation
+# 📂 Directory Shortcuts
 # ==============================
-alias work="cd ${HOME}/Documents/work/"
-alias dev="cd ${HOME}/Developer/"
+alias work="cd ~/Documents/work/"
+alias dev="cd ~/Developer/"
 
 # ==============================
 # 🤖 Ollama AI Commands
 # ==============================
 
-# Check available models
+# List & manage models
 alias ollama-list="ollama list"
+alias ollama-remove="ollama rm"
+alias ollama-clean-safe='ollama list | awk "{print \$1}" | fzf --multi | xargs -r -n1 ollama rm'
 
-# Run Llama 3 interactively
+# Run models
 alias llama3="ollama run llama3"
-
-# Run Gemma 3 interactively
 alias gemma3="ollama run gemma3"
-
-# Run Code Llama interactively
 alias codellama="ollama run codellama"
+alias mistral="ollama run mistral"
 
-# Quick AI prompts from the terminal
-alias ai="ollama run llama3"
-alias code-ai="ollama run codellama"
-alias chat-ai="ollama run gemma3"
-
-# Stream responses in real-time (if supported)
+# Streamed runners
 alias llama3-stream="ollama run --stream llama3"
 alias gemma3-stream="ollama run --stream gemma3"
 alias codellama-stream="ollama run --stream codellama"
+alias mistral-stream="ollama run --stream mistral"
 
-# Fetch model details
+# Default shortcuts
+alias ai="ollama run llama3"         # Fast, general-purpose
+alias code-ai="ollama run codellama" # Coding
+alias chat-ai="ollama run gemma3"    # Friendly chat
+
+# Show model info
 alias llama3-info="ollama show llama3"
 alias gemma3-info="ollama show gemma3"
 alias codellama-info="ollama show codellama"
-
-# Remove a model (if needed)
-alias ollama-remove="ollama rm"
+alias mistral-info="ollama show mistral"
 
 # ==============================
 # 🖥️  TMUX Shortcuts
@@ -50,40 +48,42 @@ alias tl='tmux list-sessions'
 alias tk='tmux kill-session -t'
 
 # ==============================
-# 🛠 Web Server (NGINX, PHP-FPM, MariaDB)
+# 🛠 Web Server Management
 # ==============================
+
+# NGINX
 alias nginx-start="sudo systemctl start nginx"
 alias nginx-stop="sudo systemctl stop nginx"
 alias nginx-restart="sudo systemctl restart nginx"
 alias nginx-status="sudo systemctl status nginx"
-alias nginx-test="sudo nginx -t"  # Test Nginx config before restarting
+alias nginx-test="sudo nginx -t"
 
+# PHP-FPM
 alias php-start="sudo systemctl start php-fpm"
 alias php-stop="sudo systemctl stop php-fpm"
 alias php-restart="sudo systemctl restart php-fpm"
 alias php-status="sudo systemctl status php-fpm"
 
+# MariaDB
 alias mariadb-start="sudo systemctl start mariadb"
 alias mariadb-stop="sudo systemctl stop mariadb"
 alias mariadb-restart="sudo systemctl restart mariadb"
 alias mariadb-status="sudo systemctl status mariadb"
-
-# Restart all web services at once
-alias web-restart="sudo systemctl restart nginx php-fpm mariadb"
-
-# Open MySQL shell as root
 alias mysql-root="mariadb -u root -p"
 
-# Quick backup & restore for MariaDB (with timestamp)
-alias mysql-dump="mysqldump -u root -p --all-databases > ~/mariadb_backup_$(date +'%Y%m%d_%H%M%S').sql"
-alias mysql-restore="mariadb -u root -p < ~/mariadb_backup.sql"
+# All-in-one restart
+alias web-restart="sudo systemctl restart nginx php-fpm mariadb"
+
+# Quick MariaDB backup/restore
+alias mysql-dump='mysqldump -u root -p --all-databases > ~/mariadb_backup_$(date +%Y%m%d_%H%M%S).sql'
+alias mysql-restore='mariadb -u root -p < ~/mariadb_backup.sql'
 
 # ==============================
 # 🍰 CakePHP (Docker-based)
 # ==============================
-alias cake="docker-compose exec -u $(id -u ${USER}):$(id -g ${USER}) php-fpm bin/cake"
-alias fpm="docker-compose exec -u $(id -u ${USER}):$(id -g ${USER}) php-fpm"
-alias phpfpmcomposer="docker-compose exec -u $(id -u ${USER}):$(id -g ${USER}) php-fpm composer"
+alias fpm="docker-compose exec -u $(id -u):$(id -g) php-fpm"
+alias cake="$fpm bin/cake"
+alias phpfpmcomposer="$fpm composer"
 
 # ==============================
 # 🛠 Git Shortcuts
@@ -95,18 +95,15 @@ alias gc="git commit"
 alias gs="git status"
 alias gp="git pull"
 
-# Delete merged branches (except master, develop, staging)
-alias gbpurge='git branch --merged | grep -v "\*" | grep -v "master" | grep -v "develop" | grep -v "staging" | xargs -n 1 git branch -d'
-
-# Alternative: Fetch & clean up merged branches
-# alias gbpurge='git fetch -p && git branch --merged | grep -v '*' | grep -v 'master' | xargs git branch -d'
+# Clean merged branches (excluding protected ones)
+alias gbpurge='git branch --merged | grep -v "\*" | grep -Ev "master|develop|staging" | xargs -n 1 git branch -d'
 
 # ==============================
-# 🎨 System Info (Fastfetch > Neofetch)
+# 🎨 System Info & Misc
 # ==============================
 alias neofetch="fastfetch"
-
 alias matrix="cmatrix"
 
+# Editor preference
 alias vim="nvim"
 alias vi="nvim"
