@@ -1,0 +1,24 @@
+#!/bin/bash
+
+cd "$1" || exit
+
+search_artist="$3"
+search_album="$2"
+
+echo "🔎 Searching for album art for $search_artist - $search_album..."
+
+mbid=$(curl -s "https://musicbrainz.org/ws/2/release/?query=artist:\"$search_artist\" AND release:\"$search_album\"&fmt=json" \
+  | jq -r '.releases[0].id')
+
+if [[ -n "$mbid" && "$mbid" != "null" ]]; then
+  art_url="https://coverartarchive.org/release/${mbid}/front-500.jpg"
+  echo "🎨 Found cover art: $art_url"
+  wget -q -O cover.jpg "$art_url"
+  for f in *.flac; do
+    metaflac --remove --import-picture-from="cover.jpg" "$f"
+  done
+  echo "✅ Cover art embedded in FLAC files."
+else
+  echo "❌ No cover art found for $search_artist - $search_album"
+fi
+

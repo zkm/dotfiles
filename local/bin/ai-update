@@ -1,0 +1,53 @@
+#!/bin/bash
+set -e
+
+DAYS_OLD=7
+
+echo "✅ Ollama is up to date (v0.6.6 assumed)."
+
+# --- Update models if they're old ---
+echo ""
+echo "🔄 Checking model freshness..."
+models=(llama3 codellama gemma3 mistral)
+
+for model in "${models[@]}"; do
+  modified=$(ollama list | grep "$model" | awk '{print $(NF-1), $NF}')
+  if [[ -z "$modified" ]]; then
+    echo "⬇️ $model not found — pulling fresh copy..."
+    ollama pull "$model"
+    continue
+  fi
+
+  timestamp=$(date -d "$modified" +%s 2>/dev/null || gdate -d "$modified" +%s)
+  now=$(date +%s)
+  age_days=$(( (now - timestamp) / 86400 ))
+
+  if [[ $age_days -ge $DAYS_OLD ]]; then
+    echo "⏳ $model is $age_days days old — updating..."
+    ollama pull "$model"
+  else
+    echo "✅ $model is recent ($age_days days old) — skipping."
+  fi
+done
+
+# --- Prompt for cleanup ---
+echo ""
+read -p "🧹 Remove unused models via fzf? [y/N]: " confirm
+if [[ "$confirm" =~ ^[Yy]$ ]]; then
+  echo "→ Select models to delete (use space to select, Enter to confirm):"
+  to_delete=$(ollama list | awk '{print $1}' | fzf --multi)
+
+  if [[ -n "$to_delete" ]]; then
+    echo "$to_delete" | xargs -n1 ollama rm
+    echo "🗑️ Models removed."
+  else
+    echo "⚠️ No models selected."
+  fi
+else
+  echo "🛑 Skipping model cleanup."
+fi
+
+# --- Done ---
+echo ""
+echo "✅ Finished. Current models:"
+ollama list
