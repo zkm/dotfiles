@@ -10,6 +10,24 @@ alias work="cd ~/Documents/work/"
 alias dev="cd ~/Developer/"
 
 # ==============================
+# 📝 Editor Preference
+# ==============================
+vim() {
+  if command -v nvim >/dev/null 2>&1; then
+    command nvim "$@"
+  elif command -v vim >/dev/null 2>&1; then
+    command vim "$@"
+  else
+    echo "❌ No 'nvim' or 'vim' installed." >&2
+    return 1
+  fi
+}
+
+vi() {
+  vim "$@"
+}
+
+# ==============================
 # 🤖 Ollama AI Commands
 # ==============================
 
@@ -101,9 +119,25 @@ alias gbpurge='git branch --merged | grep -v "\*" | grep -Ev "master|develop|sta
 # ==============================
 # 🎨 System Info & Misc
 # ==============================
-alias neofetch="fastfetch"
-alias matrix="cmatrix"
 
-# Editor preference
-alias vim="nvim"
-alias vi="nvim"
+# Fallback: fastfetch > neofetch > warning
+neofetch() {
+  if command -v fastfetch >/dev/null 2>&1; then
+    fastfetch "$@"
+  elif command -v neofetch >/dev/null 2>&1; then
+    command neofetch "$@"
+  else
+    echo "❌ Neither fastfetch nor neofetch is installed." >&2
+    return 1
+  fi
+}
+
+# Run cmatrix only if available
+matrix() {
+  if command -v cmatrix >/dev/null 2>&1; then
+    command cmatrix "$@"
+  else
+    echo "❌ cmatrix is not installed." >&2
+    return 1
+  fi
+}
