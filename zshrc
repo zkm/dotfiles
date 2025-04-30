@@ -6,16 +6,14 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Load Powerlevel10k theme and config
+# Load Powerlevel10k Theme & Config
 source ~/.powerlevel10k/powerlevel10k.zsh-theme
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-
 
 # ==============================
 # 🔹 Load Custom Aliases
 # ==============================
 [[ -f ~/.aliases ]] && source ~/.aliases
-
 
 # ==============================
 # 🛠 Custom Environment Variables
@@ -23,7 +21,6 @@ source ~/.powerlevel10k/powerlevel10k.zsh-theme
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
 export DRUSH_LAUNCHER_FALLBACK="/srv/http/drupal"
 export PIP_REQUIRE_VIRTUALENV=false
-
 
 # ==============================
 # 🚀 PATH Configuration
@@ -38,11 +35,10 @@ eval "$(rbenv init -)"
 export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init --path)"
 
-# Load NVM if available
+# Load NVM
 export NVM_DIR="$HOME/.nvm"
 [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
 [[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
-
 
 # ==============================
 # ⚙️ Zsh Behavior & Input Settings
@@ -62,15 +58,11 @@ bindkey -v
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
 
-
 # ==============================
 # 🎯 Vi Mode Prompt Indicator
 # ==============================
-# Show [NORMAL] or [INSERT] in the prompt based on current Vi mode.
-# Requires setting $ORIGINAL_PROMPT (can be integrated with P10K).
-
-ORIGINAL_PROMPT=$PROMPT
-
+# Save the original prompt and dynamically update it
+# to show [NORMAL] or [INSERT] based on Vi key mode.
 function zle-keymap-select {
   case $KEYMAP in
     vicmd)
@@ -82,10 +74,5 @@ function zle-keymap-select {
   esac
   zle reset-prompt
 }
-zle -N zle-keymap-select
 
-# Initialize correct prompt state on shell startup
-function zle-line-init {
-  zle-keymap-select
-}
-zle -N zle-line-init
+zle -N zle-keymap-select
