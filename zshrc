@@ -1,84 +1,91 @@
 # ==============================
-# 🌟 Powerlevel10k Prompt
+# 🌟 Powerlevel10k Prompt Setup
 # ==============================
-# Enable instant prompt (should be at the top)
+# Enable instant prompt for faster shell startup
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Load Powerlevel10k Theme
-# source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+# Load Powerlevel10k theme and config
 source ~/.powerlevel10k/powerlevel10k.zsh-theme
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
-# Load P10K Config (if exists)
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# ==============================
-# 🔹 Aliases
-# ==============================
-# Load custom aliases if file exists
-if [[ -f ~/.aliases ]]; then
-  source ~/.aliases
-fi
 
 # ==============================
-# 🛠 Environment Variables
+# 🔹 Load Custom Aliases
+# ==============================
+[[ -f ~/.aliases ]] && source ~/.aliases
+
+
+# ==============================
+# 🛠 Custom Environment Variables
 # ==============================
 export HSA_OVERRIDE_GFX_VERSION=10.3.0
+export DRUSH_LAUNCHER_FALLBACK="/srv/http/drupal"
+export PIP_REQUIRE_VIRTUALENV=false
 
 
 # ==============================
 # 🚀 PATH Configuration
 # ==============================
-# rbenv (Ruby Version Manager)
-export PATH="$HOME/.rbenv/bin:$PATH"
+# Prepend user and dev tools to PATH
+export PATH="$HOME/.local/bin:$HOME/scripts:$HOME/.rbenv/bin:$HOME/.pyenv/bin:$HOME/.config/composer/vendor/bin:$PATH"
 
-# pyenv (Python Version Manager)
+# Initialize rbenv
+eval "$(rbenv init -)"
+
+# Initialize pyenv
 export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
 
-# Node Version Manager (NVM)
+# Load NVM if available
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-# Composer Global Bin (for Drush & PHP tools)
-export PATH="$HOME/.config/composer/vendor/bin:$PATH"
-
-# Add User Binaries (if exists)
-[[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
+[[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+[[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
 
 
 # ==============================
-# 🛠 Utility Settings & Fixes
+# ⚙️ Zsh Behavior & Input Settings
 # ==============================
-# Fix for Arch Linux Python package management (PEP 668)
-export PIP_REQUIRE_VIRTUALENV=false
-
-# Improve history behavior
+# Shell history settings
 HISTSIZE=10000
 SAVEHIST=10000
 HISTFILE=~/.zsh_history
 
-# Auto-correct minor typos in commands
-setopt correct
+# Shell options
+setopt correct         # Auto-correct minor typos in commands
+setopt nocaseglob      # Enable case-insensitive globbing
+autoload -Uz compinit && compinit  # Enable tab completion
 
-# Enable tab completion menu
-autoload -Uz compinit && compinit
+# Keybindings (Vi-style editing)
+bindkey -v
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
 
-# Enable case-insensitive globbing (useful for ls, cd, etc.)
-setopt nocaseglob
 
 # ==============================
-# ✅ Load NVM (last to avoid slow shell startup)
+# 🎯 Vi Mode Prompt Indicator
 # ==============================
-if command -v nvm &> /dev/null; then
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-fi
+# Show [NORMAL] or [INSERT] in the prompt based on current Vi mode.
+# Requires setting $ORIGINAL_PROMPT (can be integrated with P10K).
 
-export DRUSH_LAUNCHER_FALLBACK="/srv/http/drupal"
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+ORIGINAL_PROMPT=$PROMPT
 
+function zle-keymap-select {
+  case $KEYMAP in
+    vicmd)
+      PROMPT="%F{green}[NORMAL]%f $ORIGINAL_PROMPT"
+      ;;
+    main|viins)
+      PROMPT="%F{blue}[INSERT]%f $ORIGINAL_PROMPT"
+      ;;
+  esac
+  zle reset-prompt
+}
+zle -N zle-keymap-select
+
+# Initialize correct prompt state on shell startup
+function zle-line-init {
+  zle-keymap-select
+}
+zle -N zle-line-init
