@@ -1,17 +1,31 @@
+# ============================================================================
+# 🚀 Personal Shell Aliases & Functions
+# ============================================================================
+# Author: zkm
+# Last Updated: September 15, 2025
+# Description: Custom aliases and functions for enhanced shell experience
+# ============================================================================
+
 # ==============================
 # 🖥️  Basic Commands
 # ==============================
 alias c="clear"
+alias l="ls -la"
+alias ll="ls -l"
+alias la="ls -A"
 
 # ==============================
 # 📂 Directory Shortcuts
 # ==============================
 alias work="cd ~/Documents/work/"
 alias dev="cd ~/Developer/"
+alias ..="cd .."
+alias ...="cd ../.."
 
 # ==============================
-# 📝 Editor Preference
+# 📝 Editor Preferences
 # ==============================
+# Smart vim/nvim fallback
 vim() {
   if command -v nvim >/dev/null 2>&1; then
     command nvim "$@"
@@ -26,101 +40,14 @@ vim() {
 vi() {
   vim "$@"
 }
+vi() {
+  vim "$@"
+}
 
 # ==============================
-# 🤖 Ollama AI Commands
+# 🎨 System Info & Utilities
 # ==============================
-
-# List & manage models
-alias ollama-list="ollama list"
-alias ollama-remove="ollama rm"
-alias ollama-clean-safe='ollama list | awk "{print \$1}" | fzf --multi | xargs -r -n1 ollama rm'
-
-# Run models
-alias llama3="ollama run llama3"
-alias gemma3="ollama run gemma3"
-alias codellama="ollama run codellama"
-alias mistral="ollama run mistral"
-
-# Streamed runners
-alias llama3-stream="ollama run --stream llama3"
-alias gemma3-stream="ollama run --stream gemma3"
-alias codellama-stream="ollama run --stream codellama"
-alias mistral-stream="ollama run --stream mistral"
-
-# Default shortcuts
-alias ai="ollama run llama3"         # Fast, general-purpose
-alias code-ai="ollama run codellama" # Coding
-alias chat-ai="ollama run gemma3"    # Friendly chat
-
-# Show model info
-alias llama3-info="ollama show llama3"
-alias gemma3-info="ollama show gemma3"
-alias codellama-info="ollama show codellama"
-alias mistral-info="ollama show mistral"
-
-# ==============================
-# 🖥️  TMUX Shortcuts
-# ==============================
-alias tl='tmux list-sessions'
-alias tk='tmux kill-session -t'
-
-# ==============================
-# 🛠 Web Server Management
-# ==============================
-
-# NGINX
-alias nginx-start="sudo systemctl start nginx"
-alias nginx-stop="sudo systemctl stop nginx"
-alias nginx-restart="sudo systemctl restart nginx"
-alias nginx-status="sudo systemctl status nginx"
-alias nginx-test="sudo nginx -t"
-
-# PHP-FPM
-alias php-start="sudo systemctl start php-fpm"
-alias php-stop="sudo systemctl stop php-fpm"
-alias php-restart="sudo systemctl restart php-fpm"
-alias php-status="sudo systemctl status php-fpm"
-
-# MariaDB
-alias mariadb-start="sudo systemctl start mariadb"
-alias mariadb-stop="sudo systemctl stop mariadb"
-alias mariadb-restart="sudo systemctl restart mariadb"
-alias mariadb-status="sudo systemctl status mariadb"
-alias mysql-root="mariadb -u root -p"
-
-# All-in-one restart
-alias web-restart="sudo systemctl restart nginx php-fpm mariadb"
-
-# Quick MariaDB backup/restore
-alias mysql-dump='mysqldump -u root -p --all-databases > ~/mariadb_backup_$(date +%Y%m%d_%H%M%S).sql'
-alias mysql-restore='mariadb -u root -p < ~/mariadb_backup.sql'
-
-# ==============================
-# 🍰 CakePHP (Docker-based)
-# ==============================
-alias fpm="docker-compose exec -u $(id -u):$(id -g) php-fpm"
-alias cake="$fpm bin/cake"
-alias phpfpmcomposer="$fpm composer"
-
-# ==============================
-# 🛠 Git Shortcuts
-# ==============================
-alias g="git"
-alias gco="git checkout"
-alias gb="git branch"
-alias gc="git commit"
-alias gs="git status"
-alias gp="git pull"
-
-# Clean merged branches (excluding protected ones)
-alias gbpurge='git branch --merged | grep -v "\*" | grep -Ev "master|develop|staging" | xargs -n 1 git branch -d'
-
-# ==============================
-# 🎨 System Info & Misc
-# ==============================
-
-# Fallback: fastfetch > neofetch > warning
+# Smart system info display (fastfetch > neofetch)
 neofetch() {
   if command -v fastfetch >/dev/null 2>&1; then
     fastfetch "$@"
@@ -132,7 +59,7 @@ neofetch() {
   fi
 }
 
-# Run cmatrix only if available
+# Matrix effect (if available)
 matrix() {
   if command -v cmatrix >/dev/null 2>&1; then
     command cmatrix "$@"
@@ -141,3 +68,374 @@ matrix() {
     return 1
   fi
 }
+
+# System Python for yay (Arch Linux)
+if command -v yay >/dev/null 2>&1; then
+  alias yay='env PATH="/usr/bin:$PATH" yay'
+fi
+
+# ==============================
+# 🖥️  TMUX Management
+# ==============================
+alias tl='tmux list-sessions'
+alias tk='tmux kill-session -t'
+alias ta='tmux attach -t'
+alias tn='tmux new-session -s'
+alias ta='tmux attach -t'
+alias tn='tmux new-session -s'
+
+# ==============================
+# 🛠 Git Shortcuts
+# ==============================
+alias g="git"
+alias gco="git checkout"
+alias gb="git branch"
+alias gc="git commit"
+alias gca="git commit -a"
+alias gcm="git commit -m"
+alias gs="git status"
+alias gp="git pull"
+alias gps="git push"
+alias gl="git log --oneline --graph"
+alias gd="git diff"
+
+# Clean merged branches (excluding protected ones)
+alias gbpurge='git branch --merged | grep -v "\*" | grep -Ev "master|develop|staging" | xargs -n 1 git branch -d'
+
+# ==============================
+# 🎵 Music Library Management
+# ==============================
+# Navidrome sync operations
+alias sync-local-music='rsync -avh --progress ~/Music/ /mnt/zombie/navidrome/Music/ | tee ~/syncmusic.log'
+alias naviscan='docker restart navidrome && sleep 5 && docker exec navidrome /app/navidrome scan'
+
+# iPod sync operations
+#alias syncipod='rsync -avh --progress --ignore-existing /mnt/zombie/navidrome/Music_iPod/ /run/media/$USER/IPOD/Music/'
+alias syncipod='rsync -avh --progress --ignore-existing --delete /mnt/zombie/navidrome/Music_iPod/ /run/media/$USER/IPOD/Music/'
+
+
+# Remote music sync operations (LAN-optimized, safer, configurable)
+# Configure via env or ~/.aliases.local (see loader near file end).
+# Defaults (only applied if unset at the time of sourcing):
+: "${RSYNC_REMOTE_HOST:=do-navipi}"
+: "${RSYNC_REMOTE_USER:=$USER}"
+: "${MUSIC_SRC:=/mnt/zombie/navidrome/Music/}"
+: "${RSYNC_REMOTE_BASE:=/media/${RSYNC_REMOTE_USER}/NapsterX/Music}"
+
+alias dryrun-music='rsync -avhW --delete --itemize-changes \
+  --exclude ".DS_Store" --exclude "Thumbs.db" --exclude "._*" \
+  "$MUSIC_SRC" "${RSYNC_REMOTE_HOST}:${RSYNC_REMOTE_BASE}/"'
+alias sync-music='rsync -avhW --delete --info=progress2 --partial --delay-updates \
+  --exclude ".DS_Store" --exclude "Thumbs.db" --exclude "._*" \
+  "$MUSIC_SRC" "${RSYNC_REMOTE_HOST}:${RSYNC_REMOTE_BASE}/"'
+
+# ==============================
+# 🐳 Docker
+# ==============================
+
+# Unset any existing aliases first
+unset -f docker-start docker-stop docker-restart docker-status docker-log 2>/dev/null
+unalias docker-start docker-stop docker-restart docker-status docker-log 2>/dev/null
+
+function docker-start() {
+  # Check if Docker daemon is already running
+  if docker info &>/dev/null; then
+    echo "✅ Docker daemon is already running"
+    return 0
+  fi
+  
+  echo "🐳 Starting Docker daemon..."
+  
+  # First, try to unmask and start via systemctl
+  if systemctl list-unit-files "docker.service" &>/dev/null; then
+    local status_output=$(systemctl status "docker.service" 2>&1)
+    if echo "$status_output" | grep -q "masked"; then
+      echo "🔓 Unmasking docker.service..."
+      if sudo systemctl unmask docker.service; then
+        echo "✅ Docker service unmasked"
+        echo "🔧 Enabling docker.service..."
+        sudo systemctl enable docker.service
+        echo "Starting docker.service..."
+        if sudo systemctl start docker.service; then
+          sleep 3
+          if docker info &>/dev/null; then
+            echo "✅ Docker daemon started successfully via systemctl"
+            return 0
+          fi
+        fi
+      fi
+    else
+      echo "🚀 Attempting to start docker.service..."
+      if sudo systemctl start docker.service; then
+        sleep 3
+        if docker info &>/dev/null; then
+          echo "✅ Docker daemon started successfully via systemctl"
+          return 0
+        fi
+      fi
+    fi
+  fi
+  
+  # If systemctl approach failed, try manual start
+  echo "⚠️  Systemctl approach failed, trying manual start..."
+  echo "🔧 Starting dockerd manually..."
+  
+  # Check if dockerd is available
+  if ! command -v dockerd &>/dev/null; then
+    echo "❌ dockerd not found in PATH"
+    return 1
+  fi
+  
+  # Start dockerd in background
+  sudo dockerd > /tmp/docker.log 2>&1 &
+  local dockerd_pid=$!
+  
+  echo "⏳ Waiting for Docker daemon to start (PID: $dockerd_pid)..."
+  
+  # Wait up to 10 seconds for Docker to start
+  local count=0
+  while [ $count -lt 10 ]; do
+    if docker info &>/dev/null; then
+      echo "✅ Docker daemon started successfully (manual)"
+      echo "📋 Docker daemon running with PID: $dockerd_pid"
+      echo "📝 Logs available at: /tmp/docker.log"
+      return 0
+    fi
+    sleep 1
+    count=$((count + 1))
+  done
+  
+  echo "❌ Docker daemon failed to start within 10 seconds"
+  echo "📝 Check logs at: /tmp/docker.log"
+  kill $dockerd_pid 2>/dev/null
+  return 1
+}
+
+function docker-stop() {
+  echo "🛑 Stopping Docker daemon..."
+  
+  # First try systemctl approach
+  for service in "docker" "docker.service" "containerd"; do
+    if systemctl is-active "$service" &>/dev/null; then
+      echo "Stopping $service via systemctl..."
+      if sudo systemctl stop "$service"; then
+        echo "✅ $service stopped successfully"
+        return 0
+      fi
+    fi
+  done
+  
+  # If no systemctl service was active, look for manual dockerd processes
+  local dockerd_pids=$(ps aux | grep '[d]ockerd' | awk '{print $2}')
+  
+  if [ -n "$dockerd_pids" ]; then
+    echo "🔧 Found manual dockerd processes: $dockerd_pids"
+    echo "🛑 Stopping dockerd processes..."
+    
+    # Try graceful shutdown first
+    for pid in $dockerd_pids; do
+      echo "  Stopping dockerd (PID: $pid)..."
+      sudo kill -TERM "$pid" 2>/dev/null
+    done
+    
+    # Wait a moment for graceful shutdown
+    sleep 3
+    
+    # Check if any processes are still running and force kill if needed
+    local remaining_pids=$(ps aux | grep '[d]ockerd' | awk '{print $2}')
+    if [ -n "$remaining_pids" ]; then
+      echo "⚠️  Some dockerd processes still running, force killing..."
+      for pid in $remaining_pids; do
+        sudo kill -KILL "$pid" 2>/dev/null
+      done
+    fi
+    
+    echo "✅ Docker daemon processes stopped"
+    return 0
+  fi
+  
+  echo "ℹ️  No active Docker services or processes found"
+  return 0
+}
+
+function docker-restart() {
+  docker-stop
+  sleep 2
+  docker-start
+}
+
+function docker-status() {
+  echo "=== Docker Daemon Status ==="
+  if docker info &>/dev/null; then
+    echo "✅ Docker daemon is running"
+    docker version --format 'Client: {{.Client.Version}}, Server: {{.Server.Version}}' 2>/dev/null || echo "Version info unavailable"
+  else
+    echo "❌ Docker daemon is not accessible"
+  fi
+  
+  echo -e "\n=== Systemctl Services ==="
+  for service in "docker.service" "containerd.service"; do
+    if systemctl list-unit-files "$service" &>/dev/null 2>&1; then
+      local service_status=$(systemctl is-active "$service" 2>/dev/null)
+      if [ -z "$service_status" ]; then
+        service_status="inactive"
+      fi
+      
+      local masked_info=""
+      # Check if service is masked
+      if systemctl status "$service" 2>&1 | grep -q "masked"; then
+        masked_info=" (masked)"
+      fi
+      
+      echo "  $service: $service_status$masked_info"
+    fi
+  done
+}
+
+function docker-log() {
+  # Try to find the right service for logs
+  for service in "docker" "docker.service" "containerd"; do
+    if systemctl list-unit-files "$service" &>/dev/null; then
+      echo "📋 Showing logs for $service..."
+      sudo journalctl -u "$service" -f --no-pager
+      return $?
+    fi
+  done
+  echo "❌ No Docker service found for logging"
+}
+
+# Docker utility aliases
+alias docker-clean="docker system prune -af --volumes"
+alias docker-list="docker ps -a"
+alias docker-images="docker images -a"
+alias docker-rmi="docker rmi"
+alias docker-rm="docker rm"
+alias docker-stopall="docker stop \$(docker ps -q)"
+alias docker-rmall="docker rm \$(docker ps -a -q)"
+alias docker-build="docker build -t"
+alias docker-compose-up="docker-compose up -d"
+alias docker-compose-down="docker-compose down"
+alias docker-compose-log="docker-compose logs -f --tail=100"
+alias docker-compose-restart="docker-compose down && docker-compose up -d"
+alias docker-inspect="docker inspect"
+
+
+# ==============================
+# 🌐 Web Server Management
+# ==============================
+# NGINX
+alias nginx-start="sudo systemctl start nginx"
+alias nginx-stop="sudo systemctl stop nginx"
+alias nginx-restart="sudo systemctl restart nginx"
+alias nginx-status="sudo systemctl status nginx"
+alias nginx-test="sudo nginx -t"
+alias nginx-reload="sudo systemctl reload nginx"
+
+# PHP-FPM
+alias php-start="sudo systemctl start php-fpm"
+alias php-stop="sudo systemctl stop php-fpm"
+alias php-restart="sudo systemctl restart php-fpm"
+alias php-status="sudo systemctl status php-fpm"
+alias php-reload="sudo systemctl reload php-fpm"
+
+# MariaDB/MySQL
+alias mariadb-start="sudo systemctl start mariadb"
+alias mariadb-stop="sudo systemctl stop mariadb"
+alias mariadb-restart="sudo systemctl restart mariadb"
+alias mariadb-status="sudo systemctl status mariadb"
+alias mysql-root="mariadb -u root -p"
+
+# Web stack management
+alias web-start="sudo systemctl start nginx php-fpm mariadb"
+alias web-stop="sudo systemctl stop nginx php-fpm mariadb"
+alias web-restart="sudo systemctl restart nginx php-fpm mariadb"
+alias web-status="sudo systemctl status nginx php-fpm mariadb"
+
+# Database backup/restore
+alias mysql-dump='mysqldump -u root -p --all-databases > ~/mariadb_backup_$(date +%Y%m%d_%H%M%S).sql'
+alias mysql-restore='mariadb -u root -p < ~/mariadb_backup.sql'
+
+# ==============================
+# 🍰 CakePHP Development (Docker)
+# ==============================
+alias fpm="docker-compose exec -u $(id -u):$(id -g) php-fpm"
+alias cake="$fpm bin/cake"
+alias composer-fpm="$fpm composer"
+
+# ==============================
+# 🤖 OLLAMA ALIASES (GPU + CPU)
+# ==============================
+
+if [ -n "$ZSH_VERSION" ]; then
+  alias ollama='nocorrect ollama'
+else
+  alias ollama='ollama'
+fi
+
+# --- Model management ---
+alias ollama-list="ollama list"
+alias ollama-remove="ollama rm"
+alias ollama-clean-safe='ollama list | awk "NR>1 {print \$1}" | fzf --multi | xargs -r -n1 ollama rm'
+
+# --- Quick shortcuts ---
+alias ai="ollama run llama3-8b-gpu"                   # general chat / reasoning
+alias code-ai="ollama run codellama-13b-gpu"          # GPU-tuned code model
+alias fast-ai="ollama run mistral:7b-instruct"        # fast helper
+alias chill-ai="ollama run gemma2:latest"             # friendly conversational
+
+# --- Direct model aliases ---
+alias llama3="ollama run llama3-8b-gpu"
+alias codellama="ollama run codellama-13b-gpu"
+alias mistral="ollama run mistral:7b-instruct"
+alias gemma="ollama run gemma2:latest"
+
+# --- Streaming versions ---
+alias llama3-stream="ollama run --stream llama3-8b-gpu"
+alias codellama-stream="ollama run --stream codellama-13b-gpu"
+alias mistral-stream="ollama run --stream mistral:7b-instruct"
+alias gemma-stream="ollama run --stream gemma2:latest"
+
+# --- Info ---
+alias llama3-info="ollama show llama3-8b-gpu"
+alias codellama-info="ollama show codellama-13b-gpu"
+alias mistral-info="ollama show mistral:7b-instruct"
+alias gemma-info="ollama show gemma2:latest"
+
+alias ai-gpu="ollama run codellama-13b-gpu 'What GPU are you running on?'"
+alias ollama-gpu="ollama ps && rocm-smi --showuse --showmemuse"
+
+# ==============================
+# 💾 RAID Management
+# ==============================
+# Comprehensive RAID status viewer
+raidview() {
+  local mddev=$(grep -Eo '^md[0-9]+' /proc/mdstat | head -n1)
+  if [ -z "$mddev" ]; then
+    mddev=$(lsblk -rno NAME,TYPE | awk '$2=="raid5"{print $1; exit}')
+  fi
+  
+  echo "📊 === RAID Status Overview ==="
+  echo "📋 == mdstat =="
+  cat /proc/mdstat
+  
+  if [ -n "$mddev" ]; then
+    echo -e "\n🔍 == RAID Detail (/dev/$mddev) =="
+    sudo mdadm --detail /dev/"$mddev" | grep -E "Raid Level|Array Size|State|Active Devices|Working|Failed|Spare|RaidDevice"
+  else
+    echo -e "\n⚠️  == RAID Detail =="
+    echo "No md raid device detected."
+  fi
+  
+  echo -e "\n💽 == Storage Devices =="
+  lsblk -o NAME,SIZE,TYPE,FSTYPE,LABEL,MOUNTPOINT
+  
+  echo -e "\n📈 == Disk Usage =="
+  df -h -x tmpfs -x devtmpfs
+}
+
+# ============================================================================
+# 🎯 End of Aliases & Functions
+# ============================================================================
+
+# Load local, untracked overrides (machine-specific aliases and vars)
+[ -f "$HOME/.aliases.local" ] && . "$HOME/.aliases.local"
