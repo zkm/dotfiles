@@ -40,9 +40,6 @@ vim() {
 vi() {
   vim "$@"
 }
-vi() {
-  vim "$@"
-}
 
 # ==============================
 # 🎨 System Info & Utilities
@@ -81,8 +78,6 @@ alias tl='tmux list-sessions'
 alias tk='tmux kill-session -t'
 alias ta='tmux attach -t'
 alias tn='tmux new-session -s'
-alias ta='tmux attach -t'
-alias tn='tmux new-session -s'
 
 # ==============================
 # 🛠 Git Shortcuts
@@ -98,9 +93,6 @@ alias gp="git pull"
 alias gps="git push"
 alias gl="git log --oneline --graph"
 alias gd="git diff"
-
-# Clean merged branches (excluding protected ones)
-alias gbpurge='git branch --merged | grep -v "\*" | grep -Ev "master|develop|staging" | xargs -n 1 git branch -d'
 
 # ==============================
 # 🎵 Music Library Management
