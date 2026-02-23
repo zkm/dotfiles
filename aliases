@@ -1,8 +1,9 @@
+#!/usr/bin/env zsh
 # ============================================================================
 # 🚀 Personal Shell Aliases & Functions
 # ============================================================================
 # Author: zkm
-# Last Updated: September 15, 2025
+# Last Updated: February 23, 2026
 # Description: Custom aliases and functions for enhanced shell experience
 # ============================================================================
 
@@ -106,20 +107,9 @@ alias naviscan='docker restart navidrome && sleep 5 && docker exec navidrome /ap
 alias syncipod='rsync -avh --progress --ignore-existing --delete /mnt/zombie/navidrome/Music_iPod/ /run/media/$USER/IPOD/Music/'
 
 
-# Remote music sync operations (LAN-optimized, safer, configurable)
-# Configure via env or ~/.aliases.local (see loader near file end).
-# Defaults (only applied if unset at the time of sourcing):
-: "${RSYNC_REMOTE_HOST:=do-navipi}"
-: "${RSYNC_REMOTE_USER:=$USER}"
-: "${MUSIC_SRC:=/mnt/zombie/navidrome/Music/}"
-: "${RSYNC_REMOTE_BASE:=/media/${RSYNC_REMOTE_USER}/NapsterX/Music}"
-
-alias dryrun-music='rsync -avhW --delete --itemize-changes \
-  --exclude ".DS_Store" --exclude "Thumbs.db" --exclude "._*" \
-  "$MUSIC_SRC" "${RSYNC_REMOTE_HOST}:${RSYNC_REMOTE_BASE}/"'
-alias sync-music='rsync -avhW --delete --info=progress2 --partial --delay-updates \
-  --exclude ".DS_Store" --exclude "Thumbs.db" --exclude "._*" \
-  "$MUSIC_SRC" "${RSYNC_REMOTE_HOST}:${RSYNC_REMOTE_BASE}/"'
+# Remote music sync operations  
+alias dryrun-music='rsync -avh --progress --delete --dry-run /mnt/zombie/navidrome/Music/ do-navipi:/media/zkm/NapsterX/Music/'
+alias sync-music='rsync -avh --progress --delete /mnt/zombie/navidrome/Music/ do-navipi:/media/zkm/NapsterX/Music/'
 
 # ==============================
 # 🐳 Docker
@@ -337,6 +327,39 @@ alias mariadb-restart="sudo systemctl restart mariadb"
 alias mariadb-status="sudo systemctl status mariadb"
 alias mysql-root="mariadb -u root -p"
 
+# Plex Media Server
+# Unset any existing aliases/functions first
+unset -f plex-start plex-stop plex-status 2>/dev/null
+unalias plex-start plex-stop plex-status 2>/dev/null
+
+function plex-start() {
+  sudo systemctl start plexmediaserver
+  if systemctl is-active --quiet plexmediaserver; then
+    echo "▶️  Plex Media Server started"
+  else
+    echo "🚫 Failed to start Plex Media Server"
+    return 1
+  fi
+}
+
+function plex-stop() {
+  sudo systemctl stop plexmediaserver
+  if systemctl is-active --quiet plexmediaserver; then
+    echo "🚫 Failed to stop Plex Media Server"
+    return 1
+  else
+    echo "⏹️  Plex Media Server stopped"
+  fi
+}
+
+function plex-status() {
+  if systemctl is-active --quiet plexmediaserver; then
+    echo "🟢 Plex Media Server is running"
+  else
+    echo "🔴 Plex Media Server is stopped"
+  fi
+}
+
 # Web stack management
 alias web-start="sudo systemctl start nginx php-fpm mariadb"
 alias web-stop="sudo systemctl stop nginx php-fpm mariadb"
@@ -358,43 +381,46 @@ alias composer-fpm="$fpm composer"
 # 🤖 OLLAMA ALIASES (GPU + CPU)
 # ==============================
 
-if [ -n "$ZSH_VERSION" ]; then
-  alias ollama='nocorrect ollama'
-else
-  alias ollama='ollama'
-fi
+alias ollama='nocorrect ollama'
 
 # --- Model management ---
 alias ollama-list="ollama list"
 alias ollama-remove="ollama rm"
 alias ollama-clean-safe='ollama list | awk "NR>1 {print \$1}" | fzf --multi | xargs -r -n1 ollama rm'
 
-# --- Quick shortcuts ---
-alias ai="ollama run llama3-8b-gpu"                   # general chat / reasoning
-alias code-ai="ollama run codellama-13b-gpu"          # GPU-tuned code model
-alias fast-ai="ollama run mistral:7b-instruct"        # fast helper
-alias chill-ai="ollama run gemma2:latest"             # friendly conversational
+# --- Quick shortcuts (CPU) ---
+alias ai="OLLAMA_NUM_GPU=0 ollama run llama3"          # general chat / reasoning (CPU)
+alias chat="OLLAMA_NUM_GPU=0 ollama run llama3"        # interactive chat (CPU)
+alias code-ai="OLLAMA_NUM_GPU=0 ollama run codellama"  # code model (CPU)
+alias fast-ai="OLLAMA_NUM_GPU=0 ollama run mistral"    # fast helper (CPU)
+alias chill-ai="OLLAMA_NUM_GPU=0 ollama run gemma3"    # friendly conversational (CPU)
 
-# --- Direct model aliases ---
-alias llama3="ollama run llama3-8b-gpu"
-alias codellama="ollama run codellama-13b-gpu"
-alias mistral="ollama run mistral:7b-instruct"
-alias gemma="ollama run gemma2:latest"
+# --- Direct model aliases (CPU) ---
+alias llama3="OLLAMA_NUM_GPU=0 ollama run llama3"
+alias codellama="OLLAMA_NUM_GPU=0 ollama run codellama"
+alias mistral="OLLAMA_NUM_GPU=0 ollama run mistral"
+alias gemma="OLLAMA_NUM_GPU=0 ollama run gemma3"
 
-# --- Streaming versions ---
-alias llama3-stream="ollama run --stream llama3-8b-gpu"
-alias codellama-stream="ollama run --stream codellama-13b-gpu"
-alias mistral-stream="ollama run --stream mistral:7b-instruct"
-alias gemma-stream="ollama run --stream gemma2:latest"
+# --- Streaming versions (CPU) ---
+alias llama3-stream="OLLAMA_NUM_GPU=0 ollama run --stream llama3"
+alias codellama-stream="OLLAMA_NUM_GPU=0 ollama run --stream codellama"
+alias mistral-stream="OLLAMA_NUM_GPU=0 ollama run --stream mistral"
+alias gemma-stream="OLLAMA_NUM_GPU=0 ollama run --stream gemma3"
 
 # --- Info ---
-alias llama3-info="ollama show llama3-8b-gpu"
-alias codellama-info="ollama show codellama-13b-gpu"
-alias mistral-info="ollama show mistral:7b-instruct"
-alias gemma-info="ollama show gemma2:latest"
+alias llama3-info="ollama show llama3"
+alias codellama-info="ollama show codellama"
+alias mistral-info="ollama show mistral"
+alias gemma-info="ollama show gemma3"
 
-alias ai-gpu="ollama run codellama-13b-gpu 'What GPU are you running on?'"
 alias ollama-gpu="ollama ps && rocm-smi --showuse --showmemuse"
+
+# --- Cleanup (interactive, no fzf required) ---
+ollama-clean() {
+  echo "🗑️  Removing model: $1"
+  [ -z "$1" ] && echo "Usage: ollama-clean <model_name>" && return 1
+  ollama rm "$1"
+}
 
 # ==============================
 # 💾 RAID Management
@@ -429,5 +455,3 @@ raidview() {
 # 🎯 End of Aliases & Functions
 # ============================================================================
 
-# Load local, untracked overrides (machine-specific aliases and vars)
-[ -f "$HOME/.aliases.local" ] && . "$HOME/.aliases.local"
