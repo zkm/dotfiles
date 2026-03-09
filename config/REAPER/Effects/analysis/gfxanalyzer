@@ -20,6 +20,7 @@ options:no_meter
 
 @init
 gfx_ext_retina == 0 ? gfx_ext_retina = 1;
+gfx_ext_flags |= 0x100 | 0x200;
 ext_nodenorm=1;
 recpos=0;
 max_fft_size=32768;
@@ -268,7 +269,7 @@ small_mode ? (
   gfx_set(1,1,1,0.25);
   gfx_x=0;
   gfx_y=2;
-  gfx_printf("FFT %d\n%ddB f",16<<slider1,slider2);
+  !(gfx_ext_flags&1) ? gfx_printf("FFT %d\n%ddB f",16<<slider1,slider2);
 ) : (
 fft_button.draw_button(gfx_w, 0, sprintf(#,"%s%d",gfx_w<400?"":"FFT: ",16<<slider1));
 

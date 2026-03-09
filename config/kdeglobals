@@ -104,27 +104,26 @@ ForegroundNormal=236,239,244
 ForegroundPositive=163,190,140
 ForegroundVisited=143,188,187
 
-[DirSelect Dialog]
-DirSelectDialog Size=1920,1058
-History Items[$e]=file:$HOME/Music,file:$HOME/Audiobooks,file:$HOME/Audiobooks,file:$HOME/Audiobooks,file:$HOME/Audiobooks,file:$HOME/Audiobooks
-
 [General]
+BrowserApplication=google-chrome.desktop
+ColorScheme=UtterlyNord
 ColorSchemeHash=faaf5d0b6da1b5cb6a1d51987c1f844813d2a797
+XftHintStyle=hintslight
+XftSubPixel=none
 
 [Icons]
-Theme=breeze
+Theme=breeze-dark
 
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop
+ShowDeleteCommand=false
+widgetStyle=Breeze
 
 [KFileDialog Settings]
 Allow Expansion=false
 Automatically select filename extension=true
 Breadcrumb Navigation=false
 Decoration position=2
-LocationCombo Completionmode=5
-PathCombo Completionmode=5
-Show Bookmarks=false
 Show Full Path=false
 Show Inline Previews=true
 Show Preview=false
@@ -136,6 +135,16 @@ Sort hidden files last=false
 Sort reversed=false
 Speedbar Width=140
 View Style=DetailTree
+
+[KScreen]
+ScreenScaleFactors=DisplayPort-0=1;DisplayPort-1=1;DisplayPort-2=1;HDMI-A-0=1;HDMI-A-1-1=1;DisplayPort-1-3=1;DisplayPort-1-4=1;
+
+[KShortcutsDialog Settings]
+Dialog Size=600,480
+
+[PreviewSettings]
+EnableRemoteFolderThumbnail=false
+MaximumRemoteSize=0
 
 [WM]
 activeBackground=46,52,64

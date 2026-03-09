@@ -15,6 +15,7 @@ in_pin:right input
 options:no_meter
 
 @init
+gfx_ext_flags |= 0x100|0x200; // disable border, make mouse clicks toggle window
 gfx_ext_retina == 0 ? gfx_ext_retina = 1;
 ext_nodenorm=1;
 recpos=0;
@@ -469,6 +470,7 @@ viewadv < 1 ? (
   );
 );
 
+!(gfx_ext_flags & 1) ? (
 gfx_x=gfx_w+8;
 hold_button.draw_button(gfx_x-8,small_mode ? (gfx_h-gfx_texth-4):0, 
   g_hold>=0 ? sprintf(#,small_mode?"h: -%d":"hold: -%d samples",g_hold+0.5) : "hold");
@@ -490,5 +492,6 @@ retrig_button.draw_button(gfx_x-8,0, sprintf(#,"retrig: %s",(view_retrig|0)==1?"
   (view_retrig|0)==3?"descend":
   "instant"));
 ); 
+);  
 
 );

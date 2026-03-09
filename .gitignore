@@ -1,3 +1,28 @@
 .DS_Store
 .cache
 cache
+
+# OpenRGB generated artifacts
+config/OpenRGB/logs/
+config/OpenRGB/__pycache__/
+config/OpenRGB/.venv/
+config/OpenRGB/OpenRGB.json.bak*
+
+# Local license/registration artifacts
+config/REAPER/reaper-license.rk
+config/REAPER/reaper-reginfo2.ini
+
+# Runtime/cache artifacts from synced app configs
+config/btop/btop.log
+config/gtk-3.0/settings.ini.*
+config/REAPER/MetadataCaches/
+config/REAPER/ReaPack/
+config/REAPER/reaper-recentfx.ini
+*.pyc
+
+# Generic temp/editor artifacts
+*.tmp
+*.temp
+*.swp
+*.swo
+*~

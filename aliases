@@ -2,8 +2,8 @@
 # ============================================================================
 # 🚀 Personal Shell Aliases & Functions
 # ============================================================================
-# Author: zkm
-# Last Updated: February 23, 2026
+# Author: Zach Schneider
+# Last Updated: March 9, 2026
 # Description: Custom aliases and functions for enhanced shell experience
 # ============================================================================
 
@@ -66,6 +66,186 @@ matrix() {
     return 1
   fi
 }
+
+# OpenRGB launcher (native binary or Flatpak)
+openrgb() {
+  if command -v openrgb >/dev/null 2>&1; then
+    command openrgb "$@"
+  elif command -v flatpak >/dev/null 2>&1 && flatpak info org.openrgb.OpenRGB >/dev/null 2>&1; then
+    flatpak run org.openrgb.OpenRGB "$@"
+  else
+    echo "❌ OpenRGB is not installed (native or Flatpak)." >&2
+    return 1
+  fi
+}
+
+# OpenRGB configuration defaults (override in ~/.zshrc before sourcing aliases)
+: "${OPENRGB_HOME:=${XDG_CONFIG_HOME:-$HOME/.config}/OpenRGB}"
+: "${OPENRGB_LOG_DIR:=${XDG_STATE_HOME:-$HOME/.local/state}/openrgb}"
+: "${OPENRGB_SDK_HOST:=127.0.0.1}"
+: "${OPENRGB_SDK_PORT:=6742}"
+mkdir -p "$OPENRGB_LOG_DIR" >/dev/null 2>&1
+
+# OpenRGB SDK server shortcut for Python effects
+openrgb-server() {
+  openrgb --noautoconnect --server --loglevel warning
+}
+
+# Set RGB_VERBOSE=1 to show detailed launcher status messages.
+rgb-verbose() {
+  [ "${RGB_VERBOSE:-0}" = "1" ]
+}
+
+# Check whether OpenRGB SDK server is reachable
+openrgb-sdk-running() {
+  if command -v python3 >/dev/null 2>&1; then
+    command python3 -c "from openrgb import OpenRGBClient; OpenRGBClient('${OPENRGB_SDK_HOST}', int('${OPENRGB_SDK_PORT}'), name='AliasProbe', protocol_version=2)" >/dev/null 2>&1
+    return $?
+  elif command -v python >/dev/null 2>&1; then
+    command python -c "from openrgb import OpenRGBClient; OpenRGBClient('${OPENRGB_SDK_HOST}', int('${OPENRGB_SDK_PORT}'), name='AliasProbe', protocol_version=2)" >/dev/null 2>&1
+    return $?
+  fi
+
+  return 1
+}
+
+# Start OpenRGB SDK server in background when needed
+openrgb-sdk-ensure() {
+  if openrgb-sdk-running; then
+    return 0
+  fi
+
+  if rgb-verbose; then
+    echo "⚙️ OpenRGB SDK server is not running. Starting it..."
+  fi
+
+  # Clean up any stale server process before relaunching.
+  pkill -f 'openrgb.*--server' >/dev/null 2>&1 || true
+
+  if command -v openrgb >/dev/null 2>&1; then
+    nohup openrgb --noautoconnect --server --loglevel warning </dev/null >"$OPENRGB_LOG_DIR/sdk.log" 2>&1 &!
+  elif command -v flatpak >/dev/null 2>&1 && flatpak info org.openrgb.OpenRGB >/dev/null 2>&1; then
+    nohup flatpak run org.openrgb.OpenRGB --noautoconnect --server --loglevel warning </dev/null >"$OPENRGB_LOG_DIR/sdk.log" 2>&1 &!
+  else
+    echo "❌ OpenRGB command not found (native or Flatpak)." >&2
+    return 1
+  fi
+
+  # Wait briefly for the SDK socket to become reachable.
+  local tries=0
+  while [ $tries -lt 30 ]; do
+    if openrgb-sdk-running; then
+      if rgb-verbose; then
+        echo "✅ OpenRGB SDK server started"
+      fi
+      return 0
+    fi
+    sleep 0.25
+    tries=$((tries + 1))
+  done
+
+  echo "❌ Failed to start OpenRGB SDK server. Check $OPENRGB_LOG_DIR/sdk.log" >&2
+  return 1
+}
+
+# Reload current shell configuration
+reload() {
+  source ~/.zshrc
+  echo "✅ Terminal configuration reloaded"
+}
+
+# Emergency stop for all OpenRGB effect scripts
+rgb-stop() {
+  pkill -f "$OPENRGB_HOME/.*_openrgb.py" >/dev/null 2>&1 || true
+  sleep 0.2
+  if command -v python3 >/dev/null 2>&1; then
+    command python3 "$OPENRGB_HOME/off_openrgb.py" >/dev/null 2>&1 || true
+  elif command -v python >/dev/null 2>&1; then
+    command python "$OPENRGB_HOME/off_openrgb.py" >/dev/null 2>&1 || true
+  fi
+  echo "🛑 RGB effects stopped and lights turned off"
+}
+
+# Stop any running RGB effect scripts before starting another one.
+rgb-stop-current-effect() {
+  if pgrep -f "$OPENRGB_HOME/.*_openrgb.py" >/dev/null 2>&1; then
+    pkill -f "$OPENRGB_HOME/.*_openrgb.py" >/dev/null 2>&1 || true
+    sleep 0.2
+    if rgb-verbose; then
+      echo "🧹 Stopped active RGB effect before starting a new one"
+    fi
+  fi
+}
+
+# Run OpenRGB effect scripts from this config directory
+rgb-effect() {
+  local script_name="$1"
+  shift
+  local run_mode="bg"
+
+  if [ "${1:-}" = "--fg" ]; then
+    run_mode="fg"
+    shift
+  fi
+
+  if [ -z "$script_name" ]; then
+    echo "Usage: rgb-effect <blizzard|matrix|rainbow|off> [--fg] [args...]"
+    return 1
+  fi
+
+  if ! openrgb-sdk-ensure; then
+    return 1
+  fi
+
+  # Prevent multiple effects from fighting each other.
+  rgb-stop-current-effect
+
+  local script="$OPENRGB_HOME/${script_name}_openrgb.py"
+  if [ ! -f "$script" ]; then
+    echo "❌ Effect script not found: $script" >&2
+    return 1
+  fi
+
+  local py_exec=""
+  if command -v python3 >/dev/null 2>&1; then
+    py_exec="python3"
+  elif command -v python >/dev/null 2>&1; then
+    py_exec="python"
+  fi
+
+  if [ -z "$py_exec" ]; then
+    echo "❌ Python is not installed." >&2
+    return 1
+  fi
+
+  if [ "$run_mode" = "fg" ]; then
+    command "$py_exec" "$script" "$@"
+    return $?
+  fi
+
+  local log_file="$OPENRGB_LOG_DIR/${script_name}.log"
+  : >"$log_file"
+  nohup "$py_exec" "$script" "$@" </dev/null >"$log_file" 2>&1 &!
+  local pid=$!
+
+  if [ "$script_name" = "matrix" ]; then
+    echo "🐇  The Matrix has you... Follow the white rabbit."
+  elif [ "$script_name" = "blizzard" ]; then
+    echo "🐺 Winter is coming... and your LEDs know it."
+  elif [ "$script_name" = "rainbow" ]; then
+    echo "🌈 Follow the yellow brick glow."
+  fi
+
+  if rgb-verbose; then
+    echo "✅ Started rgb-${script_name} in background (PID: $pid)"
+    echo "📄 Log: $log_file"
+  fi
+}
+
+alias rgb-blizzard='rgb-effect blizzard'
+alias rgb-matrix='rgb-effect matrix'
+alias rgb-rainbow='rgb-effect rainbow'
+alias rgb-off='rgb-effect off'
 
 # System Python for yay (Arch Linux)
 if command -v yay >/dev/null 2>&1; then
@@ -199,7 +379,7 @@ function docker-stop() {
   # First try systemctl approach
   for service in "docker" "docker.service" "containerd"; do
     if systemctl is-active "$service" &>/dev/null; then
-      echo "Stopping $service via systemctl..."
+      echo "🛑 Stopping $service via systemctl..."
       if sudo systemctl stop "$service"; then
         echo "✅ $service stopped successfully"
         return 0
@@ -216,7 +396,7 @@ function docker-stop() {
     
     # Try graceful shutdown first
     for pid in $dockerd_pids; do
-      echo "  Stopping dockerd (PID: $pid)..."
+      echo "🛑 Stopping dockerd (PID: $pid)..."
       sudo kill -TERM "$pid" 2>/dev/null
     done
     
@@ -454,4 +634,3 @@ raidview() {
 # ============================================================================
 # 🎯 End of Aliases & Functions
 # ============================================================================
-

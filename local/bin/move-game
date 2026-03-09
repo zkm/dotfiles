@@ -1,0 +1,12 @@
+#!/bin/bash
+game="$1"
+src="/mnt/games/SteamLibrary/steamapps/common/$game"
+dst="/mnt/zombie/SteamOverflow/$game"
+
+if [ -d "$src" ]; then
+  echo "Moving $game..."
+  mv "$src" "$dst" && ln -s "$dst" "$src" && echo "✅ Done."
+else
+  echo "❌ Game not found: $src"
+fi
+

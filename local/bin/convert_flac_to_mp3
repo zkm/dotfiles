@@ -1,0 +1,41 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+SOURCE_DIR="$HOME/Music"
+DEST_DIR="$HOME/MusicMP3"
+LOG_FILE="$HOME/convert_flac_to_mp3.log"
+
+mkdir -p "$DEST_DIR"
+echo "Starting conversion at $(date)" > "$LOG_FILE"
+
+find "$SOURCE_DIR" -type f -iname "*.flac" -print0 | while IFS= read -r -d '' file; do
+  rel_path="${file#$SOURCE_DIR/}"
+  mp3_path="$DEST_DIR/${rel_path%.flac}.mp3"
+  mp3_dir="$(dirname "$mp3_path")"
+
+  if [[ -f "$mp3_path" ]]; then
+    echo "✅ Skipping (exists): $mp3_path" | tee -a "$LOG_FILE"
+    continue
+  fi
+
+  echo "🎧 Converting: $file → $mp3_path" | tee -a "$LOG_FILE"
+  mkdir -p "$mp3_dir"
+
+  cover="$(dirname "$file")/cover.jpg"
+
+  if [[ -f "$cover" ]]; then
+    ffmpeg -hide_banner -loglevel error -i "$file" -i "$cover" \
+      -map 0:a -map 1:v -c:a libmp3lame -q:a 0 -c:v mjpeg \
+      -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" \
+      "$mp3_path"
+    echo "🖼  Embedded cover: $cover" | tee -a "$LOG_FILE"
+  else
+    echo "⚠️  No cover.jpg found — embedding skipped: $file" | tee -a "$LOG_FILE"
+    ffmpeg -hide_banner -loglevel error -i "$file" -q:a 0 -map_metadata 0 "$mp3_path"
+  fi
+
+  echo "✅ Success: $mp3_path" | tee -a "$LOG_FILE"
+done
+
+echo "Done at $(date)" >> "$LOG_FILE"

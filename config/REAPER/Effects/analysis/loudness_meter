@@ -37,7 +37,7 @@ options:no_meter
 
 <?
   nch = max(max_nch,64); // maximum channel count
-  sinc_sz = 16; // true peak interpolation size
+  sinc_sz = 32; // true peak interpolation size
   use_mem_sinc = sinc_sz>32;
 
   printf("sinc_sz = %d;\n",sinc_sz);

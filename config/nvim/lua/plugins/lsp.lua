@@ -9,7 +9,6 @@ return {
     require("mason-lspconfig").setup({
       ensure_installed = {
         "lua_ls",
-        "tsserver", -- still needed here for Mason to install it
         "gopls",
         "elixirls",
         "rust_analyzer",
