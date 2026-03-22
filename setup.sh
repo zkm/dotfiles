@@ -57,6 +57,53 @@ install_with_pacman() {
     sudo pacman -S --needed curl git zsh tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build
 }
 
+install_yay() {
+    if [[ ! -x "$(command -v pacman)" ]]; then
+        return 0
+    fi
+
+    if [[ -x "$(command -v yay)" ]]; then
+        return 0
+    fi
+
+    echo "Installing yay..."
+    sudo pacman -S --needed base-devel git
+
+    local aur_user build_root yay_dir install_cmd
+    aur_user="${SUDO_USER:-$(id -un)}"
+    build_root="/tmp/yay-build-$aur_user-$$"
+    yay_dir="$build_root/yay"
+    install_cmd="cd '$build_root' && git clone https://aur.archlinux.org/yay.git '$yay_dir' && cd '$yay_dir' && makepkg -si --noconfirm"
+
+    rm -rf "$build_root"
+    mkdir -p "$build_root"
+
+    if [[ "$(id -u)" -eq 0 ]]; then
+        chown "$aur_user:$aur_user" "$build_root"
+        if command -v runuser >/dev/null 2>&1; then
+            if ! runuser -u "$aur_user" -- bash -lc "$install_cmd"; then
+                echo "Could not install yay automatically."
+                rm -rf "$build_root"
+                return 0
+            fi
+        else
+            if ! su - "$aur_user" -c "$install_cmd"; then
+                echo "Could not install yay automatically."
+                rm -rf "$build_root"
+                return 0
+            fi
+        fi
+    else
+        if ! bash -lc "$install_cmd"; then
+            echo "Could not install yay automatically."
+            rm -rf "$build_root"
+            return 0
+        fi
+    fi
+
+    rm -rf "$build_root"
+}
+
 install_pyenv_from_upstream() {
     if command -v pyenv >/dev/null 2>&1; then
         return 0
@@ -126,6 +173,61 @@ install_with_yum() {
     fi
 
     install_pyenv_from_upstream
+}
+
+install_hypr_stack() {
+    # Hyprland stack is Linux-only.
+    if [[ "$(uname)" == "Darwin" ]]; then
+        return 0
+    fi
+
+    echo "Installing Hyprland stack packages..."
+
+    if [[ -x "$(command -v pacman)" ]]; then
+        local pacman_packages=(
+            hyprland hyprpaper waybar mako rofi-wayland kitty
+            wl-clipboard grim slurp swappy brightnessctl playerctl
+            pavucontrol network-manager-applet
+        )
+        local pkg
+        for pkg in "${pacman_packages[@]}"; do
+            sudo pacman -S --needed "$pkg" || echo "Skipping unavailable package: $pkg"
+        done
+    elif [[ -x "$(command -v apt-get)" ]]; then
+        # Package availability differs by distro release, so install best-effort.
+        local apt_packages=(
+            hyprland hyprpaper waybar mako-notifier rofi-wayland kitty
+            wl-clipboard grim slurp swappy brightnessctl playerctl pavucontrol
+            network-manager-gnome
+        )
+        local pkg
+        sudo apt-get update
+        for pkg in "${apt_packages[@]}"; do
+            sudo apt-get install -y "$pkg" || echo "Skipping unavailable package: $pkg"
+        done
+    elif [[ -x "$(command -v dnf)" ]]; then
+        local dnf_packages=(
+            hyprland hyprpaper waybar mako rofi-wayland kitty
+            wl-clipboard grim slurp swappy brightnessctl playerctl pavucontrol
+            network-manager-applet
+        )
+        local pkg
+        for pkg in "${dnf_packages[@]}"; do
+            sudo dnf install -y "$pkg" || echo "Skipping unavailable package: $pkg"
+        done
+    elif [[ -x "$(command -v yum)" ]]; then
+        local yum_packages=(
+            hyprland hyprpaper waybar mako rofi-wayland kitty
+            wl-clipboard grim slurp swappy brightnessctl playerctl pavucontrol
+            network-manager-applet
+        )
+        local pkg
+        for pkg in "${yum_packages[@]}"; do
+            sudo yum install -y "$pkg" || echo "Skipping unavailable package: $pkg"
+        done
+    else
+        echo "Unsupported Linux distribution for Hyprland auto-install."
+    fi
 }
 
 function setup_lang_envs() {
@@ -216,6 +318,12 @@ function create_dotfiles() {
     if [[ -f "$repo_root/zprofile" ]]; then
         ln -sfn "$repo_root/zprofile" ~/.zprofile
     fi
+
+    # Keep Hyprland config tracked in repo while preserving the standard config path.
+    if [[ -d "$repo_root/config/hypr" ]]; then
+        mkdir -p ~/.config
+        ln -sfn "$repo_root/config/hypr" ~/.config/hypr
+    fi
 }
 
 function setup_p10k() {
@@ -268,6 +376,7 @@ else
     if [[ -x "$(command -v pacman)" ]]; then
         # Arch Linux (Pacman)
         install_with_pacman
+        install_yay
         elif [[ -x "$(command -v apt-get)" ]]; then
         # Debian/Ubuntu (APT)
         install_with_apt
@@ -282,6 +391,8 @@ else
         exit 1
     fi
 fi
+
+install_hypr_stack
 
 setup_shell
 
@@ -353,6 +464,7 @@ function install_browsers() {
     if [[ -x "$(command -v pacman)" ]]; then
         # Arch official repos provide Firefox + Chromium. Google Chrome is in AUR.
         sudo pacman -S --needed firefox chromium
+        install_yay
         if [[ -x "$(command -v yay)" ]]; then
             yay -S --needed google-chrome || true
         fi
@@ -383,13 +495,12 @@ function install_vscode() {
     fi
 
     if [[ -x "$(command -v pacman)" ]]; then
-        sudo pacman -S --needed code || {
-            if [[ -x "$(command -v yay)" ]]; then
-                yay -S --needed visual-studio-code-bin || true
-            else
-                echo "VS Code not found in pacman repos and yay is not installed."
-            fi
-        }
+        install_yay
+        if [[ -x "$(command -v yay)" ]]; then
+            yay -S --needed visual-studio-code-bin || true
+        else
+            echo "Could not install yay automatically. Install Visual Studio Code manually with: yay -S visual-studio-code-bin"
+        fi
     elif [[ -x "$(command -v apt-get)" ]]; then
         sudo apt-get install -y code || {
             if [[ -x "$(command -v snap)" ]]; then
@@ -580,6 +691,7 @@ function install_media_tools() {
             else
                 set -e
                 # REAPER is usually available via AUR.
+                install_yay
                 if [[ -x "$(command -v yay)" ]]; then
                     yay -S --needed reaper || true
                 else

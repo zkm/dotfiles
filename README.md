@@ -49,6 +49,7 @@ Back up anything important first.
 9. Applies Terminal.app default profile on macOS (`Pro`).
 10. Attempts browser install (Firefox + Chrome/Chromium).
 11. Attempts Visual Studio Code install.
+   - Arch Linux: bootstraps `yay` if needed and installs `visual-studio-code-bin` from AUR.
 12. Installs Docker:
    - macOS: installs Docker Desktop (Homebrew cask)
    - Linux: installs Docker engine + compose plugin/package, enables the service, and adds your user to the `docker` group
