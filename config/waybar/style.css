@@ -1,0 +1,144 @@
+* {
+  font: 10.5pt "MesloLGS NF", "Fira Code";
+  color: #cdd6f4;
+}
+
+window#waybar {
+  background: transparent;
+}
+
+#clock,
+#custom-cpu_spec,
+#custom-gpu_spec,
+#custom-weather,
+#network,
+#pulseaudio,
+#hyprland-workspaces {
+  background: #181825;
+  border: 1px solid #313244;
+  border-radius: 9px;
+  margin: 2px;
+  padding: 0 7px;
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+#clock:hover,
+#custom-cpu_spec:hover,
+#custom-gpu_spec:hover,
+#custom-weather:hover,
+#network:hover,
+#pulseaudio:hover,
+#hyprland-workspaces:hover {
+  background: #1f1f2e;
+}
+
+#clock {
+  font-weight: 700;
+  border-color: #89b4fa;
+  min-width: 194px;
+}
+
+#custom-cpu_spec {
+  border-color: #f9e2af;
+  min-width: 76px;
+}
+
+#custom-cpu_spec.cool {
+  border-color: #a6e3a1;
+}
+
+#custom-cpu_spec.warm {
+  border-color: #f9e2af;
+}
+
+#custom-cpu_spec.hot {
+  border-color: #f38ba8;
+  color: #f38ba8;
+}
+
+#custom-gpu_spec {
+  border-color: #fab387;
+  min-width: 76px;
+}
+
+#custom-gpu_spec.cool {
+  border-color: #89dceb;
+}
+
+#custom-gpu_spec.warm {
+  border-color: #fab387;
+}
+
+#custom-gpu_spec.hot {
+  border-color: #f38ba8;
+  color: #f38ba8;
+}
+
+#custom-weather {
+  border-color: #74c7ec;
+  min-width: 64px;
+}
+
+#custom-weather.cold {
+  border-color: #89dceb;
+}
+
+#custom-weather.mild {
+  border-color: #74c7ec;
+}
+
+#custom-weather.hot {
+  border-color: #f9e2af;
+}
+
+#network {
+  border-color: #94e2d5;
+  min-width: 58px;
+}
+
+#network.disconnected {
+  border-color: #f38ba8;
+  color: #f38ba8;
+}
+
+#pulseaudio {
+  border-color: #cba6f7;
+  min-width: 64px;
+}
+
+#pulseaudio.muted {
+  border-color: #6c7086;
+  color: #9399b2;
+}
+
+#hyprland-workspaces {
+  padding: 0 6px;
+}
+
+#hyprland-workspaces button {
+  color: #a6adc8;
+  border: none;
+  border-radius: 6px;
+  padding: 0 7px;
+  margin: 2px;
+}
+
+#hyprland-workspaces button.active {
+  background: #89b4fa;
+  color: #11111b;
+}
+
+#hyprland-workspaces button.urgent {
+  background: #f38ba8;
+  color: #11111b;
+}
+
+tooltip {
+  background: #11111b;
+  border: 1px solid #45475a;
+  border-radius: 8px;
+}
+
+tooltip label {
+  color: #cdd6f4;
+}

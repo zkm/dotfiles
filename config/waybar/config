@@ -1,0 +1,49 @@
+{
+  "modules-left": ["hyprland/workspaces"],
+  "modules-center": ["clock"],
+  "modules-right": ["custom/cpu_spec", "custom/gpu_spec", "custom/weather", "network", "pulseaudio"],
+  "hyprland/workspaces": {
+    "format": "{id}",
+    "all-outputs": true,
+    "active-only": false,
+    "on-click": "activate"
+  },
+  "clock": {
+    "format": "  {:%m/%d/%Y %I:%M %p}",
+    "format-alt": "  {:%a %m/%d %I:%M %p}",
+    "tooltip": true,
+    "tooltip-format": "{:%A, %B %d, %Y %I:%M:%S %p}"
+  },
+  "custom/cpu_spec": {
+    "exec": "~/.config/waybar/scripts/cpu_spec.sh",
+    "interval": 5,
+    "return-type": "json",
+    "tooltip": true
+  },
+  "custom/gpu_spec": {
+    "exec": "~/.config/waybar/scripts/gpu_spec.sh",
+    "interval": 5,
+    "return-type": "json",
+    "tooltip": true
+  },
+  "custom/weather": {
+    "exec": "~/.config/waybar/scripts/weather.sh",
+    "interval": 600,
+    "return-type": "json",
+    "tooltip": true
+  },
+  "network": {
+    "format-ethernet": "󰈀 LAN",
+    "format-wifi": "󰤨 {signalStrength}%",
+    "format-disconnected": "󰖪",
+    "tooltip-format": "{ifname} via {gwaddr}",
+    "tooltip-format-wifi": "{essid} ({signalStrength}%) on {ifname}",
+    "tooltip-format-ethernet": "Wired {ifname} via {gwaddr}"
+  },
+  "pulseaudio": {
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟",
+    "format-icons": ["󰕿", "󰖀", "󰕾"],
+    "scroll-step": 2
+  }
+}
