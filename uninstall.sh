@@ -82,6 +82,45 @@ cleanup_neovim_bootstrap() {
     fi
 }
 
+uninstall_homebrew_packages() {
+    if ! command -v brew >/dev/null 2>&1; then
+        log "Homebrew not found. Skipping."
+        return
+    fi
+
+    local formulae
+    local casks
+    formulae="$(brew list --formula 2>/dev/null)"
+    casks="$(brew list --cask 2>/dev/null)"
+
+    if [[ -z "$formulae" && -z "$casks" ]]; then
+        log "No Homebrew packages installed. Skipping."
+        return
+    fi
+
+    log "The following Homebrew formulae will be removed:"
+    echo "${formulae:-  (none)}"
+    log "The following Homebrew casks will be removed:"
+    echo "${casks:-  (none)}"
+
+    read -r -p "Uninstall all Homebrew packages listed above? [y/N] " answer
+    case "$answer" in
+        [yY]|[yY][eE][sS]) ;;
+        *) log "Skipping Homebrew package removal."; return ;;
+    esac
+
+    if [[ -n "$formulae" ]]; then
+        # shellcheck disable=SC2086
+        brew uninstall --force $formulae 2>/dev/null || true
+    fi
+    if [[ -n "$casks" ]]; then
+        # shellcheck disable=SC2086
+        brew uninstall --cask --force $casks 2>/dev/null || true
+    fi
+
+    log "Homebrew packages removed."
+}
+
 cleanup_optional_components() {
     rm -rf "$HOME/.powerlevel10k"
     rm -rf "$HOME/.config/nvim/pack/github/start/copilot.vim"
@@ -116,6 +155,10 @@ main() {
     cleanup_zshrc_entries
     cleanup_neovim_bootstrap
     cleanup_optional_components
+
+    if [[ "$(uname)" == "Darwin" ]]; then
+        uninstall_homebrew_packages
+    fi
 
     log "Uninstall complete."
 }

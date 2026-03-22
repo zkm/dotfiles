@@ -32,25 +32,25 @@ function install_homebrew() {
 
 function install_homebrew_packages() {
     echo "Installing Homebrew packages..."
-    brew install tmux neovim the_silver_searcher node fastfetch pyenv rbenv ruby-build
+    brew install tmux neovim ripgrep node fastfetch pyenv rbenv ruby-build
 }
 
 install_with_pacman() {
     echo "Installing packages with Pacman..."
-    sudo pacman -S --needed curl git tmux neovim the_silver_searcher nodejs fastfetch pyenv rbenv ruby-build
+    sudo pacman -S --needed curl git tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build
 }
 
 # Function to install packages using APT (Debian/Ubuntu)
 install_with_apt() {
     echo "Installing packages with APT..."
     sudo apt-get update
-    sudo apt-get install -y curl git tmux neovim silversearcher-ag nodejs fastfetch pyenv rbenv
+    sudo apt-get install -y curl git tmux neovim ripgrep nodejs fastfetch pyenv rbenv
 }
 
 # Function to install packages using YUM (RHEL/CentOS)
 install_with_yum() {
     echo "Installing packages with YUM..."
-    sudo yum install -y curl git tmux neovim the_silver_searcher nodejs fastfetch pyenv rbenv
+    sudo yum install -y curl git tmux neovim ripgrep nodejs fastfetch pyenv rbenv
 }
 
 function setup_lang_envs() {
