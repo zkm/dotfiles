@@ -317,6 +317,44 @@ function install_vscode() {
     fi
 }
 
+function install_docker() {
+    echo "Installing Docker..."
+
+    if [[ "$(uname)" == "Darwin" ]]; then
+        if command -v brew >/dev/null 2>&1; then
+            if [[ -d "/Applications/Docker.app" ]] || brew list --cask docker >/dev/null 2>&1; then
+                echo "Docker Desktop is already installed. Skipping."
+            else
+                brew install --cask docker || true
+            fi
+        else
+            echo "Homebrew not found. Install Docker Desktop manually."
+        fi
+        return
+    fi
+
+    if [[ -x "$(command -v pacman)" ]]; then
+        sudo pacman -S --needed docker docker-compose
+    elif [[ -x "$(command -v apt-get)" ]]; then
+        sudo apt-get update
+        sudo apt-get install -y docker.io docker-compose-plugin || sudo apt-get install -y docker.io docker-compose || true
+    elif [[ -x "$(command -v yum)" ]]; then
+        sudo yum install -y docker docker-compose-plugin || sudo yum install -y docker docker-compose || true
+    else
+        echo "Unsupported Linux distribution for Docker auto-install."
+        return
+    fi
+
+    if [[ -x "$(command -v systemctl)" ]]; then
+        sudo systemctl enable --now docker || sudo systemctl enable --now docker.service || true
+    fi
+
+    if [[ -x "$(command -v usermod)" ]] && [[ "$(id -u)" -ne 0 ]]; then
+        sudo usermod -aG docker "$USER" || true
+        echo "Added $USER to docker group. Log out and back in for group changes to take effect."
+    fi
+}
+
 function install_media_tools() {
     # Optional installs so setup stays safe for shared/public use.
     # Enable with: INSTALL_MEDIA_TOOLS=1 ./setup.sh
@@ -326,21 +364,61 @@ function install_media_tools() {
     local has_media_flag="${INSTALL_MEDIA_TOOLS+x}"
     local has_openrgb_flag="${INSTALL_OPENRGB+x}"
     local has_reaper_flag="${INSTALL_REAPER+x}"
+    local openrgb_installed="0"
+    local reaper_installed="0"
     local answer
+
+    if [[ "$(uname)" == "Darwin" ]]; then
+        if [[ -d "/Applications/OpenRGB.app" ]] || command -v openrgb >/dev/null 2>&1; then
+            openrgb_installed="1"
+        elif command -v brew >/dev/null 2>&1 && brew list --cask openrgb >/dev/null 2>&1; then
+            openrgb_installed="1"
+        fi
+
+        if [[ -d "/Applications/REAPER.app" ]] || [[ -d "/Applications/REAPER64.app" ]] || command -v reaper >/dev/null 2>&1; then
+            reaper_installed="1"
+        elif command -v brew >/dev/null 2>&1 && brew list --cask reaper >/dev/null 2>&1; then
+            reaper_installed="1"
+        fi
+    else
+        if command -v openrgb >/dev/null 2>&1; then
+            openrgb_installed="1"
+        elif [[ -x "$(command -v pacman)" ]] && pacman -Qi openrgb >/dev/null 2>&1; then
+            openrgb_installed="1"
+        elif [[ -x "$(command -v apt-get)" ]] && dpkg -s openrgb >/dev/null 2>&1; then
+            openrgb_installed="1"
+        elif [[ -x "$(command -v yum)" ]] && rpm -q openrgb >/dev/null 2>&1; then
+            openrgb_installed="1"
+        fi
+
+        if command -v reaper >/dev/null 2>&1; then
+            reaper_installed="1"
+        elif [[ -x "$(command -v pacman)" ]] && pacman -Qi reaper >/dev/null 2>&1; then
+            reaper_installed="1"
+        fi
+    fi
 
     # Interactive prompt only when no explicit media flags were provided.
     if [[ -z "$has_media_flag" && -z "$has_openrgb_flag" && -z "$has_reaper_flag" && -t 0 ]]; then
         echo "Optional media tools are available (OpenRGB and REAPER)."
 
-        read -r -p "Install OpenRGB? [y/N] " answer
-        case "$answer" in
-            [yY]|[yY][eE][sS]) install_openrgb="1" ;;
-        esac
+        if [[ "$openrgb_installed" == "1" ]]; then
+            echo "OpenRGB is already installed. Skipping prompt."
+        else
+            read -r -p "Install OpenRGB? [y/N] " answer
+            case "$answer" in
+                [yY]|[yY][eE][sS]) install_openrgb="1" ;;
+            esac
+        fi
 
-        read -r -p "Install REAPER? [y/N] " answer
-        case "$answer" in
-            [yY]|[yY][eE][sS]) install_reaper="1" ;;
-        esac
+        if [[ "$reaper_installed" == "1" ]]; then
+            echo "REAPER is already installed. Skipping prompt."
+        else
+            read -r -p "Install REAPER? [y/N] " answer
+            case "$answer" in
+                [yY]|[yY][eE][sS]) install_reaper="1" ;;
+            esac
+        fi
     fi
 
     if [[ "${INSTALL_MEDIA_TOOLS:-0}" == "1" ]]; then
@@ -359,45 +437,92 @@ function install_media_tools() {
     echo "Installing optional media tools..."
 
     if [[ "$(uname)" == "Darwin" ]]; then
+        if [[ "$install_openrgb" == "1" ]]; then
+            if [[ -d "/Applications/OpenRGB.app" ]] || command -v openrgb >/dev/null 2>&1; then
+                echo "OpenRGB is already installed. Skipping."
+                install_openrgb="0"
+            fi
+        fi
+        if [[ "$install_reaper" == "1" ]]; then
+            if [[ -d "/Applications/REAPER.app" ]] || [[ -d "/Applications/REAPER64.app" ]]; then
+                echo "REAPER is already installed. Skipping."
+                install_reaper="0"
+            fi
+        fi
+
         if command -v brew >/dev/null 2>&1; then
             if [[ "$install_openrgb" == "1" ]]; then
-                brew install --cask openrgb || true
+                if brew list --cask openrgb >/dev/null 2>&1; then
+                    echo "OpenRGB cask is already installed. Skipping."
+                else
+                    brew install --cask openrgb || true
+                fi
             fi
             if [[ "$install_reaper" == "1" ]]; then
-                brew install --cask reaper || true
+                if brew list --cask reaper >/dev/null 2>&1; then
+                    echo "REAPER cask is already installed. Skipping."
+                else
+                    brew install --cask reaper || true
+                fi
             fi
-        else
+        elif [[ "$install_openrgb" == "1" || "$install_reaper" == "1" ]]; then
             echo "Homebrew not found. Install media tools manually."
+        else
+            echo "OpenRGB/REAPER already present. Nothing to install."
         fi
         return
     fi
 
     if [[ -x "$(command -v pacman)" ]]; then
         if [[ "$install_openrgb" == "1" ]]; then
-            sudo pacman -S --needed openrgb || true
+            if pacman -Qi openrgb >/dev/null 2>&1; then
+                echo "OpenRGB is already installed. Skipping."
+            else
+                sudo pacman -S --needed openrgb || true
+            fi
         fi
         if [[ "$install_reaper" == "1" ]]; then
-            # REAPER is usually available via AUR.
-            if [[ -x "$(command -v yay)" ]]; then
-                yay -S --needed reaper || true
+            if pacman -Qi reaper >/dev/null 2>&1; then
+                echo "REAPER is already installed. Skipping."
             else
-                echo "yay not found; install REAPER manually."
+                # REAPER is usually available via AUR.
+                if [[ -x "$(command -v yay)" ]]; then
+                    yay -S --needed reaper || true
+                else
+                    echo "yay not found; install REAPER manually."
+                fi
             fi
         fi
     elif [[ -x "$(command -v apt-get)" ]]; then
         if [[ "$install_openrgb" == "1" ]]; then
-            sudo apt-get update
-            sudo apt-get install -y openrgb || true
+            if dpkg -s openrgb >/dev/null 2>&1; then
+                echo "OpenRGB is already installed. Skipping."
+            else
+                sudo apt-get update
+                sudo apt-get install -y openrgb || true
+            fi
         fi
         if [[ "$install_reaper" == "1" ]]; then
-            echo "REAPER is not reliably available in APT repos. Install manually from reaper.fm."
+            if command -v reaper >/dev/null 2>&1; then
+                echo "REAPER is already installed. Skipping."
+            else
+                echo "REAPER is not reliably available in APT repos. Install manually from reaper.fm."
+            fi
         fi
     elif [[ -x "$(command -v yum)" ]]; then
         if [[ "$install_openrgb" == "1" ]]; then
-            sudo yum install -y openrgb || true
+            if rpm -q openrgb >/dev/null 2>&1; then
+                echo "OpenRGB is already installed. Skipping."
+            else
+                sudo yum install -y openrgb || true
+            fi
         fi
         if [[ "$install_reaper" == "1" ]]; then
-            echo "REAPER is not reliably available in YUM repos. Install manually from reaper.fm."
+            if command -v reaper >/dev/null 2>&1; then
+                echo "REAPER is already installed. Skipping."
+            else
+                echo "REAPER is not reliably available in YUM repos. Install manually from reaper.fm."
+            fi
         fi
     else
         echo "Unsupported Linux distribution for media tool auto-install."
@@ -416,4 +541,5 @@ install_fonts
 setup_terminal_colors
 install_browsers
 install_vscode
+install_docker
 install_media_tools

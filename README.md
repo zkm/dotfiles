@@ -49,7 +49,45 @@ Back up anything important first.
 9. Applies Terminal.app default profile on macOS (`Pro`).
 10. Attempts browser install (Firefox + Chrome/Chromium).
 11. Attempts Visual Studio Code install.
-12. Optionally installs OpenRGB/REAPER (opt-in flags).
+12. Installs Docker:
+   - macOS: installs Docker Desktop (Homebrew cask)
+   - Linux: installs Docker engine + compose plugin/package, enables the service, and adds your user to the `docker` group
+13. Optionally installs OpenRGB/REAPER (opt-in flags).
+
+## 🐳 Docker Install Notes
+
+- macOS: Docker Desktop is installed if missing. Launch Docker Desktop once after setup to initialize the daemon.
+- Linux: setup attempts to enable/start Docker via `systemctl` and adds your user to the `docker` group.
+- Linux group changes usually require logging out and back in before running Docker without `sudo`.
+
+## 🛠️ Docker Troubleshooting
+
+Quick checks:
+
+```sh
+docker --version
+docker info
+docker compose version
+```
+
+If `docker info` fails on macOS:
+
+- Open Docker Desktop and wait until it shows as running.
+
+If Linux says permission denied on `/var/run/docker.sock`:
+
+```sh
+sudo usermod -aG docker "$USER"
+newgrp docker
+docker info
+```
+
+If the daemon is not running on Linux:
+
+```sh
+sudo systemctl enable --now docker
+sudo systemctl status docker
+```
 
 ## 🎛️ Optional: OpenRGB + REAPER Install
 
