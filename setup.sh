@@ -337,6 +337,13 @@ function create_dotfiles() {
         mkdir -p ~/.config
         ln -sfn "$repo_root/config/hypr" ~/.config/hypr
     fi
+
+    # Prefer the repository Neovim config when present.
+    if [[ -d "$repo_root/config/nvim" ]]; then
+        mkdir -p ~/.config
+        rm -rf ~/.config/nvim
+        ln -sfn "$repo_root/config/nvim" ~/.config/nvim
+    fi
 }
 
 function setup_p10k() {

@@ -113,7 +113,9 @@ function zle-keymap-select {
 zle -N zle-keymap-select
 
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env" # ghcup-env
-export SYSTEMD_EDITOR=vim
+export EDITOR=nvim
+export VISUAL=nvim
+export SYSTEMD_EDITOR=nvim
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
