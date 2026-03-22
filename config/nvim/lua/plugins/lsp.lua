@@ -16,18 +16,19 @@ return {
     })
 
     local lspconfig = require("lspconfig")
+    local configs = require("lspconfig.configs")
 
-    -- tsserver is deprecated → use ts_ls in lspconfig
     local servers = {
       lua_ls = {},
-      ts_ls = {}, -- the updated TypeScript/JavaScript server
       gopls = {},
       elixirls = {},
       rust_analyzer = {},
     }
 
     for server, opts in pairs(servers) do
-      lspconfig[server].setup(opts)
+      if configs[server] then
+        lspconfig[server].setup(opts)
+      end
     end
   end,
 }
