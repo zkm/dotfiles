@@ -144,6 +144,30 @@ Run:
 
 This removes symlinks that point to this repo, cleans setup-added shell init lines, and removes optional components installed by setup (Powerlevel10k clone, Neovim copilot plugin, nvm directory, and installed font copies).
 
+## 💾 Backup Current Files
+
+Create a timestamped snapshot of all current files:
+
+```sh
+./local/bin/backup_current_files.sh [source_dir] [backup_dir]
+```
+
+Examples:
+
+```sh
+# Snapshot current directory into ./backups/<timestamp>
+./local/bin/backup_current_files.sh
+
+# Snapshot ~/.config into ~/Backups/config-snapshots/<timestamp>
+./local/bin/backup_current_files.sh ~/.config ~/Backups/config-snapshots
+```
+
+Notes:
+
+- Each run creates a new snapshot directory named like `20260322_101530`.
+- Directory structure is preserved inside each snapshot.
+- If the backup directory is inside the source directory, it is automatically excluded.
+
 ## 🧪 Tested On
 
 - Arch Linux + KDE Plasma

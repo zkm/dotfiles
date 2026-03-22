@@ -27,3 +27,6 @@ config/REAPER/reaper-recentfx.ini
 *.swp
 *.swo
 *~
+
+# Local backup snapshots
+backups/
