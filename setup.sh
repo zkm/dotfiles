@@ -281,12 +281,25 @@ function setup_neovim() {
     echo "Initializing the config for neovim..."
     mkdir -p ~/.config
     mkdir -p ~/.config/nvim
+
+    # Neovim prefers init.lua. Creating init.vim alongside it causes E5422.
+    if [[ -f ~/.config/nvim/init.lua ]]; then
+        if [[ -f ~/.config/nvim/init.vim ]] && \
+           grep -qxF 'set runtimepath^=~/.vim runtimepath+=~/.vim/after' ~/.config/nvim/init.vim && \
+           grep -qxF 'let &packpath = &runtimepath' ~/.config/nvim/init.vim && \
+           grep -qxF 'source ~/.vimrc' ~/.config/nvim/init.vim; then
+            rm -f ~/.config/nvim/init.vim
+            echo "Removed legacy ~/.config/nvim/init.vim to avoid init.lua conflict."
+        else
+            echo "Detected ~/.config/nvim/init.lua. Skipping legacy init.vim bootstrap."
+        fi
+        return 0
+    fi
+
     touch ~/.config/nvim/init.vim
-    
     echo "set runtimepath^=~/.vim runtimepath+=~/.vim/after" > ~/.config/nvim/init.vim
     echo "let &packpath = &runtimepath" >> ~/.config/nvim/init.vim
     echo "source ~/.vimrc" >> ~/.config/nvim/init.vim
-    # echo "lua require('config')" >> ~/.config/nvim/init.vim
 }
 
 function create_alias_directories() {

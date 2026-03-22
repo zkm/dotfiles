@@ -40,7 +40,7 @@ Back up anything important first.
 2. Installs core packages:
    - macOS: Homebrew + packages
    - Linux: `pacman`, `dnf`, `apt`, or `yum`
-3. Bootstraps Neovim compatibility (`~/.config/nvim/init.vim` sourcing `~/.vimrc`).
+3. Bootstraps Neovim compatibility (`~/.config/nvim/init.vim` sourcing `~/.vimrc`) only when `~/.config/nvim/init.lua` is not present.
 4. Creates directories used by aliases (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
 5. Symlinks repo-managed dotfiles into `$HOME`.
 6. Adds `pyenv`, `rbenv`, and `nvm` init lines to `~/.zshrc` (if missing).
