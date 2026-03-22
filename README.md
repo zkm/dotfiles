@@ -39,7 +39,7 @@ Back up anything important first.
 1. Ensures zsh is your shell (if currently using bash).
 2. Installs core packages:
    - macOS: Homebrew + packages
-   - Linux: `pacman`, `apt`, or `yum`
+   - Linux: `pacman`, `dnf`, `apt`, or `yum`
 3. Bootstraps Neovim compatibility (`~/.config/nvim/init.vim` sourcing `~/.vimrc`).
 4. Creates directories used by aliases (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
 5. Symlinks repo-managed dotfiles into `$HOME`.
@@ -117,15 +117,15 @@ Notes:
 
 - macOS: tries Homebrew casks (`openrgb`, `reaper`).
 - Arch: installs `openrgb` via pacman; tries `reaper` via `yay` (AUR).
-- apt/yum systems: attempts `openrgb`; REAPER is usually manual.
+- apt/dnf/yum systems: attempts `openrgb`; REAPER is usually manual.
 
 ## 🖥️ Platform Notes
 
 ### Linux
 
 - KDE/GTK configs are primarily Linux-targeted.
-- Package install paths are tuned mostly for Arch first, with `apt`/`yum` fallbacks.
-- Tested environment: Arch Linux + KDE Plasma.
+- Package install paths are tuned mostly for Arch first, with `dnf`/`apt`/`yum` fallbacks.
+- Tested environments: Arch Linux + KDE Plasma, Fedora Linux Asahi Remix 43 (Workstation Edition, GNOME 49.5, Mutter/Wayland, aarch64).
 
 ### macOS
 
@@ -147,6 +147,7 @@ This removes symlinks that point to this repo, cleans setup-added shell init lin
 ## 🧪 Tested On
 
 - Arch Linux + KDE Plasma
+- Fedora Linux Asahi Remix 43 (Workstation Edition, GNOME 49.5, Mutter/Wayland, aarch64)
 - macOS (Homebrew-based path)
 
 ## 🧹 Ignored Runtime Files

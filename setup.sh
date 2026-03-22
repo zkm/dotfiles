@@ -4,13 +4,30 @@ set -e
 
 function set_zsh() {
     echo "Setting shell to zsh..."
-    chsh -s $(which zsh);
+    local zsh_path
+
+    zsh_path="$(command -v zsh 2>/dev/null || true)"
+    if [[ -z "$zsh_path" ]]; then
+        echo "zsh is not installed or not in PATH. Skipping shell change."
+        return 0
+    fi
+
+    if ! chsh -s "$zsh_path"; then
+        echo "Could not change shell automatically."
+        echo "Run this manually after setup: chsh -s $zsh_path"
+    fi
 }
 
 function setup_shell() {
-    case $SHELL in
-        */bash)
+    case "$SHELL" in
+        */zsh)
+            echo "Default shell already zsh. Skipping shell change."
+        ;;
+        */bash|*/sh)
             set_zsh
+        ;;
+        *)
+            echo "Current shell is $SHELL. Skipping automatic shell change."
         ;;
     esac
 }
@@ -32,25 +49,83 @@ function install_homebrew() {
 
 function install_homebrew_packages() {
     echo "Installing Homebrew packages..."
-    brew install tmux neovim ripgrep node fastfetch pyenv rbenv ruby-build
+    brew install zsh tmux neovim ripgrep node fastfetch pyenv rbenv ruby-build
 }
 
 install_with_pacman() {
     echo "Installing packages with Pacman..."
-    sudo pacman -S --needed curl git tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build
+    sudo pacman -S --needed curl git zsh tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build
+}
+
+install_pyenv_from_upstream() {
+    if command -v pyenv >/dev/null 2>&1; then
+        return 0
+    fi
+
+    echo "pyenv package is unavailable in configured repositories."
+    echo "Installing pyenv from upstream..."
+
+    if [[ -d "$HOME/.pyenv" ]]; then
+        echo "~/.pyenv already exists. Skipping upstream installer."
+        return 0
+    fi
+
+    if ! curl -fsSL https://pyenv.run | bash; then
+        echo "Could not install pyenv from upstream automatically."
+        echo "Run this manually: curl https://pyenv.run | bash"
+        return 0
+    fi
 }
 
 # Function to install packages using APT (Debian/Ubuntu)
 install_with_apt() {
     echo "Installing packages with APT..."
     sudo apt-get update
-    sudo apt-get install -y curl git tmux neovim ripgrep nodejs fastfetch pyenv rbenv
+    sudo apt-get install -y curl git zsh tmux neovim ripgrep nodejs fastfetch pyenv rbenv
+}
+
+# Function to install packages using DNF (Fedora)
+install_with_dnf() {
+    echo "Installing packages with DNF..."
+    sudo dnf install -y curl git zsh tmux neovim ripgrep nodejs fastfetch
+
+    # Required for building CPython versions via pyenv.
+    if ! sudo dnf groupinstall -y "Development Tools"; then
+        echo "Warning: Could not install DNF group 'Development Tools'. Continuing."
+    fi
+    sudo dnf install -y \
+      openssl-devel bzip2-devel libffi-devel zlib-devel \
+      readline-devel sqlite-devel tk-devel xz-devel \
+      ncurses-devel gdbm-devel libuuid-devel
+
+    # Some Fedora derivatives do not ship pyenv/rbenv in enabled repos.
+    if ! sudo dnf install -y --skip-unavailable pyenv rbenv; then
+        echo "Skipping unavailable optional packages: pyenv and/or rbenv"
+    fi
+
+    install_pyenv_from_upstream
 }
 
 # Function to install packages using YUM (RHEL/CentOS)
 install_with_yum() {
     echo "Installing packages with YUM..."
-    sudo yum install -y curl git tmux neovim ripgrep nodejs fastfetch pyenv rbenv
+    sudo yum install -y curl git zsh tmux neovim ripgrep nodejs fastfetch
+
+    # Required for building CPython versions via pyenv.
+    if ! sudo yum groupinstall -y "Development Tools"; then
+        echo "Warning: Could not install YUM group 'Development Tools'. Continuing."
+    fi
+    sudo yum install -y \
+      openssl-devel bzip2-devel libffi-devel zlib-devel \
+      readline-devel sqlite-devel tk-devel xz-devel \
+      ncurses-devel gdbm-devel libuuid-devel
+
+    # Some repos do not provide pyenv/rbenv; keep setup non-fatal.
+    if ! sudo yum install -y pyenv rbenv; then
+        echo "Skipping unavailable optional packages: pyenv and/or rbenv"
+    fi
+
+    install_pyenv_from_upstream
 }
 
 function setup_lang_envs() {
@@ -62,8 +137,8 @@ function setup_lang_envs() {
     if ! grep -qxF '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' ~/.zshrc; then
         echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
     fi
-    if ! grep -qxF 'eval "$(pyenv init - zsh)"' ~/.zshrc; then
-        echo 'eval "$(pyenv init - zsh)"' >> ~/.zshrc
+    if ! grep -qxF 'if command -v pyenv >/dev/null 2>&1; then eval "$(pyenv init - zsh)"; fi' ~/.zshrc; then
+        echo 'if command -v pyenv >/dev/null 2>&1; then eval "$(pyenv init - zsh)"; fi' >> ~/.zshrc
     fi
 
     if ! grep -qxF 'export RBENV_ROOT="$HOME/.rbenv"' ~/.zshrc; then
@@ -72,8 +147,8 @@ function setup_lang_envs() {
     if ! grep -qxF '[[ -d $RBENV_ROOT/bin ]] && export PATH="$RBENV_ROOT/bin:$PATH"' ~/.zshrc; then
         echo '[[ -d $RBENV_ROOT/bin ]] && export PATH="$RBENV_ROOT/bin:$PATH"' >> ~/.zshrc
     fi
-    if ! grep -qxF 'eval "$(rbenv init - zsh)"' ~/.zshrc; then
-        echo 'eval "$(rbenv init - zsh)"' >> ~/.zshrc
+    if ! grep -qxF 'if command -v rbenv >/dev/null 2>&1; then eval "$(rbenv init - zsh)"; fi' ~/.zshrc; then
+        echo 'if command -v rbenv >/dev/null 2>&1; then eval "$(rbenv init - zsh)"; fi' >> ~/.zshrc
     fi
 }
 
@@ -81,7 +156,10 @@ function install_nvm() {
     echo "Installing nvm..."
 
     if [[ ! -d "$HOME/.nvm" ]]; then
-        curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+        if ! curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash; then
+            echo "Warning: Failed to install nvm. Skipping."
+            return 0
+        fi
     else
         echo "nvm directory already exists. Skipping installer."
     fi
@@ -142,7 +220,11 @@ function create_dotfiles() {
 
 function setup_p10k() {
     if [[ ! -d ~/.powerlevel10k ]]; then
-        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
+        echo "Installing powerlevel10k..."
+        if ! git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k; then
+            echo "Warning: Failed to clone powerlevel10k. Skipping."
+            return 0
+        fi
     fi
     
     # Check if the source line already exists in ~/.zshrc
@@ -156,19 +238,26 @@ function setup_p10k() {
 
 function setup_vim_plug() {
     echo "Installing neovim-plug..."
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    nvim --headless +PlugInstall +qall
+    if ! curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim; then
+        echo "Warning: Failed to download vim-plug. Skipping."
+        return 0
+    fi
+    
+    # Install plugins with timeout to prevent hanging
+    timeout 30 nvim --headless -u ~/.vimrc +PlugInstall +qall 2>/dev/null || true
 }
 
 function install_copilot() {
     if [[ ! -d ~/.config/nvim/pack/github/start/copilot.vim ]]; then
         echo "Installing Github copilot..."
-        git clone https://github.com/github/copilot.vim.git ~/.config/nvim/pack/github/start/copilot.vim
+        if ! git clone https://github.com/github/copilot.vim.git ~/.config/nvim/pack/github/start/copilot.vim 2>/dev/null; then
+            echo "Warning: Failed to clone copilot.vim. Skipping."
+            return 0
+        fi
     fi
 }
 
-setup_shell
 clear_old_dotfiles
 
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -182,6 +271,9 @@ else
         elif [[ -x "$(command -v apt-get)" ]]; then
         # Debian/Ubuntu (APT)
         install_with_apt
+        elif [[ -x "$(command -v dnf)" ]]; then
+        # Fedora (DNF)
+        install_with_dnf
         elif [[ -x "$(command -v yum)" ]]; then
         # RHEL/CentOS (YUM)
         install_with_yum
@@ -190,6 +282,8 @@ else
         exit 1
     fi
 fi
+
+setup_shell
 
 function install_fonts() {
     echo "Installing fonts..."
@@ -383,42 +477,34 @@ function install_media_tools() {
     else
         if command -v openrgb >/dev/null 2>&1; then
             openrgb_installed="1"
-        elif [[ -x "$(command -v pacman)" ]] && pacman -Qi openrgb >/dev/null 2>&1; then
-            openrgb_installed="1"
-        elif [[ -x "$(command -v apt-get)" ]] && dpkg -s openrgb >/dev/null 2>&1; then
-            openrgb_installed="1"
-        elif [[ -x "$(command -v yum)" ]] && rpm -q openrgb >/dev/null 2>&1; then
-            openrgb_installed="1"
+        else
+            set +e
+            pacman -Qi openrgb >/dev/null 2>&1 2>&1
+            [[ $? -eq 0 ]] && openrgb_installed="1"
+            dpkg -s openrgb >/dev/null 2>&1
+            [[ $? -eq 0 ]] && openrgb_installed="1"
+            rpm -q openrgb >/dev/null 2>&1
+            [[ $? -eq 0 ]] && openrgb_installed="1"
+            set -e
         fi
 
         if command -v reaper >/dev/null 2>&1; then
             reaper_installed="1"
-        elif [[ -x "$(command -v pacman)" ]] && pacman -Qi reaper >/dev/null 2>&1; then
-            reaper_installed="1"
+        else
+            set +e
+            pacman -Qi reaper >/dev/null 2>&1
+            [[ $? -eq 0 ]] && reaper_installed="1"
+            set -e
         fi
     fi
 
-    # Interactive prompt only when no explicit media flags were provided.
-    if [[ -z "$has_media_flag" && -z "$has_openrgb_flag" && -z "$has_reaper_flag" && -t 0 ]]; then
+    # Skip interactive prompts - use environment variables instead
+    # This prevents terminal hangs/crashes in some terminal emulators
+    if [[ -z "$has_media_flag" && -z "$has_openrgb_flag" && -z "$has_reaper_flag" ]]; then
         echo "Optional media tools are available (OpenRGB and REAPER)."
-
-        if [[ "$openrgb_installed" == "1" ]]; then
-            echo "OpenRGB is already installed. Skipping prompt."
-        else
-            read -r -p "Install OpenRGB? [y/N] " answer
-            case "$answer" in
-                [yY]|[yY][eE][sS]) install_openrgb="1" ;;
-            esac
-        fi
-
-        if [[ "$reaper_installed" == "1" ]]; then
-            echo "REAPER is already installed. Skipping prompt."
-        else
-            read -r -p "Install REAPER? [y/N] " answer
-            case "$answer" in
-                [yY]|[yY][eE][sS]) install_reaper="1" ;;
-            esac
-        fi
+        echo "To install, use: INSTALL_OPENRGB=1 INSTALL_REAPER=1 ./setup.sh"
+        echo "Skipping media tools (non-interactive mode)."
+        return 0
     fi
 
     if [[ "${INSTALL_MEDIA_TOOLS:-0}" == "1" ]]; then
@@ -475,16 +561,24 @@ function install_media_tools() {
 
     if [[ -x "$(command -v pacman)" ]]; then
         if [[ "$install_openrgb" == "1" ]]; then
-            if pacman -Qi openrgb >/dev/null 2>&1; then
+            set +e
+            pacman -Qi openrgb >/dev/null 2>&1
+            if [[ $? -eq 0 ]]; then
+                set -e
                 echo "OpenRGB is already installed. Skipping."
             else
+                set -e
                 sudo pacman -S --needed openrgb || true
             fi
         fi
         if [[ "$install_reaper" == "1" ]]; then
-            if pacman -Qi reaper >/dev/null 2>&1; then
+            set +e
+            pacman -Qi reaper >/dev/null 2>&1
+            if [[ $? -eq 0 ]]; then
+                set -e
                 echo "REAPER is already installed. Skipping."
             else
+                set -e
                 # REAPER is usually available via AUR.
                 if [[ -x "$(command -v yay)" ]]; then
                     yay -S --needed reaper || true
@@ -495,9 +589,13 @@ function install_media_tools() {
         fi
     elif [[ -x "$(command -v apt-get)" ]]; then
         if [[ "$install_openrgb" == "1" ]]; then
-            if dpkg -s openrgb >/dev/null 2>&1; then
+            set +e
+            dpkg -s openrgb >/dev/null 2>&1
+            if [[ $? -eq 0 ]]; then
+                set -e
                 echo "OpenRGB is already installed. Skipping."
             else
+                set -e
                 sudo apt-get update
                 sudo apt-get install -y openrgb || true
             fi
@@ -511,9 +609,13 @@ function install_media_tools() {
         fi
     elif [[ -x "$(command -v yum)" ]]; then
         if [[ "$install_openrgb" == "1" ]]; then
-            if rpm -q openrgb >/dev/null 2>&1; then
+            set +e
+            rpm -q openrgb >/dev/null 2>&1
+            if [[ $? -eq 0 ]]; then
+                set -e
                 echo "OpenRGB is already installed. Skipping."
             else
+                set -e
                 sudo yum install -y openrgb || true
             fi
         fi

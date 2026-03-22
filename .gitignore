@@ -21,6 +21,7 @@ config/REAPER/reaper-recentfx.ini
 *.pyc
 
 # Generic temp/editor artifacts
+.vscode/
 *.tmp
 *.temp
 *.swp
