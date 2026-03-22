@@ -317,6 +317,93 @@ function install_vscode() {
     fi
 }
 
+function install_media_tools() {
+    # Optional installs so setup stays safe for shared/public use.
+    # Enable with: INSTALL_MEDIA_TOOLS=1 ./setup.sh
+    # Or individually: INSTALL_OPENRGB=1 INSTALL_REAPER=1 ./setup.sh
+    local install_openrgb="${INSTALL_OPENRGB:-0}"
+    local install_reaper="${INSTALL_REAPER:-0}"
+    local has_media_flag="${INSTALL_MEDIA_TOOLS+x}"
+    local has_openrgb_flag="${INSTALL_OPENRGB+x}"
+    local has_reaper_flag="${INSTALL_REAPER+x}"
+    local answer
+
+    # Interactive prompt only when no explicit media flags were provided.
+    if [[ -z "$has_media_flag" && -z "$has_openrgb_flag" && -z "$has_reaper_flag" && -t 0 ]]; then
+        echo "Optional media tools are available (OpenRGB and REAPER)."
+
+        read -r -p "Install OpenRGB? [y/N] " answer
+        case "$answer" in
+            [yY]|[yY][eE][sS]) install_openrgb="1" ;;
+        esac
+
+        read -r -p "Install REAPER? [y/N] " answer
+        case "$answer" in
+            [yY]|[yY][eE][sS]) install_reaper="1" ;;
+        esac
+    fi
+
+    if [[ "${INSTALL_MEDIA_TOOLS:-0}" == "1" ]]; then
+        install_openrgb="1"
+        install_reaper="1"
+    fi
+
+    if [[ "$install_openrgb" != "1" && "$install_reaper" != "1" ]]; then
+        echo "Skipping OpenRGB/REAPER install (opt-in)."
+        if [[ ! -t 0 && -z "$has_media_flag" && -z "$has_openrgb_flag" && -z "$has_reaper_flag" ]]; then
+            echo "Tip: run with INSTALL_MEDIA_TOOLS=1, INSTALL_OPENRGB=1, or INSTALL_REAPER=1"
+        fi
+        return
+    fi
+
+    echo "Installing optional media tools..."
+
+    if [[ "$(uname)" == "Darwin" ]]; then
+        if command -v brew >/dev/null 2>&1; then
+            if [[ "$install_openrgb" == "1" ]]; then
+                brew install --cask openrgb || true
+            fi
+            if [[ "$install_reaper" == "1" ]]; then
+                brew install --cask reaper || true
+            fi
+        else
+            echo "Homebrew not found. Install media tools manually."
+        fi
+        return
+    fi
+
+    if [[ -x "$(command -v pacman)" ]]; then
+        if [[ "$install_openrgb" == "1" ]]; then
+            sudo pacman -S --needed openrgb || true
+        fi
+        if [[ "$install_reaper" == "1" ]]; then
+            # REAPER is usually available via AUR.
+            if [[ -x "$(command -v yay)" ]]; then
+                yay -S --needed reaper || true
+            else
+                echo "yay not found; install REAPER manually."
+            fi
+        fi
+    elif [[ -x "$(command -v apt-get)" ]]; then
+        if [[ "$install_openrgb" == "1" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y openrgb || true
+        fi
+        if [[ "$install_reaper" == "1" ]]; then
+            echo "REAPER is not reliably available in APT repos. Install manually from reaper.fm."
+        fi
+    elif [[ -x "$(command -v yum)" ]]; then
+        if [[ "$install_openrgb" == "1" ]]; then
+            sudo yum install -y openrgb || true
+        fi
+        if [[ "$install_reaper" == "1" ]]; then
+            echo "REAPER is not reliably available in YUM repos. Install manually from reaper.fm."
+        fi
+    else
+        echo "Unsupported Linux distribution for media tool auto-install."
+    fi
+}
+
 setup_neovim
 create_alias_directories
 create_dotfiles
@@ -329,3 +416,4 @@ install_fonts
 setup_terminal_colors
 install_browsers
 install_vscode
+install_media_tools

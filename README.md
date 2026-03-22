@@ -1,10 +1,10 @@
 # dotfiles
 
-My personal dotfiles for Linux (primarily Arch) and macOS, including configuration for Neovim, Zsh, KDE Plasma, Git, and more.
+Personal dotfiles for Linux (primarily Arch) and macOS.
 
-## ⚙️ Usage
+Includes configuration for Zsh, Neovim, Git, tmux, KDE/GTK theming, OpenRGB, REAPER, and related tooling.
 
-These dotfiles are organized for easy setup across fresh systems. To install:
+## ⚙️ Install
 
 ```sh
 git clone https://github.com/zkm/dotfiles ~/.dotfiles
@@ -12,47 +12,111 @@ cd ~/.dotfiles
 ./setup.sh
 ```
 
-The setup script will back up any existing dotfiles and create symlinks or copy over key configurations.
+## ⚠️ Important Behavior
 
-Note: the current `setup.sh` removes existing dotfiles before linking repo-managed files. If you want backups, create them manually first.
+`setup.sh` is intentionally destructive for managed dotfiles.
 
-## 🖥️ What’s Included
+Before creating fresh symlinks, it removes existing files/dirs such as:
 
-- **Shell**: Zsh (`.zshrc`, Powerlevel10k theme, aliases, custom functions)
-- **Editor**: Neovim with Lua config and plugin management
-- **Terminal**: Fastfetch, Btop, custom GTK and KDE themes
-- **Git**: `.gitconfig` with aliases and sensible defaults
-- **Desktop**: KDE Plasma config files, GTK themes, mimeapps
-- **Media/Tools**:
-  - REAPER (DAW config)
-  - OpenRGB (profiles plus custom Python effects)
-  - MPV (media player)
-- **Fonts**: Fira Code and MesloLGS Nerd Font
-- **Dotfiles Syncing**: Fonts, theming, and config stored in a portable structure
+- `~/.aliases`
+- `~/.gitconfig`
+- `~/.dircolors`
+- `~/.vimrc`
+- `~/.vimrc.plugs`
+- `~/.zshrc`
+- `~/.zsh`
+- `~/.tmux.conf`
+- `~/.p10k.zsh`
+- `~/.zprofile`
+- `~/.bin`
+
+Back up anything important first.
+
+## 🧩 What Setup Does
+
+`setup.sh` currently performs the following:
+
+1. Ensures zsh is your shell (if currently using bash).
+2. Installs core packages:
+   - macOS: Homebrew + packages
+   - Linux: `pacman`, `apt`, or `yum`
+3. Bootstraps Neovim compatibility (`~/.config/nvim/init.vim` sourcing `~/.vimrc`).
+4. Creates directories used by aliases (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
+5. Symlinks repo-managed dotfiles into `$HOME`.
+6. Adds `pyenv`, `rbenv`, and `nvm` init lines to `~/.zshrc` (if missing).
+7. Installs Powerlevel10k, vim-plug plugins, and `copilot.vim`.
+8. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
+9. Applies Terminal.app default profile on macOS (`Pro`).
+10. Attempts browser install (Firefox + Chrome/Chromium).
+11. Attempts Visual Studio Code install.
+12. Optionally installs OpenRGB/REAPER (opt-in flags).
+
+## 🎛️ Optional: OpenRGB + REAPER Install
+
+These are now opt-in per user/machine.
+
+If you run `./setup.sh` interactively (normal terminal), setup will prompt:
+
+- Install OpenRGB? [y/N]
+- Install REAPER? [y/N]
+
+If you run setup non-interactively (automation/CI), use env flags.
+
+Install both:
+
+```sh
+INSTALL_MEDIA_TOOLS=1 ./setup.sh
+```
+
+Install only one:
+
+```sh
+INSTALL_OPENRGB=1 ./setup.sh
+INSTALL_REAPER=1 ./setup.sh
+```
+
+Notes:
+
+- macOS: tries Homebrew casks (`openrgb`, `reaper`).
+- Arch: installs `openrgb` via pacman; tries `reaper` via `yay` (AUR).
+- apt/yum systems: attempts `openrgb`; REAPER is usually manual.
+
+## 🖥️ Platform Notes
+
+### Linux
+
+- KDE/GTK configs are primarily Linux-targeted.
+- Package install paths are tuned mostly for Arch first, with `apt`/`yum` fallbacks.
+- Tested environment: Arch Linux + KDE Plasma.
+
+### macOS
+
+- Uses Homebrew for package/app installation.
+- Installs fonts into `~/Library/Fonts`.
+- Sets Apple Terminal default/startup profile to `Pro`.
+- Linux desktop theming files are present in-repo but mostly not applied by macOS tooling.
+
+## 🔁 Uninstall / Cleanup
+
+Run:
+
+```sh
+./uninstall.sh
+```
+
+This removes symlinks that point to this repo, cleans setup-added shell init lines, and removes optional components installed by setup (Powerlevel10k clone, Neovim copilot plugin, nvm directory, and installed font copies).
 
 ## 🧪 Tested On
 
 - Arch Linux + KDE Plasma
+- macOS (Homebrew-based path)
 
-## 📝 Notes
+## 🧹 Ignored Runtime Files
 
-For terminal theming (e.g., Solarized), make sure your terminal profile is named `Default`, or adjust the setup script accordingly.
+The repo ignores generated/runtime artifacts, including:
 
-## 🔁 Reinstall Workflow
-
-For full-system recovery:
-
-1. Clone this repo.
-2. Review sensitive or machine-specific files before applying.
-3. Run `./setup.sh` to relink managed dotfiles.
-4. Restore any non-repo local secrets manually.
-
-## 🧹 What Is Ignored
-
-This repo intentionally ignores generated/runtime files so syncs stay clean:
-
-- OpenRGB logs/cache/venv and backup JSONs
+- OpenRGB logs/cache/venv and backup JSON files
 - REAPER license/registration artifacts
-- Runtime logs and temporary editor files
+- Runtime logs and editor temp files
 
-This keeps reinstall backups focused on reusable configuration.
+This keeps syncs focused on reusable configuration.
