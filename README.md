@@ -4,6 +4,8 @@ Personal dotfiles for Linux (primarily Arch) and macOS.
 
 Includes configuration for Zsh, Neovim, Git, tmux, KDE/GTK theming, OpenRGB, REAPER, and related tooling.
 
+Hyprland installs also include a basic Hyprlock setup, with `SUPER+L` bound to lock the screen.
+
 ## ⚙️ Install
 
 ```sh

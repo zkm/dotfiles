@@ -185,7 +185,7 @@ install_hypr_stack() {
 
     if [[ -x "$(command -v pacman)" ]]; then
         local pacman_packages=(
-            hyprland hyprpaper waybar mako rofi-wayland kitty
+            hyprland hyprpaper hyprlock waybar mako rofi-wayland kitty
             wl-clipboard grim slurp swappy brightnessctl playerctl
             pavucontrol network-manager-applet
         )
@@ -196,7 +196,7 @@ install_hypr_stack() {
     elif [[ -x "$(command -v apt-get)" ]]; then
         # Package availability differs by distro release, so install best-effort.
         local apt_packages=(
-            hyprland hyprpaper waybar mako-notifier rofi-wayland kitty
+            hyprland hyprpaper hyprlock waybar mako-notifier rofi-wayland kitty
             wl-clipboard grim slurp swappy brightnessctl playerctl pavucontrol
             network-manager-gnome
         )
@@ -207,7 +207,7 @@ install_hypr_stack() {
         done
     elif [[ -x "$(command -v dnf)" ]]; then
         local dnf_packages=(
-            hyprland hyprpaper waybar mako rofi-wayland kitty
+            hyprland hyprpaper hyprlock waybar mako rofi-wayland kitty
             wl-clipboard grim slurp swappy brightnessctl playerctl pavucontrol
             network-manager-applet
         )
@@ -217,7 +217,7 @@ install_hypr_stack() {
         done
     elif [[ -x "$(command -v yum)" ]]; then
         local yum_packages=(
-            hyprland hyprpaper waybar mako rofi-wayland kitty
+            hyprland hyprpaper hyprlock waybar mako rofi-wayland kitty
             wl-clipboard grim slurp swappy brightnessctl playerctl pavucontrol
             network-manager-applet
         )
