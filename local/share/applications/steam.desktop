@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Steam
+Comment=Steam Game Launcher
+Icon=steam
+Exec=steam %U
+Terminal=false
+Categories=Utility;
+MimeType=x-scheme-handler/steam;x-scheme-handler/steamcommunity;
