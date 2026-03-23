@@ -325,6 +325,20 @@ function create_dotfiles() {
     if [[ -d "$repo_root/local/bin" ]]; then
         ln -sfn "$repo_root/local/bin" ~/.bin
     fi
+
+    # Link repo-managed desktop entry overrides.
+    if [[ -d "$repo_root/local/share/applications" ]]; then
+        mkdir -p ~/.local/share/applications
+        local desktop_entry
+        for desktop_entry in "$repo_root"/local/share/applications/*.desktop; do
+            [[ -e "$desktop_entry" ]] || continue
+            ln -sfn "$desktop_entry" "$HOME/.local/share/applications/$(basename "$desktop_entry")"
+        done
+        if command -v update-desktop-database >/dev/null 2>&1; then
+            update-desktop-database "$HOME/.local/share/applications" >/dev/null 2>&1 || true
+        fi
+    fi
+
     ln -sfn "$repo_root/zshrc" ~/.zshrc
     ln -sfn "$repo_root/tmux.conf" ~/.tmux.conf
     ln -sfn "$repo_root/p10k.zsh" ~/.p10k.zsh

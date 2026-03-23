@@ -147,6 +147,17 @@ main() {
     remove_if_symlink_to_repo "$HOME/.vimrc.plugs"
     remove_if_symlink_to_repo "$HOME/.zsh"
     remove_if_symlink_to_repo "$HOME/.bin"
+    if [[ -d "$repo_root/local/share/applications" ]]; then
+        mkdir -p "$HOME/.local/share/applications"
+        local desktop_entry
+        for desktop_entry in "$repo_root"/local/share/applications/*.desktop; do
+            [[ -e "$desktop_entry" ]] || continue
+            remove_if_symlink_to_repo "$HOME/.local/share/applications/$(basename "$desktop_entry")"
+        done
+        if command -v update-desktop-database >/dev/null 2>&1; then
+            update-desktop-database "$HOME/.local/share/applications" >/dev/null 2>&1 || true
+        fi
+    fi
     remove_if_symlink_to_repo "$HOME/.zshrc"
     remove_if_symlink_to_repo "$HOME/.tmux.conf"
     remove_if_symlink_to_repo "$HOME/.p10k.zsh"

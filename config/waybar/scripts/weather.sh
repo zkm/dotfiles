@@ -3,14 +3,17 @@ set -eu
 
 location="${WEATHER_LOCATION:-}"
 if [ -n "${location}" ]; then
-  url="https://wttr.in/${location}?u&format=%l|%C|%t"
+  location_enc=$(printf '%s' "${location}" | sed 's/ /%20/g')
+  url="https://wttr.in/${location_enc}?u&format=%l|%C|%t"
 else
   url="https://wttr.in/?u&format=%l|%C|%t"
 fi
 
 raw=""
 if command -v curl >/dev/null 2>&1; then
-  raw=$(curl -fsS --max-time 6 "${url}" || true)
+  raw=$(curl -A "waybar-weather/1.0" -fsS --max-time 6 "${url}" || true)
+elif command -v wget >/dev/null 2>&1; then
+  raw=$(wget -qO- --timeout=6 "${url}" || true)
 fi
 
 if [ -z "${raw}" ]; then
