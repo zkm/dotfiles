@@ -2,7 +2,9 @@
 
 Personal dotfiles for Linux (primarily Arch) and macOS.
 
-Includes configuration for Zsh, Neovim, Git, tmux, KDE/GTK theming, OpenRGB, REAPER, and related tooling.
+Includes configuration for Zsh, Git, tmux, KDE/GTK theming, OpenRGB, REAPER, and related tooling.
+
+Neovim configuration now lives in a separate repository: [zkm/nvim-config](https://github.com/zkm/nvim-config).
 
 Hyprland installs also include a basic Hyprlock setup, with `SUPER+L` bound to lock the screen.
 
@@ -23,8 +25,6 @@ Before creating fresh symlinks, it removes existing files/dirs such as:
 - `~/.aliases`
 - `~/.gitconfig`
 - `~/.dircolors`
-- `~/.vimrc`
-- `~/.vimrc.plugs`
 - `~/.zshrc`
 - `~/.zsh`
 - `~/.tmux.conf`
@@ -42,20 +42,19 @@ Back up anything important first.
 2. Installs core packages:
    - macOS: Homebrew + packages
    - Linux: `pacman`, `dnf`, `apt`, or `yum`
-3. Bootstraps Neovim compatibility (`~/.config/nvim/init.vim` sourcing `~/.vimrc`) only when `~/.config/nvim/init.lua` is not present.
-4. Creates directories used by aliases (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
-5. Symlinks repo-managed dotfiles into `$HOME`.
-6. Adds `pyenv`, `rbenv`, and `nvm` init lines to `~/.zshrc` (if missing).
-7. Installs Powerlevel10k, vim-plug plugins, and `copilot.vim`.
-8. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
-9. Applies Terminal.app default profile on macOS (`Pro`).
-10. Attempts browser install (Firefox + Chrome/Chromium).
-11. Attempts Visual Studio Code install.
+3. Creates directories used by aliases (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
+4. Symlinks repo-managed dotfiles into `$HOME`.
+5. Adds `pyenv`, `rbenv`, and `nvm` init lines to `~/.zshrc` (if missing).
+6. Installs Powerlevel10k.
+7. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
+8. Applies Terminal.app default profile on macOS (`Pro`).
+9. Attempts browser install (Firefox + Chrome/Chromium).
+10. Attempts Visual Studio Code install.
    - Arch Linux: bootstraps `yay` if needed and installs `visual-studio-code-bin` from AUR.
-12. Installs Docker:
+11. Installs Docker:
    - macOS: installs Docker Desktop (Homebrew cask)
    - Linux: installs Docker engine + compose plugin/package, enables the service, and adds your user to the `docker` group
-13. Optionally installs OpenRGB/REAPER (opt-in flags).
+12. Optionally installs OpenRGB/REAPER (opt-in flags).
 
 ## 🐳 Docker Install Notes
 
@@ -145,7 +144,7 @@ Run:
 ./uninstall.sh
 ```
 
-This removes symlinks that point to this repo, cleans setup-added shell init lines, and removes optional components installed by setup (Powerlevel10k clone, Neovim copilot plugin, nvm directory, and installed font copies).
+This removes symlinks that point to this repo, cleans setup-added shell init lines, and removes optional components installed by setup (Powerlevel10k clone, nvm directory, and installed font copies).
 
 ## 💾 Backup Current Files
 

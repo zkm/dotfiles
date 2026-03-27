@@ -70,18 +70,6 @@ cleanup_zshrc_entries() {
     remove_exact_line "$zshrc" 'source ~/.powerlevel10k/powerlevel10k.zsh-theme'
 }
 
-cleanup_neovim_bootstrap() {
-    local init_vim="$HOME/.config/nvim/init.vim"
-
-    if [[ -f "$init_vim" ]] && \
-       grep -qxF 'set runtimepath^=~/.vim runtimepath+=~/.vim/after' "$init_vim" && \
-       grep -qxF 'let &packpath = &runtimepath' "$init_vim" && \
-       grep -qxF 'source ~/.vimrc' "$init_vim"; then
-        rm -f "$init_vim"
-        log "Removed generated Neovim bootstrap: $init_vim"
-    fi
-}
-
 uninstall_homebrew_packages() {
     if ! command -v brew >/dev/null 2>&1; then
         log "Homebrew not found. Skipping."
@@ -123,7 +111,6 @@ uninstall_homebrew_packages() {
 
 cleanup_optional_components() {
     rm -rf "$HOME/.powerlevel10k"
-    rm -rf "$HOME/.config/nvim/pack/github/start/copilot.vim"
     rm -rf "$HOME/.nvm"
 
     if [[ "$(uname)" == "Darwin" ]]; then
@@ -143,8 +130,6 @@ main() {
     remove_if_symlink_to_repo "$HOME/.aliases"
     remove_if_symlink_to_repo "$HOME/.gitconfig"
     remove_if_symlink_to_repo "$HOME/.dircolors"
-    remove_if_symlink_to_repo "$HOME/.vimrc"
-    remove_if_symlink_to_repo "$HOME/.vimrc.plugs"
     remove_if_symlink_to_repo "$HOME/.zsh"
     remove_if_symlink_to_repo "$HOME/.bin"
     if [[ -d "$repo_root/local/share/applications" ]]; then
@@ -164,7 +149,6 @@ main() {
     remove_if_symlink_to_repo "$HOME/.zprofile"
 
     cleanup_zshrc_entries
-    cleanup_neovim_bootstrap
     cleanup_optional_components
 
     if [[ "$(uname)" == "Darwin" ]]; then

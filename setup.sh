@@ -34,7 +34,7 @@ function setup_shell() {
 
 function clear_old_dotfiles() {
     echo "Removing previous dotfiles..."
-    rm -f ~/.aliases ~/.gitconfig ~/.vimrc ~/.vimrc.plugs ~/.zshrc ~/.tmux.conf ~/.p10k.zsh ~/.zprofile ~/.dircolors
+    rm -f ~/.aliases ~/.gitconfig ~/.zshrc ~/.tmux.conf ~/.p10k.zsh ~/.zprofile ~/.dircolors
     rm -rf ~/.zsh ~/.bin
 }
 
@@ -277,31 +277,6 @@ function install_nvm() {
     fi
 }
 
-function setup_neovim() {
-    echo "Initializing the config for neovim..."
-    mkdir -p ~/.config
-    mkdir -p ~/.config/nvim
-
-    # Neovim prefers init.lua. Creating init.vim alongside it causes E5422.
-    if [[ -f ~/.config/nvim/init.lua ]]; then
-        if [[ -f ~/.config/nvim/init.vim ]] && \
-           grep -qxF 'set runtimepath^=~/.vim runtimepath+=~/.vim/after' ~/.config/nvim/init.vim && \
-           grep -qxF 'let &packpath = &runtimepath' ~/.config/nvim/init.vim && \
-           grep -qxF 'source ~/.vimrc' ~/.config/nvim/init.vim; then
-            rm -f ~/.config/nvim/init.vim
-            echo "Removed legacy ~/.config/nvim/init.vim to avoid init.lua conflict."
-        else
-            echo "Detected ~/.config/nvim/init.lua. Skipping legacy init.vim bootstrap."
-        fi
-        return 0
-    fi
-
-    touch ~/.config/nvim/init.vim
-    echo "set runtimepath^=~/.vim runtimepath+=~/.vim/after" > ~/.config/nvim/init.vim
-    echo "let &packpath = &runtimepath" >> ~/.config/nvim/init.vim
-    echo "source ~/.vimrc" >> ~/.config/nvim/init.vim
-}
-
 function create_alias_directories() {
     echo "Creating directories used by aliases..."
 
@@ -319,8 +294,6 @@ function create_dotfiles() {
     ln -sfn "$repo_root/aliases" ~/.aliases
     ln -sfn "$repo_root/gitconfig" ~/.gitconfig
     ln -sfn "$repo_root/dircolors" ~/.dircolors
-    ln -sfn "$repo_root/vimrc" ~/.vimrc
-    ln -sfn "$repo_root/vimrc.plugs" ~/.vimrc.plugs
     ln -sfn "$repo_root/zsh" ~/.zsh
     if [[ -d "$repo_root/local/bin" ]]; then
         ln -sfn "$repo_root/local/bin" ~/.bin
@@ -352,12 +325,6 @@ function create_dotfiles() {
         ln -sfn "$repo_root/config/hypr" ~/.config/hypr
     fi
 
-    # Prefer the repository Neovim config when present.
-    if [[ -d "$repo_root/config/nvim" ]]; then
-        mkdir -p ~/.config
-        rm -rf ~/.config/nvim
-        ln -sfn "$repo_root/config/nvim" ~/.config/nvim
-    fi
 }
 
 function setup_p10k() {
@@ -377,28 +344,6 @@ function setup_p10k() {
     fi
 }
 
-
-function setup_vim_plug() {
-    echo "Installing neovim-plug..."
-    if ! curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim; then
-        echo "Warning: Failed to download vim-plug. Skipping."
-        return 0
-    fi
-    
-    # Install plugins with timeout to prevent hanging
-    timeout 30 nvim --headless -u ~/.vimrc +PlugInstall +qall 2>/dev/null || true
-}
-
-function install_copilot() {
-    if [[ ! -d ~/.config/nvim/pack/github/start/copilot.vim ]]; then
-        echo "Installing Github copilot..."
-        if ! git clone https://github.com/github/copilot.vim.git ~/.config/nvim/pack/github/start/copilot.vim 2>/dev/null; then
-            echo "Warning: Failed to clone copilot.vim. Skipping."
-            return 0
-        fi
-    fi
-}
 
 clear_old_dotfiles
 
@@ -777,14 +722,11 @@ function install_media_tools() {
     fi
 }
 
-setup_neovim
 create_alias_directories
 create_dotfiles
 setup_lang_envs
 install_nvm
 setup_p10k
-setup_vim_plug
-install_copilot
 install_fonts
 setup_terminal_colors
 install_browsers
