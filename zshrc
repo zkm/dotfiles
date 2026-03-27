@@ -1,8 +1,11 @@
 # ==============================
 # 🌟 Powerlevel10k Prompt Setup
 # ==============================
+# Ensure core system binaries are always available, even if PATH was inherited in a bad state.
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
+
 # Enable instant prompt for faster shell startup
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+if [[ -z "${ZSH_RELOADING:-}" ]] && [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
@@ -42,13 +45,15 @@ path=(
   $path
 )
 
-# Initialize version managers once.
-if command -v pyenv >/dev/null 2>&1; then
+# Initialize version managers once per shell to avoid duplicate hook setup on re-source.
+if [[ -z "${__PYENV_INIT_DONE:-}" ]] && command -v pyenv >/dev/null 2>&1; then
   eval "$(pyenv init - zsh)"
+  __PYENV_INIT_DONE=1
 fi
 
-if command -v rbenv >/dev/null 2>&1; then
+if [[ -z "${__RBENV_INIT_DONE:-}" ]] && command -v rbenv >/dev/null 2>&1; then
   eval "$(rbenv init - zsh)"
+  __RBENV_INIT_DONE=1
 fi
 
 # Lazy-load NVM on first use to keep shell startup fast.
@@ -122,12 +127,35 @@ export SYSTEMD_EDITOR=nvim
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+# SDKMAN is lazy-loaded on first use to keep startup fast and avoid reload edge cases.
 export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-if command -v pyenv >/dev/null 2>&1; then eval "$(pyenv init - zsh)"; fi
-[[ -d $RBENV_ROOT/bin ]] && export PATH="$RBENV_ROOT/bin:$PATH"
-if command -v rbenv >/dev/null 2>&1; then eval "$(rbenv init - zsh)"; fi
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+_sdkman_lazy_load() {
+  if [[ -n "${__SDKMAN_INIT_DONE:-}" ]]; then
+    return 0
+  fi
+
+  if [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]]; then
+    source "$SDKMAN_DIR/bin/sdkman-init.sh"
+    __SDKMAN_INIT_DONE=1
+    return 0
+  fi
+
+  echo "SDKMAN init script not found: $SDKMAN_DIR/bin/sdkman-init.sh" >&2
+  return 1
+}
+
+sdk() {
+  local -a _sdk_args=("$@")
+  _sdkman_lazy_load || return 1
+
+  if [[ -n "${__SDKMAN_WRAPPER_BYPASS:-}" ]]; then
+    echo "SDKMAN failed to initialize correctly." >&2
+    return 1
+  fi
+
+  __SDKMAN_WRAPPER_BYPASS=1
+  sdk "${_sdk_args[@]}"
+  local _sdk_rc=$?
+  unset __SDKMAN_WRAPPER_BYPASS
+  return $_sdk_rc
+}
