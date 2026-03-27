@@ -28,9 +28,9 @@ alias ...="cd ../.."
 # ==============================
 # Smart vim/nvim fallback
 vim() {
-  if command -v nvim >/dev/null 2>&1; then
+  if whence -p nvim >/dev/null 2>&1; then
     command nvim "$@"
-  elif command -v vim >/dev/null 2>&1; then
+  elif whence -p vim >/dev/null 2>&1; then
     command vim "$@"
   else
     echo "❌ No 'nvim' or 'vim' installed." >&2
@@ -39,7 +39,11 @@ vim() {
 }
 
 vi() {
-  vim "$@"
+  if whence -p nvim >/dev/null 2>&1; then
+    command nvim "$@"
+  else
+    vim "$@"
+  fi
 }
 
 # ==============================
@@ -150,8 +154,8 @@ openrgb-sdk-ensure() {
 
 # Reload current shell configuration
 reload() {
-  source ~/.zshrc
-  echo "✅ Terminal configuration reloaded"
+  echo "🔄 Restarting shell..."
+  exec zsh -l
 }
 
 # Emergency stop for all OpenRGB effect scripts
@@ -553,9 +557,9 @@ alias mysql-restore='mariadb -u root -p < ~/mariadb_backup.sql'
 # ==============================
 # 🍰 CakePHP Development (Docker)
 # ==============================
-alias fpm="docker-compose exec -u $(id -u):$(id -g) php-fpm"
-alias cake="$fpm bin/cake"
-alias composer-fpm="$fpm composer"
+alias fpm='docker-compose exec -u $(id -u):$(id -g) php-fpm'
+alias cake='docker-compose exec -u $(id -u):$(id -g) php-fpm bin/cake'
+alias composer-fpm='docker-compose exec -u $(id -u):$(id -g) php-fpm composer'
 
 # ==============================
 # 🤖 OLLAMA ALIASES (GPU + CPU)
