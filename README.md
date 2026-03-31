@@ -127,6 +127,7 @@ Notes:
 
 - KDE/GTK configs are primarily Linux-targeted.
 - Package install paths are tuned mostly for Arch first, with `dnf`/`apt`/`yum` fallbacks.
+- On Debian Bookworm (including Raspberry Pi OS Bookworm), `fastfetch` may be unavailable in default APT repositories. Setup now treats it as optional and continues.
 - Tested environments: Arch Linux + KDE Plasma, Fedora Linux Asahi Remix 43 (Workstation Edition, GNOME 49.5, Mutter/Wayland, aarch64).
 
 ### macOS

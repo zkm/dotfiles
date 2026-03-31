@@ -128,7 +128,17 @@ install_pyenv_from_upstream() {
 install_with_apt() {
     echo "Installing packages with APT..."
     sudo apt-get update
-    sudo apt-get install -y curl git zsh tmux neovim ripgrep nodejs fastfetch pyenv rbenv
+
+    # Install core packages first so setup remains usable even if optional
+    # packages are unavailable on the current Debian/Ubuntu release.
+    sudo apt-get install -y curl git zsh tmux neovim ripgrep nodejs
+
+    local optional_pkg
+    for optional_pkg in fastfetch pyenv rbenv; do
+        if ! sudo apt-get install -y "$optional_pkg"; then
+            echo "Skipping unavailable optional package: $optional_pkg"
+        fi
+    done
 }
 
 # Function to install packages using DNF (Fedora)
