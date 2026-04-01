@@ -26,6 +26,14 @@ alias ...="cd ../.."
 # ==============================
 # 📝 Editor Preferences
 # ==============================
+# Avoid alias/function collisions (common with Oh My Zsh / distro defaults)
+unalias \
+  vim vi neofetch matrix openrgb openrgb-server rgb-verbose \
+  openrgb-sdk-running openrgb-sdk-ensure reload rgb-stop \
+  rgb-stop-current-effect rgb-effect docker-start docker-stop \
+  docker-restart docker-status docker-log plex-start plex-stop \
+  plex-status ollama-clean raidview 2>/dev/null
+
 # Smart vim/nvim fallback
 vim() {
   if whence -p nvim >/dev/null 2>&1; then
