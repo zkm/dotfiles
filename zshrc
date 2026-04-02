@@ -56,20 +56,12 @@ if [[ -z "${__RBENV_INIT_DONE:-}" ]] && command -v rbenv >/dev/null 2>&1; then
   __RBENV_INIT_DONE=1
 fi
 
-# Lazy-load NVM on first use to keep shell startup fast.
-_nvm_lazy_load() {
-  unset -f nvm node npm npx corepack yarn pnpm
-  [[ -s "$NVM_DIR/nvm.sh" ]] && source "$NVM_DIR/nvm.sh"
+# Load NVM during startup when it's installed so a default Node version is available.
+if [[ -z "${__NVM_INIT_DONE:-}" ]] && [[ -s "$NVM_DIR/nvm.sh" ]]; then
+  source "$NVM_DIR/nvm.sh"
   [[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
-}
-
-nvm() { _nvm_lazy_load; nvm "$@"; }
-node() { _nvm_lazy_load; command node "$@"; }
-npm() { _nvm_lazy_load; command npm "$@"; }
-npx() { _nvm_lazy_load; command npx "$@"; }
-corepack() { _nvm_lazy_load; command corepack "$@"; }
-yarn() { _nvm_lazy_load; command yarn "$@"; }
-pnpm() { _nvm_lazy_load; command pnpm "$@"; }
+  __NVM_INIT_DONE=1
+fi
 
 # ==============================
 # ⚙️ Zsh Behavior & Input Settings
