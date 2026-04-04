@@ -185,6 +185,23 @@ install_with_yum() {
     install_pyenv_from_upstream
 }
 
+# Function to install packages using Portage (Gentoo)
+install_with_emerge() {
+    echo "Installing packages with Portage (emerge)..."
+
+    sudo emerge --sync
+    sudo emerge --noreplace \
+      net-misc/curl dev-vcs/git app-shells/zsh app-misc/tmux \
+      app-editors/neovim sys-apps/ripgrep net-libs/nodejs app-misc/fastfetch
+
+    # These may require additional overlays depending on Gentoo profile.
+    if ! sudo emerge --noreplace dev-python/pyenv dev-util/rbenv; then
+        echo "Skipping unavailable optional packages: pyenv and/or rbenv"
+    fi
+
+    install_pyenv_from_upstream
+}
+
 install_hypr_stack() {
     # Hyprland stack is Linux-only.
     if [[ "$(uname)" == "Darwin" ]]; then
@@ -234,6 +251,17 @@ install_hypr_stack() {
         local pkg
         for pkg in "${yum_packages[@]}"; do
             sudo yum install -y "$pkg" || echo "Skipping unavailable package: $pkg"
+        done
+    elif [[ -x "$(command -v emerge)" ]]; then
+        local emerge_packages=(
+            gui-wm/hyprland gui-apps/hyprpaper gui-apps/hyprlock gui-apps/waybar
+            x11-misc/mako x11-misc/rofi x11-terms/kitty gui-apps/wl-clipboard
+            media-gfx/grim media-gfx/slurp media-gfx/swappy app-misc/brightnessctl
+            media-sound/playerctl media-sound/pavucontrol gnome-extra/nm-applet
+        )
+        local pkg
+        for pkg in "${emerge_packages[@]}"; do
+            sudo emerge --noreplace "$pkg" || echo "Skipping unavailable package: $pkg"
         done
     else
         echo "Unsupported Linux distribution for Hyprland auto-install."
@@ -375,6 +403,9 @@ else
         elif [[ -x "$(command -v yum)" ]]; then
         # RHEL/CentOS (YUM)
         install_with_yum
+        elif [[ -x "$(command -v emerge)" ]]; then
+        # Gentoo (Portage)
+        install_with_emerge
     else
         echo "Unsupported Linux distribution. Please install packages manually."
         exit 1
@@ -464,6 +495,9 @@ function install_browsers() {
     elif [[ -x "$(command -v yum)" ]]; then
         sudo yum install -y firefox || true
         sudo yum install -y google-chrome-stable || sudo yum install -y chromium || true
+    elif [[ -x "$(command -v emerge)" ]]; then
+        sudo emerge --noreplace www-client/firefox || true
+        sudo emerge --noreplace www-client/google-chrome || sudo emerge --noreplace www-client/chromium || true
     else
         echo "Unsupported Linux distribution for browser auto-install."
     fi
@@ -506,6 +540,11 @@ function install_vscode() {
                 echo "VS Code package unavailable in YUM and snap is not installed."
             fi
         }
+    elif [[ -x "$(command -v emerge)" ]]; then
+        sudo emerge --noreplace app-editors/visual-studio-code || {
+            echo "VS Code package may require a configured overlay on Gentoo."
+            echo "Install manually or enable an overlay that provides app-editors/visual-studio-code."
+        }
     else
         echo "Unsupported Linux distribution for VS Code auto-install."
     fi
@@ -534,6 +573,8 @@ function install_docker() {
         sudo apt-get install -y docker.io docker-compose-plugin || sudo apt-get install -y docker.io docker-compose || true
     elif [[ -x "$(command -v yum)" ]]; then
         sudo yum install -y docker docker-compose-plugin || sudo yum install -y docker docker-compose || true
+    elif [[ -x "$(command -v emerge)" ]]; then
+        sudo emerge --noreplace app-containers/docker app-containers/docker-compose || true
     else
         echo "Unsupported Linux distribution for Docker auto-install."
         return
@@ -541,6 +582,9 @@ function install_docker() {
 
     if [[ -x "$(command -v systemctl)" ]]; then
         sudo systemctl enable --now docker || sudo systemctl enable --now docker.service || true
+    elif [[ -x "$(command -v rc-update)" ]]; then
+        sudo rc-update add docker default || true
+        sudo rc-service docker start || true
     fi
 
     if [[ -x "$(command -v usermod)" ]] && [[ "$(id -u)" -ne 0 ]]; then
@@ -725,6 +769,17 @@ function install_media_tools() {
                 echo "REAPER is already installed. Skipping."
             else
                 echo "REAPER is not reliably available in YUM repos. Install manually from reaper.fm."
+            fi
+        fi
+    elif [[ -x "$(command -v emerge)" ]]; then
+        if [[ "$install_openrgb" == "1" ]]; then
+            sudo emerge --noreplace app-misc/openrgb || true
+        fi
+        if [[ "$install_reaper" == "1" ]]; then
+            if command -v reaper >/dev/null 2>&1; then
+                echo "REAPER is already installed. Skipping."
+            else
+                sudo emerge --noreplace media-sound/reaper || echo "REAPER package may be unavailable; install manually from reaper.fm."
             fi
         fi
     else
