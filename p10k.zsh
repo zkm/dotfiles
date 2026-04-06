@@ -395,10 +395,17 @@
 
     # Styling for different parts of Git status.
     local       meta='%7F'  # white foreground
-    local      clean='%15F' # bright white foreground for branch readability
+    local      clean='%15F' # bright white foreground for clean repos
     local   modified='%0F' # black foreground
     local  untracked='%0F' # black foreground
     local conflicted='%1F' # red foreground
+
+    # Keep branch text readable: white on dark clean background, black on light dirty backgrounds.
+    if (( VCS_STATUS_NUM_STAGED || VCS_STATUS_NUM_UNSTAGED || VCS_STATUS_NUM_UNTRACKED ||
+          VCS_STATUS_NUM_CONFLICTED || VCS_STATUS_HAS_UNSTAGED == -1 )) ||
+       [[ -n $VCS_STATUS_ACTION ]]; then
+      clean='%0F'
+    fi
 
     local res
 
