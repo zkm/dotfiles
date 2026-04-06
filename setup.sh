@@ -49,12 +49,14 @@ function install_homebrew() {
 
 function install_homebrew_packages() {
     echo "Installing Homebrew packages..."
-    brew install zsh tmux neovim ripgrep node fastfetch pyenv rbenv ruby-build
+    brew install zsh tmux neovim ripgrep node fastfetch pyenv rbenv ruby-build eza
+    brew install opencodeai/tap/opencode
 }
 
 install_with_pacman() {
     echo "Installing packages with Pacman..."
-    sudo pacman -S --needed curl git zsh tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build
+    sudo pacman -S --needed curl git zsh tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build eza
+    install_opencode
 }
 
 install_yay() {
@@ -131,7 +133,8 @@ install_with_apt() {
 
     # Install core packages first so setup remains usable even if optional
     # packages are unavailable on the current Debian/Ubuntu release.
-    sudo apt-get install -y curl git zsh tmux neovim ripgrep nodejs
+    sudo apt-get install -y curl git zsh tmux neovim ripgrep nodejs eza
+    install_opencode
 
     local optional_pkg
     for optional_pkg in fastfetch pyenv rbenv; do
@@ -144,7 +147,9 @@ install_with_apt() {
 # Function to install packages using DNF (Fedora)
 install_with_dnf() {
     echo "Installing packages with DNF..."
-    sudo dnf install -y curl git zsh tmux neovim ripgrep nodejs fastfetch
+    sudo dnf install -y curl git zsh tmux neovim ripgrep nodejs fastfetch eza
+    install_opencode
+}
 
     # Required for building CPython versions via pyenv.
     if ! sudo dnf groupinstall -y "Development Tools"; then
@@ -166,7 +171,9 @@ install_with_dnf() {
 # Function to install packages using YUM (RHEL/CentOS)
 install_with_yum() {
     echo "Installing packages with YUM..."
-    sudo yum install -y curl git zsh tmux neovim ripgrep nodejs fastfetch
+    sudo yum install -y curl git zsh tmux neovim ripgrep nodejs fastfetch eza
+    install_opencode
+}
 
     # Required for building CPython versions via pyenv.
     if ! sudo yum groupinstall -y "Development Tools"; then
@@ -190,9 +197,25 @@ install_with_emerge() {
     echo "Installing packages with Portage (emerge)..."
 
     sudo emerge --sync
+
+    if ! grep -q "guru" /etc/portage/repos.conf/* 2>/dev/null; then
+        echo "Adding GURU overlay for eza..."
+        sudo mkdir -p /etc/portage/repos.conf
+        sudo tee /etc/portage/repos.conf/guru.conf > /dev/null << EOF
+[guru]
+location = /var/db/repos/guru
+sync-type = git
+sync-uri = https://github.com/gentoo-mirror/guru.git
+auto-sync = yes
+EOF
+        sudo emerge --sync guru
+    fi
+
     sudo emerge --noreplace \
       net-misc/curl dev-vcs/git app-shells/zsh app-misc/tmux \
-      app-editors/neovim sys-apps/ripgrep net-libs/nodejs app-misc/fastfetch
+      app-editors/neovim sys-apps/ripgrep net-libs/nodejs app-misc/fastfetch app-misc/eza
+    install_opencode
+}
 
     # These may require additional overlays depending on Gentoo profile.
     if ! sudo emerge --noreplace dev-python/pyenv dev-util/rbenv; then
@@ -200,6 +223,26 @@ install_with_emerge() {
     fi
 
     install_pyenv_from_upstream
+}
+
+install_opencode() {
+    if command -v opencode >/dev/null 2>&1; then
+        return 0
+    fi
+
+    echo "Installing OpenCode..."
+    if [[ "$(uname)" == "Darwin" ]]; then
+        return 0
+    fi
+
+    local install_dir="$HOME/.local/bin"
+    mkdir -p "$install_dir"
+
+    if curl -fsSL https://opencode.ai/install.sh | sh -s -- -p "$install_dir"; then
+        echo "OpenCode installed to $install_dir"
+    else
+        echo "Failed to install OpenCode. Install manually from https://opencode.ai"
+    fi
 }
 
 install_hypr_stack() {
@@ -345,6 +388,21 @@ function create_dotfiles() {
         ln -sfn "$repo_root/config/kitty" ~/.config/kitty
     fi
 
+}
+
+function setup_tmux_plugins() {
+    echo "Setting up tmux plugins..."
+
+    local tpm_dir="$HOME/.tmux/plugins"
+    if [[ ! -d "$tpm_dir/tpm" ]]; then
+        git clone https://github.com/tmux-plugins/tpm "$tpm_dir/tpm"
+    fi
+
+    if [[ -f ~/.tmux.conf ]]; then
+        tmux new-session -d 2>/dev/null || true
+        ~/.tmux/plugins/tpm/scripts/install_plugins.sh 2>/dev/null || true
+        tmux kill-server 2>/dev/null || true
+    fi
 }
 
 function setup_p10k() {
@@ -773,6 +831,7 @@ create_alias_directories
 create_dotfiles
 setup_lang_envs
 install_nvm
+setup_tmux_plugins
 setup_p10k
 install_fonts
 setup_terminal_colors

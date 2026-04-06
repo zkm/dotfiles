@@ -14,10 +14,39 @@ source ~/.powerlevel10k/powerlevel10k.zsh-theme
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 # ==============================
+# 🎨 Dircolors (ls colors)
+# ==============================
+eval "$(dircolors -b ~/.dotfiles/dircolors)"
+
+# ==============================
 # 🔹 Load Custom Aliases
 # ==============================
 [[ -f ~/.aliases ]] && source ~/.aliases
 
+if command -v eza &>/dev/null; then
+  unalias ls ll la lt lat 2>/dev/null
+  ls() {
+    local arg
+    local eza_args=()
+    for arg in "$@"; do
+      if [[ "$arg" =~ ^-[a-z]*s[a-z]*$ ]] || [[ "$arg" == *--sort* ]]; then
+        command ls --color=auto "$@"
+        return
+      fi
+      eza_args+=("$arg")
+    done
+    eza --icons --group-directories-first "${eza_args[@]}"
+  }
+  alias ll='eza -lh --icons --group-directories-first'
+  alias la='eza -la --icons --group-directories-first'
+  alias l='eza -lah --icons --group-directories-first'
+else
+  alias ls='ls --color=auto'
+  alias ll='ls --color=auto -l'
+  alias la='ls --color=auto -la'
+  alias lt='ls --sort=time'
+  alias lat='ls --color=auto -la --sort=time'
+fi
 alias icat='kitten icat'
 alias icat-clear='kitten icat --clear'
 
