@@ -149,7 +149,6 @@ install_with_dnf() {
     echo "Installing packages with DNF..."
     sudo dnf install -y curl git zsh tmux neovim ripgrep nodejs fastfetch eza
     install_opencode
-}
 
     # Required for building CPython versions via pyenv.
     if ! sudo dnf groupinstall -y "Development Tools"; then
@@ -173,7 +172,6 @@ install_with_yum() {
     echo "Installing packages with YUM..."
     sudo yum install -y curl git zsh tmux neovim ripgrep nodejs fastfetch eza
     install_opencode
-}
 
     # Required for building CPython versions via pyenv.
     if ! sudo yum groupinstall -y "Development Tools"; then
@@ -215,7 +213,6 @@ EOF
       net-misc/curl dev-vcs/git app-shells/zsh app-misc/tmux \
       app-editors/neovim sys-apps/ripgrep net-libs/nodejs app-misc/fastfetch app-misc/eza
     install_opencode
-}
 
     # These may require additional overlays depending on Gentoo profile.
     if ! sudo emerge --noreplace dev-python/pyenv dev-util/rbenv; then
