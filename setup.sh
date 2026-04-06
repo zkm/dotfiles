@@ -38,6 +38,46 @@ function clear_old_dotfiles() {
     rm -rf ~/.zsh ~/.bin
 }
 
+is_kde_plasma_session() {
+    [[ "$(uname)" == "Linux" ]] || return 1
+
+    local current_desktop desktop_session
+    current_desktop="${XDG_CURRENT_DESKTOP:-}"
+    desktop_session="${DESKTOP_SESSION:-}"
+
+    [[ "$current_desktop" == *KDE* ]] \
+        || [[ "$current_desktop" == *Plasma* ]] \
+        || [[ "$desktop_session" == *kde* ]] \
+        || [[ "$desktop_session" == *plasma* ]] \
+        || [[ "${KDE_FULL_SESSION:-}" == "true" ]] \
+        || [[ -n "${KDE_SESSION_VERSION:-}" ]]
+}
+
+should_install_kde_config() {
+    case "${INSTALL_KDE_CONFIG:-auto}" in
+        1|true|TRUE|yes|YES)
+            return 0
+            ;;
+        0|false|FALSE|no|NO)
+            return 1
+            ;;
+    esac
+
+    is_kde_plasma_session
+}
+
+link_repo_config_path() {
+    local repo_root="$1"
+    local config_path="$2"
+    local target_path="$HOME/.config/$config_path"
+
+    [[ -e "$repo_root/config/$config_path" ]] || return 0
+
+    mkdir -p "$HOME/.config"
+    rm -rf "$target_path"
+    ln -sfn "$repo_root/config/$config_path" "$target_path"
+}
+
 function install_homebrew() {
     echo "Installing Homebrew..."
     which -s brew
@@ -339,6 +379,7 @@ function create_alias_directories() {
 function create_dotfiles() {
     echo "Creating dotfiles..."
     local repo_root
+    local kde_config
     repo_root="$(pwd)"
 
     ln -sfn "$repo_root/aliases" ~/.aliases
@@ -374,15 +415,27 @@ function create_dotfiles() {
 
     # Keep repo-managed app config tracked in-repo while preserving standard config paths.
     if [[ -d "$repo_root/config/hypr" ]]; then
-        mkdir -p ~/.config
-        rm -rf ~/.config/hypr
-        ln -sfn "$repo_root/config/hypr" ~/.config/hypr
+        link_repo_config_path "$repo_root" "hypr"
     fi
 
     if [[ -d "$repo_root/config/kitty" ]]; then
-        mkdir -p ~/.config
-        rm -rf ~/.config/kitty
-        ln -sfn "$repo_root/config/kitty" ~/.config/kitty
+        link_repo_config_path "$repo_root" "kitty"
+    fi
+
+    if should_install_kde_config; then
+        echo "Detected KDE Plasma. Linking KDE config files..."
+        for kde_config in \
+            dolphinrc \
+            kcminputrc \
+            kdeglobals \
+            kwinrc \
+            mimeapps.list \
+            plasma-org.kde.plasma.desktop-appletsrc \
+            plasmarc; do
+            link_repo_config_path "$repo_root" "$kde_config"
+        done
+    else
+        echo "KDE Plasma not detected. Skipping KDE-specific config links."
     fi
 
 }

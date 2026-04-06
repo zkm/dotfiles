@@ -126,6 +126,7 @@ cleanup_optional_components() {
 
 main() {
     log "Uninstalling dotfiles setup managed by this repo..."
+    local kde_config
 
     remove_if_symlink_to_repo "$HOME/.aliases"
     remove_if_symlink_to_repo "$HOME/.gitconfig"
@@ -147,6 +148,19 @@ main() {
     remove_if_symlink_to_repo "$HOME/.tmux.conf"
     remove_if_symlink_to_repo "$HOME/.p10k.zsh"
     remove_if_symlink_to_repo "$HOME/.zprofile"
+    remove_if_symlink_to_repo "$HOME/.zlogin"
+    remove_if_symlink_to_repo "$HOME/.config/hypr"
+    remove_if_symlink_to_repo "$HOME/.config/kitty"
+    for kde_config in \
+        dolphinrc \
+        kcminputrc \
+        kdeglobals \
+        kwinrc \
+        mimeapps.list \
+        plasma-org.kde.plasma.desktop-appletsrc \
+        plasmarc; do
+        remove_if_symlink_to_repo "$HOME/.config/$kde_config"
+    done
 
     cleanup_zshrc_entries
     cleanup_optional_components

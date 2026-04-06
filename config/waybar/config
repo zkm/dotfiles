@@ -9,8 +9,8 @@
     "on-click": "activate"
   },
   "clock": {
-    "format": "  {:%m/%d/%Y %I:%M %p}",
-    "format-alt": "  {:%a %m/%d %I:%M %p}",
+    "format": "{:%H:%M:%S}\n{:%a %m/%d/%y}",
+    "format-alt": "{:%a %b %d}\n{:%H:%M}",
     "tooltip": true,
     "tooltip-format": "{:%A, %B %d, %Y %I:%M:%S %p}"
   },

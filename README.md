@@ -45,6 +45,7 @@ Back up anything important first.
 3. Creates directories used by aliases (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
 4. Symlinks repo-managed dotfiles into `$HOME`.
    - Includes app config such as `~/.config/hypr` and `~/.config/kitty` when present in-repo.
+   - Links KDE Plasma config files only when setup is run in a KDE session, or when overridden with `INSTALL_KDE_CONFIG=1`.
 5. Adds `pyenv`, `rbenv`, and `nvm` init lines to `~/.zshrc` (if missing).
 6. Installs Powerlevel10k.
 7. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
@@ -127,6 +128,8 @@ Notes:
 ### Linux
 
 - KDE/GTK configs are primarily Linux-targeted.
+- `setup.sh` only links Plasma config files when KDE is detected from the current session environment.
+- Override detection with `INSTALL_KDE_CONFIG=1 ./setup.sh` or force-skip with `INSTALL_KDE_CONFIG=0 ./setup.sh`.
 - Package install paths are tuned mostly for Arch first, with `dnf`/`apt`/`yum` fallbacks.
 - On Debian Bookworm (including Raspberry Pi OS Bookworm), `fastfetch` may be unavailable in default APT repositories. Setup now treats it as optional and continues.
 - Tested environments: Arch Linux + KDE Plasma, Fedora Linux Asahi Remix 43 (Workstation Edition, GNOME 49.5, Mutter/Wayland, aarch64).

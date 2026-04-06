@@ -33,9 +33,13 @@ window#waybar {
 }
 
 #clock {
+  font-size: 9pt;
   font-weight: 700;
   border-color: #89b4fa;
-  min-width: 194px;
+  line-height: 1.05;
+  min-width: 104px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
 
 #custom-cpu_spec {
