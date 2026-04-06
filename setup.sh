@@ -34,7 +34,7 @@ function setup_shell() {
 
 function clear_old_dotfiles() {
     echo "Removing previous dotfiles..."
-    rm -f ~/.aliases ~/.gitconfig ~/.zshrc ~/.tmux.conf ~/.p10k.zsh ~/.zprofile ~/.dircolors
+    rm -f ~/.aliases ~/.gitconfig ~/.zshrc ~/.tmux.conf ~/.p10k.zsh ~/.zprofile ~/.zlogin ~/.dircolors
     rm -rf ~/.zsh ~/.bin
 }
 
@@ -269,27 +269,7 @@ install_hypr_stack() {
 }
 
 function setup_lang_envs() {
-    echo "Configuring pyenv and rbenv for zsh..."
-
-    if ! grep -qxF 'export PYENV_ROOT="$HOME/.pyenv"' ~/.zshrc; then
-        echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.zshrc
-    fi
-    if ! grep -qxF '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' ~/.zshrc; then
-        echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.zshrc
-    fi
-    if ! grep -qxF 'if command -v pyenv >/dev/null 2>&1; then eval "$(pyenv init - zsh)"; fi' ~/.zshrc; then
-        echo 'if command -v pyenv >/dev/null 2>&1; then eval "$(pyenv init - zsh)"; fi' >> ~/.zshrc
-    fi
-
-    if ! grep -qxF 'export RBENV_ROOT="$HOME/.rbenv"' ~/.zshrc; then
-        echo 'export RBENV_ROOT="$HOME/.rbenv"' >> ~/.zshrc
-    fi
-    if ! grep -qxF '[[ -d $RBENV_ROOT/bin ]] && export PATH="$RBENV_ROOT/bin:$PATH"' ~/.zshrc; then
-        echo '[[ -d $RBENV_ROOT/bin ]] && export PATH="$RBENV_ROOT/bin:$PATH"' >> ~/.zshrc
-    fi
-    if ! grep -qxF 'if command -v rbenv >/dev/null 2>&1; then eval "$(rbenv init - zsh)"; fi' ~/.zshrc; then
-        echo 'if command -v rbenv >/dev/null 2>&1; then eval "$(rbenv init - zsh)"; fi' >> ~/.zshrc
-    fi
+    echo "Shell language env init is managed by the repo zshrc. Skipping direct ~/.zshrc edits."
 }
 
 function install_nvm() {
@@ -304,15 +284,7 @@ function install_nvm() {
         echo "nvm directory already exists. Skipping installer."
     fi
 
-    if ! grep -qxF 'export NVM_DIR="$HOME/.nvm"' ~/.zshrc; then
-        echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zshrc
-    fi
-    if ! grep -qxF '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' ~/.zshrc; then
-        echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.zshrc
-    fi
-    if ! grep -qxF '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' ~/.zshrc; then
-        echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> ~/.zshrc
-    fi
+    echo "nvm init is managed by the repo zshrc. Skipping direct ~/.zshrc edits."
 }
 
 function create_alias_directories() {
@@ -356,11 +328,21 @@ function create_dotfiles() {
     if [[ -f "$repo_root/zprofile" ]]; then
         ln -sfn "$repo_root/zprofile" ~/.zprofile
     fi
+    if [[ -f "$repo_root/zlogin" ]]; then
+        ln -sfn "$repo_root/zlogin" ~/.zlogin
+    fi
 
-    # Keep Hyprland config tracked in repo while preserving the standard config path.
+    # Keep repo-managed app config tracked in-repo while preserving standard config paths.
     if [[ -d "$repo_root/config/hypr" ]]; then
         mkdir -p ~/.config
+        rm -rf ~/.config/hypr
         ln -sfn "$repo_root/config/hypr" ~/.config/hypr
+    fi
+
+    if [[ -d "$repo_root/config/kitty" ]]; then
+        mkdir -p ~/.config
+        rm -rf ~/.config/kitty
+        ln -sfn "$repo_root/config/kitty" ~/.config/kitty
     fi
 
 }

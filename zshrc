@@ -18,6 +18,9 @@ source ~/.powerlevel10k/powerlevel10k.zsh-theme
 # ==============================
 [[ -f ~/.aliases ]] && source ~/.aliases
 
+alias icat='kitten icat'
+alias icat-clear='kitten icat --clear'
+
 # ==============================
 # 🛠 Custom Environment Variables
 # ==============================
@@ -151,3 +154,6 @@ sdk() {
   unset __SDKMAN_WRAPPER_BYPASS
   return $_sdk_rc
 }
+
+# opencode
+export PATH=$HOME/.opencode/bin:$PATH

@@ -1,3 +1,5 @@
 [user]
 	email = me@zachschneider.com
 	name = Zach Schneider
+[credential]
+	helper = store

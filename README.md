@@ -2,7 +2,7 @@
 
 Personal dotfiles for Linux (primarily Arch) and macOS.
 
-Includes configuration for Zsh, Git, tmux, KDE/GTK theming, OpenRGB, REAPER, and related tooling.
+Includes configuration for Zsh, Git, tmux, kitty, KDE/GTK theming, OpenRGB, REAPER, and related tooling.
 
 Neovim configuration now lives in a separate repository: [zkm/nvim-config](https://github.com/zkm/nvim-config).
 
@@ -44,6 +44,7 @@ Back up anything important first.
    - Linux: `pacman`, `dnf`, `apt`, or `yum`
 3. Creates directories used by aliases (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
 4. Symlinks repo-managed dotfiles into `$HOME`.
+   - Includes app config such as `~/.config/hypr` and `~/.config/kitty` when present in-repo.
 5. Adds `pyenv`, `rbenv`, and `nvm` init lines to `~/.zshrc` (if missing).
 6. Installs Powerlevel10k.
 7. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
