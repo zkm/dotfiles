@@ -4,6 +4,11 @@
 # Ensure core system binaries are always available, even if PATH was inherited in a bad state.
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
+# Print system summary before instant prompt to avoid p10k console I/O warnings.
+if [[ -o interactive ]] && command -v fastfetch >/dev/null 2>&1; then
+  fastfetch
+fi
+
 # Enable instant prompt for faster shell startup
 if [[ -z "${ZSH_RELOADING:-}" ]] && [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -164,3 +169,4 @@ sdk() {
 # opencode
 export PATH=$HOME/.opencode/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
+  
