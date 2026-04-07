@@ -2,6 +2,17 @@
 
 set -e
 
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+run_nonfatal() {
+    local step_name="$1"
+    shift
+
+    if ! "$@"; then
+        echo "Warning: ${step_name} failed. Continuing setup..."
+    fi
+}
+
 function set_zsh() {
     echo "Setting shell to zsh..."
     local zsh_path
@@ -380,7 +391,7 @@ function create_dotfiles() {
     echo "Creating dotfiles..."
     local repo_root
     local kde_config
-    repo_root="$(pwd)"
+    repo_root="$REPO_ROOT"
 
     ln -sfn "$repo_root/aliases" ~/.aliases
     ln -sfn "$repo_root/gitconfig" ~/.gitconfig
@@ -420,6 +431,10 @@ function create_dotfiles() {
 
     if [[ -d "$repo_root/config/kitty" ]]; then
         link_repo_config_path "$repo_root" "kitty"
+    fi
+
+    if [[ -d "$repo_root/config/fastfetch" ]]; then
+        link_repo_config_path "$repo_root" "fastfetch"
     fi
 
     if should_install_kde_config; then
@@ -475,36 +490,42 @@ function setup_p10k() {
 
 clear_old_dotfiles
 
+cd "$REPO_ROOT"
+
+# Link essential dotfiles early so shell setup is usable even if package installs fail.
+run_nonfatal "Create alias directories" create_alias_directories
+run_nonfatal "Create dotfiles" create_dotfiles
+run_nonfatal "Setup shell" setup_shell
+run_nonfatal "Setup language env stubs" setup_lang_envs
+
 if [[ "$(uname)" == "Darwin" ]]; then
-    install_homebrew
-    install_homebrew_packages
+    run_nonfatal "Install Homebrew" install_homebrew
+    run_nonfatal "Install Homebrew packages" install_homebrew_packages
 else
     # Determine the Linux distribution and install packages accordingly
     if [[ -x "$(command -v pacman)" ]]; then
         # Arch Linux (Pacman)
-        install_with_pacman
-        install_yay
+        run_nonfatal "Install packages with pacman" install_with_pacman
+        run_nonfatal "Install yay" install_yay
         elif [[ -x "$(command -v apt-get)" ]]; then
         # Debian/Ubuntu (APT)
-        install_with_apt
+        run_nonfatal "Install packages with apt" install_with_apt
         elif [[ -x "$(command -v dnf)" ]]; then
         # Fedora (DNF)
-        install_with_dnf
+        run_nonfatal "Install packages with dnf" install_with_dnf
         elif [[ -x "$(command -v yum)" ]]; then
         # RHEL/CentOS (YUM)
-        install_with_yum
+        run_nonfatal "Install packages with yum" install_with_yum
         elif [[ -x "$(command -v emerge)" ]]; then
         # Gentoo (Portage)
-        install_with_emerge
+        run_nonfatal "Install packages with emerge" install_with_emerge
     else
         echo "Unsupported Linux distribution. Please install packages manually."
         exit 1
     fi
 fi
 
-install_hypr_stack
-
-setup_shell
+run_nonfatal "Install Hyprland stack" install_hypr_stack
 
 function install_fonts() {
     echo "Installing fonts..."
@@ -877,15 +898,12 @@ function install_media_tools() {
     fi
 }
 
-create_alias_directories
-create_dotfiles
-setup_lang_envs
-install_nvm
-setup_tmux_plugins
-setup_p10k
-install_fonts
-setup_terminal_colors
-install_browsers
-install_vscode
-install_docker
-install_media_tools
+run_nonfatal "Install nvm" install_nvm
+run_nonfatal "Setup tmux plugins" setup_tmux_plugins
+run_nonfatal "Setup powerlevel10k" setup_p10k
+run_nonfatal "Install fonts" install_fonts
+run_nonfatal "Setup terminal colors" setup_terminal_colors
+run_nonfatal "Install browsers" install_browsers
+run_nonfatal "Install VS Code" install_vscode
+run_nonfatal "Install Docker" install_docker
+run_nonfatal "Install media tools" install_media_tools
