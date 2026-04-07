@@ -10,8 +10,11 @@ Meta=org.kde.krunner,/App,,toggleDisplay
 Active=true
 
 [Plugins]
-fadeEnabled=true
+blurEnabled=false
+fadeEnabled=false
 scaleEnabled=false
+slidingpopupsEnabled=false
+translucencyEnabled=false
 
 [Tiling]
 padding=4

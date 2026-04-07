@@ -157,7 +157,7 @@ customDateFormat=MM/dd/yyyy ddd
 dateDisplayFormat=BelowTime
 dateFormat=CustomDate
 fontWeight=400
-showSeconds=Always
+showSeconds=Never
 timeFormat=24h
 use24hFormat=2
 
