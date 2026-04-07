@@ -13,6 +13,9 @@ Active=true
 fadeEnabled=true
 scaleEnabled=false
 
+[Tiling]
+padding=4
+
 [Tiling][07844312-8864-519e-8fc6-4e5c331a26ba]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
