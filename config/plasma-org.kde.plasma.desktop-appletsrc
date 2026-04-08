@@ -122,23 +122,6 @@ hiddenItems=chrome_status_icon_1,Proton Mail Bridge,org.kde.plasma.devicenotifie
 knownItems=org.kde.plasma.vault,org.kde.plasma.bluetooth,org.kde.plasma.keyboardindicator,org.kde.plasma.weather,org.kde.plasma.battery,org.kde.plasma.brightness,org.kde.plasma.networkmanagement,org.kde.plasma.volume,org.kde.plasma.printmanager,org.kde.kscreen,org.kde.plasma.cameraindicator,org.kde.plasma.clipboard,org.kde.plasma.devicenotifier,org.kde.plasma.manage-inputmethod,org.kde.plasma.mediacontroller,org.kde.plasma.notifications,org.kde.plasma.keyboardlayout,org.kde.kdeconnect
 shownItems=org.kde.plasma.keyboardindicator
 
-[Containments][106][Applets][204]
-immutability=1
-plugin=org.kde.plasma.digitalclock
-
-[Containments][106][Applets][204][Configuration]
-popupHeight=400
-popupWidth=560
-
-[Containments][106][Applets][204][Configuration][Appearance]
-customDateFormat=MM/dd/yyyy ddd
-dateDisplayFormat=BelowTime
-dateFormat=CustomDate
-fontWeight=400
-showSeconds=Never
-timeFormat=24h
-use24hFormat=2
-
 [Containments][106][Applets][214]
 immutability=1
 plugin=org.kde.plasma.digitalclock
@@ -152,7 +135,7 @@ immutability=1
 plugin=org.kde.plasma.showdesktop
 
 [Containments][106][General]
-AppletOrder=177;178;179;182;204;214;217
+AppletOrder=177;178;179;182;214;217
 
 [Containments][49]
 ItemGeometries-1080x1920=
