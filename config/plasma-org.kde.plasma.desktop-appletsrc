@@ -43,9 +43,8 @@ DialogWidth=810
 
 [Containments][106][Applets][178][Configuration][General]
 iconSpacing=2
-launchers=applications:org.kde.dolphin.desktop,applications:org.wezfurlong.wezterm.desktop,applications:steam.desktop,applications:google-chrome.desktop,applications:firefox.desktop
+launchers=applications:org.kde.dolphin.desktop,applications:kitty.desktop,applications:org.wezfurlong.wezterm.desktop,applications:steam.desktop,applications:google-chrome.desktop,applications:firefox.desktop
 showLabels=false
-sortingStrategy=2
 
 [Containments][106][Applets][179]
 immutability=1
@@ -133,6 +132,7 @@ use24hFormat=2
 [Containments][106][Applets][211]
 immutability=1
 plugin=org.kde.plasma.kickoff
+transient=true
 
 [Containments][106][Applets][211][Configuration]
 popupHeight=517
@@ -160,7 +160,7 @@ immutability=1
 plugin=org.kde.plasma.showdesktop
 
 [Containments][106][General]
-AppletOrder=177;178;179;182;204;211;214;217
+AppletOrder=177;178;179;182;204;214;217
 
 [Containments][49]
 ItemGeometries-1080x1920=
@@ -170,11 +170,11 @@ ItemGeometries-1964x3491=
 ItemGeometries-2048x1152=
 ItemGeometries-2160x3840=
 ItemGeometries-2259x1271=
-ItemGeometries-2560x1440=Applet-88:2224,0,336,400,0;Applet-105:1744,688,192,256,0;Applet-97:1744,944,208,192,0;Applet-95:1936,400,608,448,0;Applet-104:1744,1136,208,208,0;Applet-90:1952,848,608,496,0;
+ItemGeometries-2560x1440=Applet-95:1936,400,608,448,0;Applet-88:1952,32,608,368,0;Applet-97:1504,1120,208,240,0;Applet-104:1728,1120,224,240,0;Applet-105:1728,848,192,256,0;Applet-90:1952,848,608,512,0;
 ItemGeometries-3072x1728=
 ItemGeometries-3491x1964=
 ItemGeometries-3840x2160=
-ItemGeometriesHorizontal=Applet-88:2224,0,336,400,0;Applet-105:1744,688,192,256,0;Applet-97:1744,944,208,192,0;Applet-95:1936,400,608,448,0;Applet-104:1744,1136,208,208,0;Applet-90:1952,848,608,496,0;
+ItemGeometriesHorizontal=Applet-95:1936,400,608,448,0;Applet-88:1952,32,608,368,0;Applet-97:1504,1120,208,240,0;Applet-104:1728,1120,224,240,0;Applet-105:1728,848,192,256,0;Applet-90:1952,848,608,512,0;
 ItemGeometriesVertical=
 activityId=2a6be1da-70a4-41be-99a4-66f3c3db6856
 formfactor=0
@@ -190,10 +190,16 @@ plugin=org.kde.plasma.systemmonitor.net
 
 [Containments][49][Applets][104][Configuration]
 CurrentPreset=org.kde.plasma.systemmonitor
+UserBackgroundHints=ShadowBackground
 
 [Containments][49][Applets][104][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
+showTitle=false
 title=Network Speed
+
+[Containments][49][Applets][104][Configuration][ConfigDialog]
+DialogHeight=630
+DialogWidth=810
 
 [Containments][49][Applets][104][Configuration][SensorColors]
 network/all/download=61,174,233
@@ -208,10 +214,16 @@ plugin=org.kde.plasma.systemmonitor.cpu
 
 [Containments][49][Applets][105][Configuration]
 CurrentPreset=org.kde.plasma.systemmonitor
+UserBackgroundHints=ShadowBackground
 
 [Containments][49][Applets][105][Configuration][Appearance]
 chartFace=org.kde.ksysguard.piechart
+showTitle=false
 title=Total CPU Use
+
+[Containments][49][Applets][105][Configuration][ConfigDialog]
+DialogHeight=630
+DialogWidth=810
 
 [Containments][49][Applets][105][Configuration][SensorColors]
 cpu/all/usage=61,174,233
@@ -221,9 +233,15 @@ highPrioritySensorIds=["cpu/all/usage"]
 lowPrioritySensorIds=["cpu/all/cpuCount","cpu/all/coreCount"]
 totalSensors=["cpu/all/usage"]
 
+[Containments][49][Applets][105][Configuration][org.kde.ksysguard.piechart][General]
+showLegend=false
+
 [Containments][49][Applets][88]
 immutability=1
 plugin=org.kde.plasma.weather
+
+[Containments][49][Applets][88][Configuration]
+UserBackgroundHints=ShadowBackground
 
 [Containments][49][Applets][88][Configuration][ConfigDialog]
 DialogHeight=630
@@ -240,9 +258,11 @@ plugin=org.kde.plasma.systemmonitor.cpucore
 
 [Containments][49][Applets][90][Configuration]
 CurrentPreset=org.kde.plasma.systemmonitor
+UserBackgroundHints=ShadowBackground
 
 [Containments][49][Applets][90][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
+showTitle=false
 title=Individual Core Usage
 
 [Containments][49][Applets][90][Configuration][ConfigDialog]
@@ -288,9 +308,11 @@ plugin=org.kde.plasma.systemmonitor.diskusage
 
 [Containments][49][Applets][95][Configuration]
 CurrentPreset=org.kde.plasma.systemmonitor
+UserBackgroundHints=ShadowBackground
 
 [Containments][49][Applets][95][Configuration][Appearance]
 chartFace=org.kde.ksysguard.horizontalbars
+showTitle=false
 title=Disk Usage
 
 [Containments][49][Applets][95][Configuration][ConfigDialog]
@@ -317,10 +339,16 @@ plugin=org.kde.plasma.systemmonitor.diskactivity
 
 [Containments][49][Applets][97][Configuration]
 CurrentPreset=org.kde.plasma.systemmonitor
+UserBackgroundHints=ShadowBackground
 
 [Containments][49][Applets][97][Configuration][Appearance]
 chartFace=org.kde.ksysguard.linechart
+showTitle=false
 title=Hard Disk Activity
+
+[Containments][49][Applets][97][Configuration][ConfigDialog]
+DialogHeight=630
+DialogWidth=810
 
 [Containments][49][Applets][97][Configuration][SensorColors]
 disk/all/read=233,120,61
