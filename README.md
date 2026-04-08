@@ -42,21 +42,25 @@ Back up anything important first.
 2. Installs core packages:
    - macOS: Homebrew + packages
    - Linux: `pacman`, `dnf`, `apt`, or `yum`
+   - Linux: attempts to install `papirus-icon-theme` (best effort; skipped if unavailable)
 3. Creates directories used by aliases (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
 4. Symlinks repo-managed dotfiles into `$HOME`.
    - Includes app config such as `~/.config/hypr` and `~/.config/kitty` when present in-repo.
    - Links KDE Plasma config files only when setup is run in a KDE session, or when overridden with `INSTALL_KDE_CONFIG=1`.
-5. Adds `pyenv`, `rbenv`, and `nvm` init lines to `~/.zshrc` (if missing).
-6. Installs Powerlevel10k.
-7. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
-8. Applies Terminal.app default profile on macOS (`Pro`).
-9. Attempts browser install (Firefox + Chrome/Chromium).
-10. Attempts Visual Studio Code install.
+5. Syncs custom desktop assets when present:
+   - `Icons/dark-side` -> `~/.local/share/icons/dark-side`
+   - `Wallpapers` -> `~/Pictures/Wallpapers`
+6. Adds `pyenv`, `rbenv`, and `nvm` init lines to `~/.zshrc` (if missing).
+7. Installs Powerlevel10k.
+8. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
+9. Applies Terminal.app default profile on macOS (`Pro`).
+10. Attempts browser install (Firefox + Chrome/Chromium).
+11. Attempts Visual Studio Code install.
    - Arch Linux: bootstraps `yay` if needed and installs `visual-studio-code-bin` from AUR.
-11. Installs Docker:
+12. Installs Docker:
    - macOS: installs Docker Desktop (Homebrew cask)
    - Linux: installs Docker engine + compose plugin/package, enables the service, and adds your user to the `docker` group
-12. Optionally installs OpenRGB/REAPER (opt-in flags).
+13. Optionally installs OpenRGB/REAPER (opt-in flags).
 
 ## 🐳 Docker Install Notes
 

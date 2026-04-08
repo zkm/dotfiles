@@ -112,7 +112,7 @@ XftHintStyle=hintslight
 XftSubPixel=none
 
 [Icons]
-Theme=breeze-dark
+Theme=Papirus-Dark
 
 [KDE]
 LookAndFeelPackage=org.kde.breezedark.desktop

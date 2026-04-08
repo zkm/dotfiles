@@ -293,6 +293,39 @@ install_opencode() {
     fi
 }
 
+install_papirus_icon_theme() {
+    # Papirus is only relevant for Linux desktop environments.
+    if [[ "$(uname)" == "Darwin" ]]; then
+        return 0
+    fi
+
+    echo "Installing Papirus icon theme (best effort)..."
+
+    if [[ -x "$(command -v pacman)" ]]; then
+        if ! sudo pacman -S --needed papirus-icon-theme; then
+            echo "Skipping unavailable package: papirus-icon-theme"
+        fi
+    elif [[ -x "$(command -v apt-get)" ]]; then
+        if ! sudo apt-get install -y papirus-icon-theme; then
+            echo "Skipping unavailable package: papirus-icon-theme"
+        fi
+    elif [[ -x "$(command -v dnf)" ]]; then
+        if ! sudo dnf install -y papirus-icon-theme; then
+            echo "Skipping unavailable package: papirus-icon-theme"
+        fi
+    elif [[ -x "$(command -v yum)" ]]; then
+        if ! sudo yum install -y papirus-icon-theme; then
+            echo "Skipping unavailable package: papirus-icon-theme"
+        fi
+    elif [[ -x "$(command -v emerge)" ]]; then
+        if ! sudo emerge --noreplace x11-themes/papirus-icon-theme; then
+            echo "Skipping unavailable package: x11-themes/papirus-icon-theme"
+        fi
+    else
+        echo "Unsupported Linux distribution for Papirus auto-install."
+    fi
+}
+
 install_hypr_stack() {
     # Hyprland stack is Linux-only.
     if [[ "$(uname)" == "Darwin" ]]; then
@@ -385,6 +418,26 @@ function create_alias_directories() {
     mkdir -p "$HOME/Developer"
     mkdir -p "${XDG_CONFIG_HOME:-$HOME/.config}/OpenRGB"
     mkdir -p "${XDG_STATE_HOME:-$HOME/.local/state}/openrgb"
+}
+
+sync_custom_desktop_assets() {
+    local repo_root="$REPO_ROOT"
+    local source_icons="$repo_root/Icons/dark-side"
+    local target_icons="$HOME/.local/share/icons/dark-side"
+    local source_wallpapers="$repo_root/Wallpapers"
+    local target_wallpapers="$HOME/Pictures/Wallpapers"
+
+    if [[ -d "$source_icons" ]]; then
+        echo "Syncing custom icons to $target_icons..."
+        mkdir -p "$target_icons"
+        cp -a "$source_icons"/. "$target_icons"/
+    fi
+
+    if [[ -d "$source_wallpapers" ]]; then
+        echo "Syncing wallpapers to $target_wallpapers..."
+        mkdir -p "$target_wallpapers"
+        cp -a "$source_wallpapers"/. "$target_wallpapers"/
+    fi
 }
 
 function create_dotfiles() {
@@ -495,6 +548,7 @@ cd "$REPO_ROOT"
 # Link essential dotfiles early so shell setup is usable even if package installs fail.
 run_nonfatal "Create alias directories" create_alias_directories
 run_nonfatal "Create dotfiles" create_dotfiles
+run_nonfatal "Sync custom desktop assets" sync_custom_desktop_assets
 run_nonfatal "Setup shell" setup_shell
 run_nonfatal "Setup language env stubs" setup_lang_envs
 
@@ -523,6 +577,8 @@ else
         echo "Unsupported Linux distribution. Please install packages manually."
         exit 1
     fi
+
+    run_nonfatal "Install Papirus icon theme" install_papirus_icon_theme
 fi
 
 run_nonfatal "Install Hyprland stack" install_hypr_stack

@@ -29,14 +29,15 @@ systemFavorites=suspend\\,hibernate\\,reboot\\,shutdown
 immutability=1
 plugin=org.kde.plasma.icontasks
 
+[Containments][106][Applets][178][Configuration][ConfigDialog]
+DialogHeight=630
+DialogWidth=810
+
 [Containments][106][Applets][178][Configuration][General]
-groupedTaskVisualization=3
-groupingStrategy=0
 iconSpacing=2
-launchers=
+launchers=applications:org.kde.dolphin.desktop,applications:org.wezfurlong.wezterm.desktop,applications:steam.desktop,applications:google-chrome.desktop,applications:firefox.desktop
 showLabels=false
-showOnlyCurrentDesktop=false
-sortingStrategy=4
+sortingStrategy=2
 
 [Containments][106][Applets][179]
 immutability=1
@@ -161,6 +162,26 @@ showSeconds=Never
 timeFormat=24h
 use24hFormat=2
 
+[Containments][106][Applets][211]
+immutability=1
+plugin=org.kde.plasma.kickoff
+
+[Containments][106][Applets][211][Configuration]
+popupHeight=509
+popupWidth=665
+
+[Containments][106][Applets][211][Configuration][ConfigDialog]
+DialogHeight=630
+DialogWidth=810
+
+[Containments][106][Applets][211][Configuration][General]
+alphaSort=true
+appNameFormat=0
+highlightNewlyInstalledApps=false
+icon=/home/zkm/.local/share/icons/dark-side/start-here-dark.png
+switchCategoryOnHover=true
+systemFavorites=suspend\\,hibernate\\,reboot\\,shutdown
+
 [Containments][106][General]
 AppletOrder=177;178;179;180;181;182;204
 
@@ -172,11 +193,11 @@ ItemGeometries-1964x3491=
 ItemGeometries-2048x1152=
 ItemGeometries-2160x3840=
 ItemGeometries-2259x1271=
-ItemGeometries-2560x1440=Applet-90:0,0,608,560,0;Applet-95:0,560,608,576,0;Applet-88:2224,0,336,400,0;Applet-101:2224,416,96,112,0;Applet-102:2320,416,240,112,0;Applet-104:0,1136,208,192,0;Applet-97:208,1136,208,192,0;Applet-105:416,1136,192,256,0;
+ItemGeometries-2560x1440=Applet-88:2224,0,336,400,0;Applet-105:1744,688,192,256,0;Applet-97:1744,944,208,192,0;Applet-95:1936,400,608,448,0;Applet-104:1744,1136,208,192,0;Applet-90:1952,848,608,480,0;
 ItemGeometries-3072x1728=
 ItemGeometries-3491x1964=
 ItemGeometries-3840x2160=
-ItemGeometriesHorizontal=Applet-90:0,0,608,560,0;Applet-95:0,560,608,576,0;Applet-88:2224,0,336,400,0;Applet-101:2224,416,96,112,0;Applet-102:2320,416,240,112,0;Applet-104:0,1136,208,192,0;Applet-97:208,1136,208,192,0;Applet-105:416,1136,192,256,0;
+ItemGeometriesHorizontal=Applet-88:2224,0,336,400,0;Applet-105:1744,688,192,256,0;Applet-97:1744,944,208,192,0;Applet-95:1936,400,608,448,0;Applet-104:1744,1136,208,192,0;Applet-90:1952,848,608,480,0;
 ItemGeometriesVertical=
 activityId=2a6be1da-70a4-41be-99a4-66f3c3db6856
 formfactor=0
@@ -197,14 +218,6 @@ DialogWidth=810
 [Containments][49][Applets][101][Configuration][General]
 actionsOrder=lockScreen,switchUser,requestShutDown,requestReboot,requestLogout,requestLogoutScreen,suspendToRam,suspendToDisk
 show_requestLogoutScreen=false
-
-[Containments][49][Applets][102]
-immutability=1
-plugin=org.kde.netspeedWidget
-
-[Containments][49][Applets][102][Configuration][ConfigDialog]
-DialogHeight=630
-DialogWidth=810
 
 [Containments][49][Applets][104]
 immutability=1
@@ -356,13 +369,19 @@ DialogHeight=891
 DialogWidth=787
 
 [Containments][49][General]
+arrangement=1
 locked=true
 positions={"1728x3072":[],"1920x1200":[],"1964x3491":[],"2160x3840":[],"2259x1271":[],"2560x1440":[],"3072x1728":[],"3491x1964":[],"3840x2160":[]}
 
 [Containments][49][Wallpaper][org.kde.image][General]
 Blur=true
-Image=file:///mnt/zombie/Photos/Wallpapers/38581.jpg
+DynamicMode=2
+FillMode=6
+Image=/home/zkm/Pictures/Wallpapers/wqhd_wallpaper_fusion.png
 SlidePaths=/usr/share/wallpapers/
+
+[Containments][49][Wallpaper][org.kde.tiled][General]
+Image=file:///home/zkm/Pictures/Wallpapers/2489634.jpg
 
 [Containments][75]
 ItemGeometries-1920x1200=
@@ -385,7 +404,7 @@ DialogWidth=1120
 positions={"1920x1080":[],"1920x1200":[],"1964x3491":[],"2160x3840":[],"2226x1252":[],"2560x1440":[]}
 
 [Containments][75][Wallpaper][org.kde.image][General]
-Image=/mnt/zombie/Photos/Wallpapers/38581.jpg
+Image=/home/zkm/Pictures/Wallpapers/wqhd_wallpaper_fusion.png
 PreviewImage=/mnt/zombie/Photos/Wallpapers/38581.jpg
 SlidePaths=/usr/share/wallpapers/
 
@@ -406,7 +425,7 @@ DialogWidth=720
 positions={"2560x1440":[]}
 
 [Containments][76][Wallpaper][org.kde.image][General]
-Image=/mnt/zombie/Photos/Wallpapers/38581.jpg
+Image=/home/zkm/Pictures/Wallpapers/wqhd_wallpaper_fusion.png
 PreviewImage=/mnt/zombie/Photos/Wallpapers/38581.jpg
 SlidePaths=/usr/share/wallpapers/
 
