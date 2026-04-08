@@ -3,7 +3,7 @@
 # 🚀 Personal Shell Aliases & Functions
 # ============================================================================
 # Author: Zach Schneider
-# Last Updated: April 6, 2026
+# Last Updated: April 2026
 # Description: Custom aliases and functions for enhanced shell experience
 # ============================================================================
 
@@ -18,11 +18,11 @@ alias la="ls -A"
 # ==============================
 # 📂 eza (modern ls replacement)
 # ==============================
+unalias ls ll la l 2>/dev/null
+
 if command -v eza &>/dev/null; then
-  unalias ls ll la l 2>/dev/null
-  ls() {
+  function ls {
     local arg
-    local eza_args=()
     for arg in "$@"; do
       if [[ "$arg" =~ ^-[a-z]*s[a-z]*$ ]] || [[ "$arg" == *--sort* ]]; then
         command ls --color=auto "$@"
@@ -308,7 +308,7 @@ alias gb="git branch"
 alias gc="git commit"
 alias gca="git commit -a"
 alias gcm="git commit -m"
-alias gs="git status"
+alias gst="git status"
 alias gp="git pull"
 alias gps="git push"
 alias gl="git log --oneline --graph"
