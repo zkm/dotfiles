@@ -20,9 +20,17 @@ wallpaperplugin=org.kde.image
 immutability=1
 plugin=org.kde.plasma.kickoff
 
+[Containments][106][Applets][177][Configuration]
+popupHeight=509
+popupWidth=665
+
+[Containments][106][Applets][177][Configuration][ConfigDialog]
+DialogHeight=630
+DialogWidth=810
+
 [Containments][106][Applets][177][Configuration][General]
 favoritesPortedToKAstats=true
-icon=/home/zkm/.local/share/icons/arch start buttons by gabriela2400/start-here monochrome strong.png
+icon=/home/zkm/.local/share/icons/dark-side/start-here-dark.png
 systemFavorites=suspend\\,hibernate\\,reboot\\,shutdown
 
 [Containments][106][Applets][178]
@@ -46,46 +54,6 @@ plugin=org.kde.plasma.panelspacer
 [Containments][106][Applets][179][Configuration][General]
 expanding=true
 length=0
-
-[Containments][106][Applets][180]
-immutability=1
-plugin=org.kde.plasma.systemmonitor.cpu
-
-[Containments][106][Applets][180][Configuration]
-CurrentPreset=org.kde.plasma.systemmonitor
-
-[Containments][106][Applets][180][Configuration][Appearance]
-chartFace=org.kde.ksysguard.linechart
-showTitle=false
-title=CPU
-
-[Containments][106][Applets][180][Configuration][SensorColors]
-cpu/all/usage=61,174,233
-
-[Containments][106][Applets][180][Configuration][Sensors]
-highPrioritySensorIds=["cpu/all/usage"]
-lowPrioritySensorIds=["cpu/all/cpuCount","cpu/all/coreCount"]
-totalSensors=["cpu/all/usage"]
-
-[Containments][106][Applets][181]
-immutability=1
-plugin=org.kde.plasma.systemmonitor
-
-[Containments][106][Applets][181][Configuration]
-CurrentPreset=org.kde.plasma.systemmonitor
-
-[Containments][106][Applets][181][Configuration][Appearance]
-chartFace=org.kde.ksysguard.linechart
-showTitle=false
-title=GPU
-
-[Containments][106][Applets][181][Configuration][SensorColors]
-gpu/all/usage=233,120,61
-
-[Containments][106][Applets][181][Configuration][Sensors]
-highPrioritySensorIds=["gpu/all/usage"]
-lowPrioritySensorIds=[]
-totalSensors=["gpu/all/usage"]
 
 [Containments][106][Applets][182]
 activityId=
@@ -167,8 +135,8 @@ immutability=1
 plugin=org.kde.plasma.kickoff
 
 [Containments][106][Applets][211][Configuration]
-popupHeight=509
-popupWidth=665
+popupHeight=517
+popupWidth=673
 
 [Containments][106][Applets][211][Configuration][ConfigDialog]
 DialogHeight=630
@@ -177,13 +145,22 @@ DialogWidth=810
 [Containments][106][Applets][211][Configuration][General]
 alphaSort=true
 appNameFormat=0
+favoritesPortedToKAstats=true
 highlightNewlyInstalledApps=false
 icon=/home/zkm/.local/share/icons/dark-side/start-here-dark.png
 switchCategoryOnHover=true
 systemFavorites=suspend\\,hibernate\\,reboot\\,shutdown
 
+[Containments][106][Applets][214]
+immutability=1
+plugin=org.kde.plasma.digitalclock
+
+[Containments][106][Applets][217]
+immutability=1
+plugin=org.kde.plasma.showdesktop
+
 [Containments][106][General]
-AppletOrder=177;178;179;180;181;182;204
+AppletOrder=177;178;179;182;204;211;214;217
 
 [Containments][49]
 ItemGeometries-1080x1920=
@@ -193,11 +170,11 @@ ItemGeometries-1964x3491=
 ItemGeometries-2048x1152=
 ItemGeometries-2160x3840=
 ItemGeometries-2259x1271=
-ItemGeometries-2560x1440=Applet-88:2224,0,336,400,0;Applet-105:1744,688,192,256,0;Applet-97:1744,944,208,192,0;Applet-95:1936,400,608,448,0;Applet-104:1744,1136,208,192,0;Applet-90:1952,848,608,480,0;
+ItemGeometries-2560x1440=Applet-88:2224,0,336,400,0;Applet-105:1744,688,192,256,0;Applet-97:1744,944,208,192,0;Applet-95:1936,400,608,448,0;Applet-104:1744,1136,208,208,0;Applet-90:1952,848,608,496,0;
 ItemGeometries-3072x1728=
 ItemGeometries-3491x1964=
 ItemGeometries-3840x2160=
-ItemGeometriesHorizontal=Applet-88:2224,0,336,400,0;Applet-105:1744,688,192,256,0;Applet-97:1744,944,208,192,0;Applet-95:1936,400,608,448,0;Applet-104:1744,1136,208,192,0;Applet-90:1952,848,608,480,0;
+ItemGeometriesHorizontal=Applet-88:2224,0,336,400,0;Applet-105:1744,688,192,256,0;Applet-97:1744,944,208,192,0;Applet-95:1936,400,608,448,0;Applet-104:1744,1136,208,208,0;Applet-90:1952,848,608,496,0;
 ItemGeometriesVertical=
 activityId=2a6be1da-70a4-41be-99a4-66f3c3db6856
 formfactor=0
@@ -206,18 +183,6 @@ lastScreen=0
 location=0
 plugin=org.kde.plasma.folder
 wallpaperplugin=org.kde.image
-
-[Containments][49][Applets][101]
-immutability=1
-plugin=org.kde.plasma.lock_logout
-
-[Containments][49][Applets][101][Configuration][ConfigDialog]
-DialogHeight=630
-DialogWidth=810
-
-[Containments][49][Applets][101][Configuration][General]
-actionsOrder=lockScreen,switchUser,requestShutDown,requestReboot,requestLogout,requestLogoutScreen,suspendToRam,suspendToDisk
-show_requestLogoutScreen=false
 
 [Containments][49][Applets][104]
 immutability=1
