@@ -21,8 +21,8 @@ immutability=1
 plugin=org.kde.plasma.kickoff
 
 [Containments][106][Applets][177][Configuration]
-popupHeight=509
-popupWidth=665
+popupHeight=521
+popupWidth=679
 
 [Containments][106][Applets][177][Configuration][ConfigDialog]
 DialogHeight=630
@@ -61,6 +61,8 @@ immutability=1
 lastScreen=-1
 location=0
 plugin=org.kde.plasma.systemtray
+popupHeight=432
+popupWidth=432
 wallpaperplugin=org.kde.image
 
 [Containments][106][Applets][182][Applets][196]
@@ -120,6 +122,10 @@ shownItems=org.kde.plasma.keyboardindicator
 immutability=1
 plugin=org.kde.plasma.digitalclock
 
+[Containments][106][Applets][204][Configuration]
+popupHeight=400
+popupWidth=560
+
 [Containments][106][Applets][204][Configuration][Appearance]
 customDateFormat=MM/dd/yyyy ddd
 dateDisplayFormat=BelowTime
@@ -129,31 +135,13 @@ showSeconds=Never
 timeFormat=24h
 use24hFormat=2
 
-[Containments][106][Applets][211]
-immutability=1
-plugin=org.kde.plasma.kickoff
-transient=true
-
-[Containments][106][Applets][211][Configuration]
-popupHeight=517
-popupWidth=673
-
-[Containments][106][Applets][211][Configuration][ConfigDialog]
-DialogHeight=630
-DialogWidth=810
-
-[Containments][106][Applets][211][Configuration][General]
-alphaSort=true
-appNameFormat=0
-favoritesPortedToKAstats=true
-highlightNewlyInstalledApps=false
-icon=/home/zkm/.local/share/icons/dark-side/start-here-dark.png
-switchCategoryOnHover=true
-systemFavorites=suspend\\,hibernate\\,reboot\\,shutdown
-
 [Containments][106][Applets][214]
 immutability=1
 plugin=org.kde.plasma.digitalclock
+
+[Containments][106][Applets][214][Configuration]
+popupHeight=400
+popupWidth=560
 
 [Containments][106][Applets][217]
 immutability=1
@@ -170,11 +158,11 @@ ItemGeometries-1964x3491=
 ItemGeometries-2048x1152=
 ItemGeometries-2160x3840=
 ItemGeometries-2259x1271=
-ItemGeometries-2560x1440=Applet-95:1936,400,608,448,0;Applet-88:1952,32,608,368,0;Applet-97:1504,1120,208,240,0;Applet-104:1728,1120,224,240,0;Applet-105:1728,848,192,256,0;Applet-90:1952,848,608,512,0;
+ItemGeometries-2560x1440=Applet-97:1504,1120,208,240,0;Applet-105:1728,848,192,256,0;Applet-88:1952,32,608,368,0;Applet-95:1936,400,608,448,0;Applet-104:1728,1120,224,240,0;Applet-90:1952,848,608,512,0;
 ItemGeometries-3072x1728=
 ItemGeometries-3491x1964=
 ItemGeometries-3840x2160=
-ItemGeometriesHorizontal=Applet-95:1936,400,608,448,0;Applet-88:1952,32,608,368,0;Applet-97:1504,1120,208,240,0;Applet-104:1728,1120,224,240,0;Applet-105:1728,848,192,256,0;Applet-90:1952,848,608,512,0;
+ItemGeometriesHorizontal=Applet-97:1504,1120,208,240,0;Applet-105:1728,848,192,256,0;Applet-88:1952,32,608,368,0;Applet-95:1936,400,608,448,0;Applet-104:1728,1120,224,240,0;Applet-90:1952,848,608,512,0;
 ItemGeometriesVertical=
 activityId=2a6be1da-70a4-41be-99a4-66f3c3db6856
 formfactor=0
