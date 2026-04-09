@@ -1,8 +1,8 @@
 # dotfiles
 
-Personal dotfiles for Linux (primarily Arch) and macOS.
+Personal dotfiles for Linux, mainly Arch, and macOS.
 
-Includes configuration for Zsh, Git, tmux, kitty, KDE/GTK theming, OpenRGB, REAPER, and related tooling.
+Includes config for Zsh, Git, tmux, kitty, KDE/GTK theming, OpenRGB, REAPER, and related tools.
 
 Neovim configuration now lives in a separate repository: [zkm/nvim-config](https://github.com/zkm/nvim-config).
 
@@ -16,11 +16,11 @@ cd ~/.dotfiles
 ./setup.sh
 ```
 
-## ⚠️ Important Behavior
+## ⚠️ Important behavior
 
 `setup.sh` is intentionally destructive for managed dotfiles.
 
-Before creating fresh symlinks, it removes existing files/dirs such as:
+Before it creates fresh symlinks, it removes existing files and directories such as:
 
 - `~/.aliases`
 - `~/.gitconfig`
@@ -34,41 +34,105 @@ Before creating fresh symlinks, it removes existing files/dirs such as:
 
 Back up anything important first.
 
-## 🧩 What Setup Does
+## 🧩 Setup
 
-`setup.sh` currently performs the following:
+`setup.sh` does the following:
 
-1. Ensures zsh is your shell (if currently using bash).
+1. Makes zsh your shell if you are currently using bash.
 2. Installs core packages:
    - macOS: Homebrew + packages
    - Linux: `pacman`, `dnf`, `apt`, or `yum`
    - Linux: attempts to install `papirus-icon-theme` (best effort; skipped if unavailable)
-3. Creates directories used by aliases (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
+3. Creates directories used by shortcuts (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
 4. Symlinks repo-managed dotfiles into `$HOME`.
    - Includes app config such as `~/.config/hypr` and `~/.config/kitty` when present in-repo.
    - Links KDE Plasma config files only when setup is run in a KDE session, or when overridden with `INSTALL_KDE_CONFIG=1`.
 5. Syncs custom desktop assets when present:
    - `Icons/dark-side` -> `~/.local/share/icons/dark-side`
    - `Wallpapers` -> `~/Pictures/Wallpapers`
-6. Adds `pyenv`, `rbenv`, and `nvm` init lines to `~/.zshrc` (if missing).
+6. Adds `pyenv`, `rbenv`, and `nvm` init lines to `~/.zshrc` if they are missing.
 7. Installs Powerlevel10k.
 8. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
-9. Applies Terminal.app default profile on macOS (`Pro`).
-10. Attempts browser install (Firefox + Chrome/Chromium).
-11. Attempts Visual Studio Code install.
+9. Sets the default Terminal.app profile on macOS to `Pro`.
+10. Tries to install browsers (Firefox and Chrome/Chromium).
+11. Tries to install Visual Studio Code.
    - Arch Linux: bootstraps `yay` if needed and installs `visual-studio-code-bin` from AUR.
 12. Installs Docker:
    - macOS: installs Docker Desktop (Homebrew cask)
    - Linux: installs Docker engine + compose plugin/package, enables the service, and adds your user to the `docker` group
-13. Optionally installs OpenRGB/REAPER (opt-in flags).
+13. Optionally installs OpenRGB and REAPER.
 
-## 🐳 Docker Install Notes
+## Useful shortcuts
+
+The full shell catalog lives in `aliases`, but these are the shortcuts I use most.
+
+### Navigation and files
+
+| Shortcut | What it does |
+| --- | --- |
+| `work` / `dev` | Go to common working directories |
+| `j <name>` | Jump to frequently used directories with zoxide |
+| `l`, `ll`, `la`, `lt`, `tree` | List files quickly with `eza` when available |
+| `ff <pattern>` | Find files with `fd` |
+| `search <pattern>` | Search recursively with `rg` |
+| `fcd` | Pick a directory with `fzf` and change into it |
+| `fvim` | Pick one or more files with `fzf` and open them in `vim` |
+
+### Editing and previewing
+
+| Shortcut | What it does |
+| --- | --- |
+| `v` | Open `nvim` |
+| `vim` / `vi` | Open `nvim` or fall back to `vim` |
+| `catp <file>` | Show plain file output, using `bat` when installed |
+| `preview <file>` | Preview a file with line numbers and syntax highlighting when available |
+| `json` | Pretty-print JSON with `jq` |
+
+### Kitty helpers
+
+| Shortcut | What it does |
+| --- | --- |
+| `imgcat <file>` | Display images directly in Kitty |
+| `imgpick` | Pick an image with `fzf` and preview it in Kitty |
+| `img <file>` | Run `imgcat` with a shorter command |
+
+### Git and tmux
+
+| Shortcut | What it does |
+| --- | --- |
+| `g`, `gst`, `gd`, `gl` | Run common Git commands |
+| `gco`, `gb`, `gc`, `gcm`, `gp`, `gps` | Check out, branch, commit, pull, and push |
+| `tl`, `ta`, `tn`, `tk` | List, attach, create, and kill tmux sessions |
+
+### System and services
+
+| Shortcut | What it does |
+| --- | --- |
+| `reload` | Restart the current shell |
+| `bt` | Launch `btop` |
+| `neofetch` | Run `fastfetch` when available, or fall back to `neofetch` |
+| `docker-start`, `docker-stop`, `docker-restart`, `docker-status`, `docker-log` | Manage the Docker daemon |
+| `web-start`, `web-stop`, `web-restart`, `web-status` | Manage nginx, php-fpm, and mariadb together |
+| `plex-start`, `plex-stop`, `plex-status` | Manage the Plex service |
+
+### OpenRGB, media, and AI
+
+| Shortcut | What it does |
+| --- | --- |
+| `rgb-blizzard`, `rgb-matrix`, `rgb-rainbow`, `rgb-off` | Start or stop OpenRGB lighting effects |
+| `rgb-stop` | Stop running RGB scripts and turn the lights off |
+| `sync-local-music`, `syncipod`, `dryrun-music`, `sync-music` | Run music library sync workflows |
+| `ai`, `chat`, `code-ai`, `fast-ai`, `chill-ai` | Start common Ollama sessions |
+| `llama3`, `codellama`, `mistral`, `gemma` | Launch specific Ollama models |
+| `ollama-list`, `ollama-remove`, `ollama-clean`, `ollama-clean-safe` | Manage Ollama models |
+
+## 🐳 Docker install notes
 
 - macOS: Docker Desktop is installed if missing. Launch Docker Desktop once after setup to initialize the daemon.
-- Linux: setup attempts to enable/start Docker via `systemctl` and adds your user to the `docker` group.
+- Linux: setup tries to enable and start Docker with `systemctl`, then adds your user to the `docker` group.
 - Linux group changes usually require logging out and back in before running Docker without `sudo`.
 
-## 🛠️ Docker Troubleshooting
+## 🛠️ Docker troubleshooting
 
 Quick checks:
 
@@ -97,16 +161,16 @@ sudo systemctl enable --now docker
 sudo systemctl status docker
 ```
 
-## 🎛️ Optional: OpenRGB + REAPER Install
+## 🎛️ Optional: OpenRGB and REAPER install
 
-These are now opt-in per user/machine.
+These installs are optional.
 
-If you run `./setup.sh` interactively (normal terminal), setup will prompt:
+If you run `./setup.sh` interactively, setup will prompt:
 
 - Install OpenRGB? [y/N]
 - Install REAPER? [y/N]
 
-If you run setup non-interactively (automation/CI), use env flags.
+If you run setup non-interactively, use environment flags.
 
 Install both:
 
@@ -123,11 +187,11 @@ INSTALL_REAPER=1 ./setup.sh
 
 Notes:
 
-- macOS: tries Homebrew casks (`openrgb`, `reaper`).
+- macOS: tries the Homebrew casks `openrgb` and `reaper`.
 - Arch: installs `openrgb` via pacman; tries `reaper` via `yay` (AUR).
-- apt/dnf/yum systems: attempts `openrgb`; REAPER is usually manual.
+- apt/dnf/yum systems: attempt `openrgb`; REAPER is usually installed manually.
 
-## 🖥️ Platform Notes
+## 🖥️ Platform notes
 
 ### Linux
 
@@ -136,7 +200,7 @@ Notes:
 - Override detection with `INSTALL_KDE_CONFIG=1 ./setup.sh` or force-skip with `INSTALL_KDE_CONFIG=0 ./setup.sh`.
 - Package install paths are tuned mostly for Arch first, with `dnf`/`apt`/`yum` fallbacks.
 - On Debian Bookworm (including Raspberry Pi OS Bookworm), `fastfetch` may be unavailable in default APT repositories. Setup now treats it as optional and continues.
-- Tested environments: Arch Linux + KDE Plasma, Fedora Linux Asahi Remix 43 (Workstation Edition, GNOME 49.5, Mutter/Wayland, aarch64).
+- Tested environments: Arch Linux + KDE Plasma; Fedora Linux Asahi Remix 43 (Workstation Edition, GNOME 49.5, Mutter/Wayland, aarch64); Gentoo + KDE Plasma; Ubuntu + GNOME; Linux Mint + Cinnamon; Debian + GNOME; Rocky Linux + GNOME; and CachyOS + GNOME 50.
 
 ### macOS
 
@@ -145,7 +209,7 @@ Notes:
 - Sets Apple Terminal default/startup profile to `Pro`.
 - Linux desktop theming files are present in-repo but mostly not applied by macOS tooling.
 
-## 🔁 Uninstall / Cleanup
+## 🔁 Uninstall and cleanup
 
 Run:
 
@@ -153,11 +217,11 @@ Run:
 ./uninstall.sh
 ```
 
-This removes symlinks that point to this repo, cleans setup-added shell init lines, and removes optional components installed by setup (Powerlevel10k clone, nvm directory, and installed font copies).
+This removes symlinks that point to this repo, cleans up shell init lines added by setup, and removes optional components installed by setup, including the Powerlevel10k clone, the `nvm` directory, and installed font copies.
 
-## 💾 Backup Current Files
+## 💾 Backup current files
 
-Create a timestamped snapshot of all current files:
+Create a timestamped snapshot of your current files:
 
 ```sh
 ./local/bin/backup_current_files.sh [source_dir] [backup_dir]
@@ -179,15 +243,21 @@ Notes:
 - Directory structure is preserved inside each snapshot.
 - If the backup directory is inside the source directory, it is automatically excluded.
 
-## 🧪 Tested On
+## 🧪 Tested on
 
 - Arch Linux + KDE Plasma
 - Fedora Linux Asahi Remix 43 (Workstation Edition, GNOME 49.5, Mutter/Wayland, aarch64)
+- Gentoo + KDE Plasma
+- Ubuntu + GNOME
+- Linux Mint + Cinnamon
+- Debian + GNOME
+- Rocky Linux + GNOME
+- CachyOS + GNOME 50
 - macOS (Homebrew-based path)
 
-## 🧹 Ignored Runtime Files
+## 🧹 Ignored runtime files
 
-The repo ignores generated/runtime artifacts, including:
+The repo ignores generated and runtime artifacts, including:
 
 - OpenRGB logs/cache/venv and backup JSON files
 - REAPER license/registration artifacts
