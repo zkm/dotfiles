@@ -30,3 +30,6 @@ config/REAPER/reaper-recentfx.ini
 
 # Local backup snapshots
 backups/
+
+# Machine-specific aliases
+aliases.local
