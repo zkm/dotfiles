@@ -42,7 +42,7 @@ Back up anything important first.
 2. Installs core packages:
    - macOS: Homebrew + packages
    - Linux: `pacman`, `dnf`, `apt`, or `yum`
-   - Linux: attempts to install `papirus-icon-theme` (best effort; skipped if unavailable)
+   - Linux: tries to install `papirus-icon-theme` (best effort; skipped if unavailable)
 3. Creates directories used by shortcuts (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
 4. Symlinks repo-managed dotfiles into `$HOME`.
    - Includes app config such as `~/.config/hypr` and `~/.config/kitty` when present in-repo.
@@ -189,7 +189,7 @@ Notes:
 
 - macOS: tries the Homebrew casks `openrgb` and `reaper`.
 - Arch: installs `openrgb` via pacman; tries `reaper` via `yay` (AUR).
-- apt/dnf/yum systems: attempt `openrgb`; REAPER is usually installed manually.
+- apt/dnf/yum systems: try to install `openrgb`; REAPER is usually installed manually.
 
 ## 🖥️ Platform notes
 
@@ -200,7 +200,7 @@ Notes:
 - Override detection with `INSTALL_KDE_CONFIG=1 ./setup.sh` or force-skip with `INSTALL_KDE_CONFIG=0 ./setup.sh`.
 - Package install paths are tuned mostly for Arch first, with `dnf`/`apt`/`yum` fallbacks.
 - On Debian Bookworm (including Raspberry Pi OS Bookworm), `fastfetch` may be unavailable in default APT repositories. Setup now treats it as optional and continues.
-- Tested environments: Arch Linux + KDE Plasma; Fedora Linux Asahi Remix 43 (Workstation Edition, GNOME 49.5, Mutter/Wayland, aarch64); Gentoo + KDE Plasma; Ubuntu + GNOME; Linux Mint + Cinnamon; Debian + GNOME; Rocky Linux + GNOME; and CachyOS + GNOME 50.
+- Tested environments are listed below.
 
 ### macOS
 
@@ -263,4 +263,4 @@ The repo ignores generated and runtime artifacts, including:
 - REAPER license/registration artifacts
 - Runtime logs and editor temp files
 
-This keeps syncs focused on reusable configuration.
+This keeps the repo focused on reusable configuration instead of machine-specific runtime files.
