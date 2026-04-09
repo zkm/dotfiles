@@ -772,6 +772,67 @@ raidview() {
   df -h -x tmpfs -x devtmpfs
 }
 
+# RAID5 health check (read-only)
+raid5-check() {
+  if ! command -v mdadm &>/dev/null; then
+    echo "❌ mdadm is not installed." >&2
+    return 1
+  fi
+  
+  if [ ! -e /dev/md127 ]; then
+    echo "❌ No RAID device found at /dev/md127" >&2
+    return 1
+  fi
+  
+  echo "🔍 === RAID5 Health Check (/dev/md127) ==="
+  sudo mdadm --detail /dev/md127 | head -20
+}
+
+# RAID synchronization status (real-time)
+raid5-sync() {
+  if ! command -v mdadm &>/dev/null; then
+    echo "❌ mdadm is not installed." >&2
+    return 1
+  fi
+  
+  if [ ! -e /dev/md127 ]; then
+    echo "❌ No RAID device found at /dev/md127" >&2
+    return 1
+  fi
+  
+  if ! command -v watch &>/dev/null; then
+    echo "❌ watch command is not installed." >&2
+    return 1
+  fi
+  
+  echo "📊 === Watching RAID Sync Status (Ctrl+C to exit) ==="
+  watch -n 1 'cat /proc/mdstat'
+}
+
+# Monitor RAID health in real-time (detailed)
+raid5-monitor() {
+  if ! command -v mdadm &>/dev/null; then
+    echo "❌ mdadm is not installed." >&2
+    return 1
+  fi
+  
+  if [ ! -e /dev/md127 ]; then
+    echo "❌ No RAID device found at /dev/md127" >&2
+    return 1
+  fi
+  
+  echo "📈 === Real-Time RAID Monitor (Ctrl+C to exit) ==="
+  sudo mdadm --monitor --delay=60 /dev/md127
+}
+
+# ==============================
+# 🏢 Machine-Specific Aliases (Local Only)
+# ==============================
+# Load machine-specific aliases that won't be tracked in git
+if [[ -f "$HOME/.aliases.local" ]]; then
+  source "$HOME/.aliases.local"
+fi
+
 # ============================================================================
 # 🎯 End of Aliases & Functions
 # ============================================================================
