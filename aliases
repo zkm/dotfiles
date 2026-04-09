@@ -34,6 +34,9 @@ if command -v eza &>/dev/null; then
   alias l='eza --icons --group-directories-first --all'
   alias ll='eza -lh --icons --group-directories-first'
   alias la='eza -la --icons --group-directories-first'
+  alias lt='eza -la --icons --group-directories-first --sort=modified'
+  alias lat='eza -la --icons --group-directories-first --sort=modified'
+  alias tree='eza --tree --icons --group-directories-first'
 else
   alias ls='ls --color=auto'
   alias ll='ls --color=auto -l'
@@ -49,6 +52,12 @@ alias work="cd ~/Documents/work/"
 alias dev="cd ~/Developer/"
 alias ..="cd .."
 alias ...="cd ../.."
+
+# zoxide smart directory jumping
+if command -v zoxide >/dev/null 2>&1 && [ -z "${__ZOXIDE_INIT_DONE:-}" ]; then
+  eval "$(zoxide init zsh --cmd j)"
+  __ZOXIDE_INIT_DONE=1
+fi
 
 # ==============================
 # 📝 Editor Preferences
@@ -79,6 +88,55 @@ vi() {
   else
     vim "$@"
   fi
+}
+
+alias v='nvim'
+
+# ==============================
+# ⚡ Modern CLI Shortcuts
+# ==============================
+if command -v bat >/dev/null 2>&1; then
+  alias catp='bat --style=plain --paging=never'
+  alias preview='bat --style=numbers --color=always --paging=never'
+fi
+
+if command -v rg >/dev/null 2>&1; then
+  alias search='rg --smart-case --hidden --glob "!.git"'
+fi
+
+if command -v fd >/dev/null 2>&1; then
+  alias ff='fd --hidden --follow --exclude .git'
+fi
+
+if command -v jq >/dev/null 2>&1; then
+  alias json='jq .'
+fi
+
+if command -v btop >/dev/null 2>&1; then
+  alias bt='btop'
+fi
+
+fcd() {
+  if ! command -v fd >/dev/null 2>&1 || ! command -v fzf >/dev/null 2>&1; then
+    echo "❌ fcd requires both fd and fzf." >&2
+    return 1
+  fi
+
+  local dir
+  dir="$(fd --type d --hidden --follow --exclude .git . "${1:-.}" | fzf --height=40% --reverse)" || return
+  [ -n "$dir" ] && cd "$dir"
+}
+
+fvim() {
+  if ! command -v fd >/dev/null 2>&1 || ! command -v fzf >/dev/null 2>&1; then
+    echo "❌ fvim requires both fd and fzf." >&2
+    return 1
+  fi
+
+  local -a files
+  files=("${(@f)$(fd --type f --hidden --follow --exclude .git . "${1:-.}" | fzf --multi --height=50% --reverse)}")
+  (( ${#files[@]} )) || return
+  vim "${files[@]}"
 }
 
 # ==============================
