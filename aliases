@@ -98,10 +98,20 @@ alias v='nvim'
 if command -v bat >/dev/null 2>&1; then
   alias catp='bat --style=plain --paging=never'
   alias preview='bat --style=numbers --color=always --paging=never'
+else
+  alias catp='cat'
+  alias preview='cat -n'
 fi
 
 if command -v rg >/dev/null 2>&1; then
   alias search='rg --smart-case --hidden --glob "!.git"'
+fi
+
+# Some distros expose fd as `fdfind`.
+if ! command -v fd >/dev/null 2>&1 && command -v fdfind >/dev/null 2>&1; then
+  fd() {
+    command fdfind "$@"
+  }
 fi
 
 if command -v fd >/dev/null 2>&1; then
@@ -115,6 +125,40 @@ fi
 if command -v btop >/dev/null 2>&1; then
   alias bt='btop'
 fi
+
+# Kitty image viewer helpers (requires kitty + kitten icat)
+imgcat() {
+  local -a icat_cmd
+
+  if command -v kitten >/dev/null 2>&1; then
+    icat_cmd=(kitten icat)
+  elif command -v kitty >/dev/null 2>&1; then
+    icat_cmd=(kitty +kitten icat)
+  else
+    echo "❌ kitty/kitten is not installed." >&2
+    return 1
+  fi
+
+  if [ "$#" -eq 0 ]; then
+    echo "Usage: imgcat <image-file> [more-image-files...]" >&2
+    return 1
+  fi
+
+  "${icat_cmd[@]}" "$@"
+}
+
+imgpick() {
+  if ! command -v fd >/dev/null 2>&1 || ! command -v fzf >/dev/null 2>&1; then
+    echo "❌ imgpick requires both fd and fzf." >&2
+    return 1
+  fi
+
+  local file
+  file="$(fd --type f --hidden --follow --exclude .git --glob '*.{png,jpg,jpeg,gif,webp,bmp}' . "${1:-.}" | fzf --height=50% --reverse)" || return
+  [ -n "$file" ] && imgcat "$file"
+}
+
+alias img='imgcat'
 
 fcd() {
   if ! command -v fd >/dev/null 2>&1 || ! command -v fzf >/dev/null 2>&1; then

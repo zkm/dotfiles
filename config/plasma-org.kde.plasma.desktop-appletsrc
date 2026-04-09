@@ -43,7 +43,7 @@ DialogWidth=810
 
 [Containments][106][Applets][178][Configuration][General]
 iconSpacing=2
-launchers=applications:org.kde.dolphin.desktop,applications:kitty.desktop,applications:org.wezfurlong.wezterm.desktop,applications:steam.desktop,applications:google-chrome.desktop,applications:firefox.desktop
+launchers=applications:org.kde.dolphin.desktop,applications:kitty.desktop,applications:org.wezfurlong.wezterm.desktop,applications:google-chrome.desktop,applications:firefox.desktop
 showLabels=false
 
 [Containments][106][Applets][179]

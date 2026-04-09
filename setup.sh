@@ -100,13 +100,15 @@ function install_homebrew() {
 
 function install_homebrew_packages() {
     echo "Installing Homebrew packages..."
-    brew install zsh tmux neovim ripgrep node fastfetch pyenv rbenv ruby-build eza
+    brew install zsh tmux neovim ripgrep node fastfetch pyenv rbenv ruby-build eza \
+      bat fd fzf jq zoxide btop
     brew install opencodeai/tap/opencode
 }
 
 install_with_pacman() {
     echo "Installing packages with Pacman..."
-    sudo pacman -S --needed curl git zsh tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build eza
+    sudo pacman -S --needed curl git zsh tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build eza \
+      bat fd fzf jq zoxide btop
     install_opencode
 }
 
@@ -187,6 +189,13 @@ install_with_apt() {
     sudo apt-get install -y curl git zsh tmux neovim ripgrep nodejs eza
     install_opencode
 
+    local tool_pkg
+    for tool_pkg in bat fd-find fzf jq zoxide btop; do
+        if ! sudo apt-get install -y "$tool_pkg"; then
+            echo "Skipping unavailable alias productivity package: $tool_pkg"
+        fi
+    done
+
     local optional_pkg
     for optional_pkg in fastfetch pyenv rbenv; do
         if ! sudo apt-get install -y "$optional_pkg"; then
@@ -200,6 +209,13 @@ install_with_dnf() {
     echo "Installing packages with DNF..."
     sudo dnf install -y curl git zsh tmux neovim ripgrep nodejs fastfetch eza
     install_opencode
+
+    local tool_pkg
+    for tool_pkg in bat fd-find fzf jq zoxide btop; do
+        if ! sudo dnf install -y "$tool_pkg"; then
+            echo "Skipping unavailable alias productivity package: $tool_pkg"
+        fi
+    done
 
     # Required for building CPython versions via pyenv.
     if ! sudo dnf groupinstall -y "Development Tools"; then
@@ -223,6 +239,13 @@ install_with_yum() {
     echo "Installing packages with YUM..."
     sudo yum install -y curl git zsh tmux neovim ripgrep nodejs fastfetch eza
     install_opencode
+
+    local tool_pkg
+    for tool_pkg in bat fd-find fzf jq zoxide btop; do
+        if ! sudo yum install -y "$tool_pkg"; then
+            echo "Skipping unavailable alias productivity package: $tool_pkg"
+        fi
+    done
 
     # Required for building CPython versions via pyenv.
     if ! sudo yum groupinstall -y "Development Tools"; then
@@ -264,6 +287,13 @@ EOF
       net-misc/curl dev-vcs/git app-shells/zsh app-misc/tmux \
       app-editors/neovim sys-apps/ripgrep net-libs/nodejs app-misc/fastfetch app-misc/eza
     install_opencode
+
+    local tool_pkg
+    for tool_pkg in app-text/bat sys-apps/fd app-shells/fzf app-misc/jq app-shells/zoxide sys-process/btop; do
+        if ! sudo emerge --noreplace "$tool_pkg"; then
+            echo "Skipping unavailable alias productivity package: $tool_pkg"
+        fi
+    done
 
     # These may require additional overlays depending on Gentoo profile.
     if ! sudo emerge --noreplace dev-python/pyenv dev-util/rbenv; then
