@@ -512,6 +512,10 @@ function create_dotfiles() {
         link_repo_config_path "$repo_root" "hypr"
     fi
 
+    if [[ -d "$repo_root/config/mako" ]]; then
+        link_repo_config_path "$repo_root" "mako"
+    fi
+
     if [[ -d "$repo_root/config/kitty" ]]; then
         link_repo_config_path "$repo_root" "kitty"
     fi
@@ -529,6 +533,7 @@ function create_dotfiles() {
             kwinrc \
             mimeapps.list \
             plasma-org.kde.plasma.desktop-appletsrc \
+            plasmanotifyrc \
             plasmarc; do
             link_repo_config_path "$repo_root" "$kde_config"
         done

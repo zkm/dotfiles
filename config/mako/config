@@ -1,0 +1,6 @@
+anchor=bottom-right
+margin=20
+layer=overlay
+max-visible=5
+default-timeout=5000
+ignore-timeout=1
