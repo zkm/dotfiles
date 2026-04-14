@@ -7,6 +7,7 @@ Includes config for Zsh, Git, tmux, kitty, KDE/GTK theming, OpenRGB, REAPER, and
 Neovim configuration now lives in a separate repository: [zkm/nvim-config](https://github.com/zkm/nvim-config).
 
 Hyprland installs also include a basic Hyprlock setup, with `SUPER+L` bound to lock the screen.
+Prompt setup defaults to Starship for both bash and zsh.
 
 ## ⚙️ Install
 
@@ -30,6 +31,9 @@ Before it creates fresh symlinks, it removes existing files and directories such
 - `~/.tmux.conf`
 - `~/.p10k.zsh`
 - `~/.zprofile`
+- `~/.bashrc`
+- `~/.bash_profile`
+- `~/.bash_aliases`
 - `~/.bin`
 
 Back up anything important first.
@@ -38,29 +42,37 @@ Back up anything important first.
 
 `setup.sh` does the following:
 
-1. Makes zsh your shell if you are currently using bash.
+1. Detects your shell mode.
+   - Default (`SHELL_MODE=auto`): keeps zsh users on zsh and keeps bash users on bash.
+   - Force zsh: `SHELL_MODE=zsh ./setup.sh`
+   - Force bash: `SHELL_MODE=bash ./setup.sh`
 2. Installs core packages:
    - macOS: Homebrew + packages
    - Linux: `pacman`, `dnf`, `apt`, or `yum`
+   - Installs `starship` when available and uses it as the default prompt backend.
    - Linux: tries to install `papirus-icon-theme` (best effort; skipped if unavailable)
 3. Creates directories used by shortcuts (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
 4. Symlinks repo-managed dotfiles into `$HOME`.
-   - Includes app config such as `~/.config/hypr` and `~/.config/kitty` when present in-repo.
+   - Includes bash files (`~/.bashrc`, `~/.bash_profile`, `~/.bash_aliases`) and zsh files.
+   - Includes app config such as `~/.config/kitty` and `~/.config/starship.toml` when present in-repo.
+   - Links `~/.config/hypr` only when Hyprland setup is enabled.
    - Links KDE Plasma config files only when setup is run in a KDE session, or when overridden with `INSTALL_KDE_CONFIG=1`.
 5. Syncs custom desktop assets when present:
    - `Icons/dark-side` -> `~/.local/share/icons/dark-side`
    - `Wallpapers` -> `~/Pictures/Wallpapers`
-6. Adds `pyenv`, `rbenv`, and `nvm` init lines to `~/.zshrc` if they are missing.
-7. Installs Powerlevel10k.
-8. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
-9. Sets the default Terminal.app profile on macOS to `Pro`.
-10. Tries to install browsers (Firefox and Chrome/Chromium).
-11. Tries to install Visual Studio Code.
+6. Uses repo-managed shell configs to initialize `pyenv`, `rbenv`, and `nvm` when installed.
+7. Configures Starship prompt for both bash and zsh.
+8. Optionally installs Powerlevel10k only when `PROMPT_BACKEND=p10k` and zsh mode is active.
+9. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
+10. Sets the default Terminal.app profile on macOS to `Pro`.
+11. Tries to install browsers (Firefox and Chrome/Chromium).
+12. Tries to install Visual Studio Code.
    - Arch Linux: bootstraps `yay` if needed and installs `visual-studio-code-bin` from AUR.
-12. Installs Docker:
+13. Installs Docker:
    - macOS: installs Docker Desktop (Homebrew cask)
    - Linux: installs Docker engine + compose plugin/package, enables the service, and adds your user to the `docker` group
-13. Optionally installs OpenRGB and REAPER.
+14. Optionally installs OpenRGB and REAPER.
+15. Optionally installs Hyprland stack with a prompt in interactive terminals.
 
 ## Useful shortcuts
 
@@ -190,6 +202,23 @@ Notes:
 - macOS: tries the Homebrew casks `openrgb` and `reaper`.
 - Arch: installs `openrgb` via pacman; tries `reaper` via `yay` (AUR).
 - apt/dnf/yum systems: try to install `openrgb`; REAPER is usually installed manually.
+
+## 🧱 Optional: Hyprland install/setup
+
+Hyprland setup is opt-in by default.
+
+- Interactive terminal: setup asks `Would you like to install/setup Hyprland? [y/N]`.
+- Non-interactive terminal: setup skips Hyprland to avoid hangs and prints a tip.
+
+Use environment overrides:
+
+```sh
+# Force install and link Hyprland config
+INSTALL_HYPRLAND=1 ./setup.sh
+
+# Force skip and do not link Hyprland config
+INSTALL_HYPRLAND=0 ./setup.sh
+```
 
 ## 🖥️ Platform notes
 

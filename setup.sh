@@ -4,6 +4,10 @@ set -e
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+SHELL_MODE_RESOLVED=""
+HYPRLAND_SETUP_DECIDED=""
+HYPRLAND_SETUP_ENABLED="0"
+
 run_nonfatal() {
     local step_name="$1"
     shift
@@ -11,6 +15,135 @@ run_nonfatal() {
     if ! "$@"; then
         echo "Warning: ${step_name} failed. Continuing setup..."
     fi
+}
+
+is_interactive_tty() {
+    [[ -t 0 && -t 1 ]]
+}
+
+bool_is_true() {
+    case "${1:-}" in
+        1|true|TRUE|yes|YES|y|Y|on|ON)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+bool_is_false() {
+    case "${1:-}" in
+        0|false|FALSE|no|NO|n|N|off|OFF)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+resolve_shell_mode() {
+    if [[ -n "$SHELL_MODE_RESOLVED" ]]; then
+        return 0
+    fi
+
+    local requested
+    requested="${SHELL_MODE:-auto}"
+
+    case "$requested" in
+        zsh|ZSH)
+            SHELL_MODE_RESOLVED="zsh"
+            ;;
+        bash|BASH)
+            SHELL_MODE_RESOLVED="bash"
+            ;;
+        auto|AUTO|"")
+            case "$SHELL" in
+                */zsh)
+                    SHELL_MODE_RESOLVED="zsh"
+                    ;;
+                *)
+                    SHELL_MODE_RESOLVED="bash"
+                    ;;
+            esac
+            ;;
+        *)
+            echo "Unknown SHELL_MODE='$requested'. Falling back to auto detection."
+            case "$SHELL" in
+                */zsh)
+                    SHELL_MODE_RESOLVED="zsh"
+                    ;;
+                *)
+                    SHELL_MODE_RESOLVED="bash"
+                    ;;
+            esac
+            ;;
+    esac
+}
+
+should_use_zsh() {
+    resolve_shell_mode
+    [[ "$SHELL_MODE_RESOLVED" == "zsh" ]]
+}
+
+hyprland_prompt_decision() {
+    local answer
+    echo "Would you like to install/setup Hyprland? [y/N]"
+    read -r answer
+
+    if bool_is_true "$answer"; then
+        return 0
+    fi
+
+    return 1
+}
+
+decide_hyprland_setup() {
+    if [[ -n "$HYPRLAND_SETUP_DECIDED" ]]; then
+        [[ "$HYPRLAND_SETUP_ENABLED" == "1" ]]
+        return $?
+    fi
+
+    HYPRLAND_SETUP_DECIDED="1"
+
+    if [[ "$(uname)" == "Darwin" ]]; then
+        HYPRLAND_SETUP_ENABLED="0"
+        return 1
+    fi
+
+    if bool_is_true "${INSTALL_HYPRLAND:-}"; then
+        HYPRLAND_SETUP_ENABLED="1"
+        return 0
+    fi
+
+    if bool_is_false "${INSTALL_HYPRLAND:-}"; then
+        HYPRLAND_SETUP_ENABLED="0"
+        return 1
+    fi
+
+    case "${INSTALL_HYPRLAND:-auto}" in
+        auto|AUTO|"")
+            ;;
+        *)
+            echo "Unrecognized INSTALL_HYPRLAND value '${INSTALL_HYPRLAND}'. Use auto, 1, or 0."
+            HYPRLAND_SETUP_ENABLED="0"
+            return 1
+            ;;
+    esac
+
+    if is_interactive_tty; then
+        if hyprland_prompt_decision; then
+            HYPRLAND_SETUP_ENABLED="1"
+            return 0
+        fi
+
+        HYPRLAND_SETUP_ENABLED="0"
+        return 1
+    fi
+
+    echo "Skipping Hyprland setup (non-interactive mode)."
+    echo "To force install, run: INSTALL_HYPRLAND=1 ./setup.sh"
+    HYPRLAND_SETUP_ENABLED="0"
+    return 1
 }
 
 function set_zsh() {
@@ -30,17 +163,22 @@ function set_zsh() {
 }
 
 function setup_shell() {
-    case "$SHELL" in
-        */zsh)
-            echo "Default shell already zsh. Skipping shell change."
-        ;;
-        */bash|*/sh)
-            set_zsh
-        ;;
-        *)
-            echo "Current shell is $SHELL. Skipping automatic shell change."
-        ;;
-    esac
+    if should_use_zsh; then
+        case "$SHELL" in
+            */zsh)
+                echo "Default shell already zsh. Skipping shell change."
+            ;;
+            */bash|*/sh)
+                set_zsh
+            ;;
+            *)
+                echo "Current shell is $SHELL. Skipping automatic shell change."
+            ;;
+        esac
+        return 0
+    fi
+
+    echo "Shell mode is bash. Keeping the current shell unchanged."
 }
 
 function clear_old_dotfiles() {
@@ -100,14 +238,24 @@ function install_homebrew() {
 
 function install_homebrew_packages() {
     echo "Installing Homebrew packages..."
-    brew install zsh tmux neovim ripgrep node fastfetch pyenv rbenv ruby-build eza \
+    local brew_packages=(tmux neovim ripgrep node fastfetch pyenv rbenv ruby-build eza starship)
+    if should_use_zsh; then
+        brew_packages+=(zsh)
+    fi
+
+    brew install "${brew_packages[@]}" \
       bat fd fzf jq zoxide btop
     brew install opencodeai/tap/opencode
 }
 
 install_with_pacman() {
     echo "Installing packages with Pacman..."
-    sudo pacman -S --needed curl git zsh tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build eza \
+    local core_packages=(curl git tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build eza starship)
+    if should_use_zsh; then
+        core_packages+=(zsh)
+    fi
+
+    sudo pacman -S --needed "${core_packages[@]}" \
       bat fd fzf jq zoxide btop
     install_opencode
 }
@@ -186,7 +334,12 @@ install_with_apt() {
 
     # Install core packages first so setup remains usable even if optional
     # packages are unavailable on the current Debian/Ubuntu release.
-    sudo apt-get install -y curl git zsh tmux neovim ripgrep nodejs eza
+    local core_packages=(curl git tmux neovim ripgrep nodejs eza)
+    if should_use_zsh; then
+        core_packages+=(zsh)
+    fi
+
+    sudo apt-get install -y "${core_packages[@]}"
     install_opencode
 
     local tool_pkg
@@ -197,7 +350,7 @@ install_with_apt() {
     done
 
     local optional_pkg
-    for optional_pkg in fastfetch pyenv rbenv; do
+    for optional_pkg in fastfetch pyenv rbenv starship; do
         if ! sudo apt-get install -y "$optional_pkg"; then
             echo "Skipping unavailable optional package: $optional_pkg"
         fi
@@ -207,7 +360,12 @@ install_with_apt() {
 # Function to install packages using DNF (Fedora)
 install_with_dnf() {
     echo "Installing packages with DNF..."
-    sudo dnf install -y curl git zsh tmux neovim ripgrep nodejs fastfetch eza
+    local core_packages=(curl git tmux neovim ripgrep nodejs fastfetch eza)
+    if should_use_zsh; then
+        core_packages+=(zsh)
+    fi
+
+    sudo dnf install -y "${core_packages[@]}"
     install_opencode
 
     local tool_pkg
@@ -227,8 +385,8 @@ install_with_dnf() {
       ncurses-devel gdbm-devel libuuid-devel
 
     # Some Fedora derivatives do not ship pyenv/rbenv in enabled repos.
-    if ! sudo dnf install -y --skip-unavailable pyenv rbenv; then
-        echo "Skipping unavailable optional packages: pyenv and/or rbenv"
+    if ! sudo dnf install -y --skip-unavailable pyenv rbenv starship; then
+        echo "Skipping unavailable optional packages: pyenv, rbenv, and/or starship"
     fi
 
     install_pyenv_from_upstream
@@ -237,7 +395,12 @@ install_with_dnf() {
 # Function to install packages using YUM (RHEL/CentOS)
 install_with_yum() {
     echo "Installing packages with YUM..."
-    sudo yum install -y curl git zsh tmux neovim ripgrep nodejs fastfetch eza
+    local core_packages=(curl git tmux neovim ripgrep nodejs fastfetch eza)
+    if should_use_zsh; then
+        core_packages+=(zsh)
+    fi
+
+    sudo yum install -y "${core_packages[@]}"
     install_opencode
 
     local tool_pkg
@@ -246,6 +409,10 @@ install_with_yum() {
             echo "Skipping unavailable alias productivity package: $tool_pkg"
         fi
     done
+
+    if ! sudo yum install -y starship; then
+        echo "Skipping unavailable optional package: starship"
+    fi
 
     # Required for building CPython versions via pyenv.
     if ! sudo yum groupinstall -y "Development Tools"; then
@@ -283,9 +450,16 @@ EOF
         sudo emerge --sync guru
     fi
 
-    sudo emerge --noreplace \
-      net-misc/curl dev-vcs/git app-shells/zsh app-misc/tmux \
-      app-editors/neovim sys-apps/ripgrep net-libs/nodejs app-misc/fastfetch app-misc/eza
+        local core_packages=(
+            net-misc/curl dev-vcs/git app-misc/tmux app-editors/neovim
+            sys-apps/ripgrep net-libs/nodejs app-misc/fastfetch app-misc/eza
+            app-shells/starship
+        )
+        if should_use_zsh; then
+                core_packages+=(app-shells/zsh)
+        fi
+
+        sudo emerge --noreplace "${core_packages[@]}"
     install_opencode
 
     local tool_pkg
@@ -423,7 +597,7 @@ install_hypr_stack() {
 }
 
 function setup_lang_envs() {
-    echo "Shell language env init is managed by the repo zshrc. Skipping direct ~/.zshrc edits."
+    echo "Shell language env init is managed by repo shell configs. Skipping direct rc file edits."
 }
 
 function install_nvm() {
@@ -438,7 +612,7 @@ function install_nvm() {
         echo "nvm directory already exists. Skipping installer."
     fi
 
-    echo "nvm init is managed by the repo zshrc. Skipping direct ~/.zshrc edits."
+    echo "nvm init is managed by repo shell configs. Skipping direct rc file edits."
 }
 
 function create_alias_directories() {
@@ -477,6 +651,9 @@ function create_dotfiles() {
     repo_root="$REPO_ROOT"
 
     ln -sfn "$repo_root/aliases" ~/.aliases
+    if [[ -f "$repo_root/bash_aliases" ]]; then
+        ln -sfn "$repo_root/bash_aliases" ~/.bash_aliases
+    fi
     ln -sfn "$repo_root/gitconfig" ~/.gitconfig
     ln -sfn "$repo_root/dircolors" ~/.dircolors
     ln -sfn "$repo_root/zsh" ~/.zsh
@@ -498,8 +675,16 @@ function create_dotfiles() {
     fi
 
     ln -sfn "$repo_root/zshrc" ~/.zshrc
+    if [[ -f "$repo_root/bashrc" ]]; then
+        ln -sfn "$repo_root/bashrc" ~/.bashrc
+    fi
+    if [[ -f "$repo_root/bash_profile" ]]; then
+        ln -sfn "$repo_root/bash_profile" ~/.bash_profile
+    fi
     ln -sfn "$repo_root/tmux.conf" ~/.tmux.conf
-    ln -sfn "$repo_root/p10k.zsh" ~/.p10k.zsh
+    if [[ -f "$repo_root/p10k.zsh" ]]; then
+        ln -sfn "$repo_root/p10k.zsh" ~/.p10k.zsh
+    fi
     if [[ -f "$repo_root/zprofile" ]]; then
         ln -sfn "$repo_root/zprofile" ~/.zprofile
     fi
@@ -508,8 +693,10 @@ function create_dotfiles() {
     fi
 
     # Keep repo-managed app config tracked in-repo while preserving standard config paths.
-    if [[ -d "$repo_root/config/hypr" ]]; then
+    if [[ -d "$repo_root/config/hypr" ]] && decide_hyprland_setup; then
         link_repo_config_path "$repo_root" "hypr"
+    elif [[ -d "$repo_root/config/hypr" ]]; then
+        echo "Skipping Hyprland config links."
     fi
 
     if [[ -d "$repo_root/config/mako" ]]; then
@@ -522,6 +709,10 @@ function create_dotfiles() {
 
     if [[ -d "$repo_root/config/fastfetch" ]]; then
         link_repo_config_path "$repo_root" "fastfetch"
+    fi
+
+    if [[ -f "$repo_root/config/starship.toml" ]]; then
+        link_repo_config_path "$repo_root" "starship.toml"
     fi
 
     if should_install_kde_config; then
@@ -559,6 +750,16 @@ function setup_tmux_plugins() {
 }
 
 function setup_p10k() {
+    if ! should_use_zsh; then
+        echo "Skipping powerlevel10k setup (bash shell mode)."
+        return 0
+    fi
+
+    if [[ "${PROMPT_BACKEND:-starship}" != "p10k" ]]; then
+        echo "Skipping powerlevel10k setup (PROMPT_BACKEND=${PROMPT_BACKEND:-starship})."
+        return 0
+    fi
+
     if [[ ! -d ~/.powerlevel10k ]]; then
         echo "Installing powerlevel10k..."
         if ! git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k; then
@@ -573,6 +774,15 @@ function setup_p10k() {
     else
         echo 'Powerlevel10k source line already exists in ~/.zshrc. Skipping.'
     fi
+}
+
+setup_starship() {
+    if ! command -v starship >/dev/null 2>&1; then
+        echo "starship is not installed. Skipping shell prompt setup."
+        return 0
+    fi
+
+    echo "starship is installed; shell rc files already contain init hooks."
 }
 
 
@@ -616,7 +826,11 @@ else
     run_nonfatal "Install Papirus icon theme" install_papirus_icon_theme
 fi
 
-run_nonfatal "Install Hyprland stack" install_hypr_stack
+if decide_hyprland_setup; then
+    run_nonfatal "Install Hyprland stack" install_hypr_stack
+else
+    echo "Skipping Hyprland stack installation."
+fi
 
 function install_fonts() {
     echo "Installing fonts..."
@@ -991,6 +1205,7 @@ function install_media_tools() {
 
 run_nonfatal "Install nvm" install_nvm
 run_nonfatal "Setup tmux plugins" setup_tmux_plugins
+run_nonfatal "Setup starship" setup_starship
 run_nonfatal "Setup powerlevel10k" setup_p10k
 run_nonfatal "Install fonts" install_fonts
 run_nonfatal "Setup terminal colors" setup_terminal_colors

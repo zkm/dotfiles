@@ -129,6 +129,7 @@ main() {
     local kde_config
 
     remove_if_symlink_to_repo "$HOME/.aliases"
+    remove_if_symlink_to_repo "$HOME/.bash_aliases"
     remove_if_symlink_to_repo "$HOME/.gitconfig"
     remove_if_symlink_to_repo "$HOME/.dircolors"
     remove_if_symlink_to_repo "$HOME/.zsh"
@@ -145,12 +146,15 @@ main() {
         fi
     fi
     remove_if_symlink_to_repo "$HOME/.zshrc"
+    remove_if_symlink_to_repo "$HOME/.bashrc"
+    remove_if_symlink_to_repo "$HOME/.bash_profile"
     remove_if_symlink_to_repo "$HOME/.tmux.conf"
     remove_if_symlink_to_repo "$HOME/.p10k.zsh"
     remove_if_symlink_to_repo "$HOME/.zprofile"
     remove_if_symlink_to_repo "$HOME/.zlogin"
     remove_if_symlink_to_repo "$HOME/.config/hypr"
     remove_if_symlink_to_repo "$HOME/.config/kitty"
+    remove_if_symlink_to_repo "$HOME/.config/starship.toml"
     for kde_config in \
         dolphinrc \
         kcminputrc \

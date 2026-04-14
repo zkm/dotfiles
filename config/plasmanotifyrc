@@ -1,5 +1,14 @@
 [Applications][code]
 Seen=true
 
+[Applications][firefox]
+Seen=true
+
+[Applications][google-chrome]
+Seen=true
+
+[Applications][signal]
+Seen=true
+
 [Notifications]
 PopupPosition=BottomRight

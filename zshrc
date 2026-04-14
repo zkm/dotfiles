@@ -1,5 +1,5 @@
 # ==============================
-# 🌟 Powerlevel10k Prompt Setup
+# Shell Prompt Setup
 # ==============================
 # Ensure core system binaries are always available, even if PATH was inherited in a bad state.
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
@@ -9,14 +9,15 @@ if [[ -o interactive ]] && command -v fastfetch >/dev/null 2>&1; then
   fastfetch
 fi
 
-# Enable instant prompt for faster shell startup
-if [[ -z "${ZSH_RELOADING:-}" ]] && [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# Prefer Starship for a shared prompt across bash and zsh.
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+elif [[ "${PROMPT_BACKEND:-starship}" == "p10k" ]]; then
+  # Optional fallback for users who explicitly keep p10k.
+  [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]] && source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  [[ -f ~/.powerlevel10k/powerlevel10k.zsh-theme ]] && source ~/.powerlevel10k/powerlevel10k.zsh-theme
+  [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 fi
-
-# Load Powerlevel10k Theme & Config
-source ~/.powerlevel10k/powerlevel10k.zsh-theme
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
 # ==============================
 # 🎨 Dircolors (ls colors)
