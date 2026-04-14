@@ -497,6 +497,25 @@ install_opencode() {
     fi
 }
 
+install_starship() {
+    if command -v starship >/dev/null 2>&1; then
+        echo "Starship is already installed. Skipping."
+        return 0
+    fi
+
+    echo "Installing Starship..."
+
+    local install_dir="$HOME/.local/bin"
+    mkdir -p "$install_dir"
+
+    if curl -fsSL https://starship.rs/install.sh | sh -s -- -y -b "$install_dir"; then
+        echo "Starship installed to $install_dir"
+    else
+        echo "Failed to install Starship automatically."
+        echo "Install manually: curl -fsSL https://starship.rs/install.sh | sh"
+    fi
+}
+
 install_papirus_icon_theme() {
     # Papirus is only relevant for Linux desktop environments.
     if [[ "$(uname)" == "Darwin" ]]; then
@@ -1205,6 +1224,7 @@ function install_media_tools() {
 
 run_nonfatal "Install nvm" install_nvm
 run_nonfatal "Setup tmux plugins" setup_tmux_plugins
+run_nonfatal "Install Starship" install_starship
 run_nonfatal "Setup starship" setup_starship
 run_nonfatal "Setup powerlevel10k" setup_p10k
 run_nonfatal "Install fonts" install_fonts
