@@ -55,7 +55,11 @@ alias ...="cd ../.."
 
 # zoxide smart directory jumping
 if command -v zoxide >/dev/null 2>&1 && [ -z "${__ZOXIDE_INIT_DONE:-}" ]; then
-  eval "$(zoxide init zsh --cmd j)"
+  if [ -n "${ZSH_VERSION:-}" ]; then
+    eval "$(zoxide init zsh --cmd j)"
+  else
+    eval "$(zoxide init bash --cmd j)"
+  fi
   __ZOXIDE_INIT_DONE=1
 fi
 
