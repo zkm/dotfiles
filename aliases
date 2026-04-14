@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 # ============================================================================
 # 🚀 Personal Shell Aliases & Functions
 # ============================================================================
@@ -76,9 +76,9 @@ unalias \
 
 # Smart vim/nvim fallback
 vim() {
-  if whence -p nvim >/dev/null 2>&1; then
+  if command -v nvim >/dev/null 2>&1; then
     command nvim "$@"
-  elif whence -p vim >/dev/null 2>&1; then
+  elif command -v vim >/dev/null 2>&1; then
     command vim "$@"
   else
     echo "❌ No 'nvim' or 'vim' installed." >&2
@@ -87,7 +87,7 @@ vim() {
 }
 
 vi() {
-  if whence -p nvim >/dev/null 2>&1; then
+  if command -v nvim >/dev/null 2>&1; then
     command nvim "$@"
   else
     vim "$@"
@@ -181,8 +181,16 @@ fvim() {
     return 1
   fi
 
-  local -a files
-  files=("${(@f)$(fd --type f --hidden --follow --exclude .git . "${1:-.}" | fzf --multi --height=50% --reverse)}")
+  local selection
+  local -a files=()
+  local file
+
+  selection="$(fd --type f --hidden --follow --exclude .git . "${1:-.}" | fzf --multi --height=50% --reverse)" || return
+
+  while IFS= read -r file; do
+    [[ -n "$file" ]] && files+=("$file")
+  done <<< "$selection"
+
   (( ${#files[@]} )) || return
   vim "${files[@]}"
 }
@@ -268,9 +276,11 @@ openrgb-sdk-ensure() {
   pkill -f 'openrgb.*--server' >/dev/null 2>&1 || true
 
   if command -v openrgb >/dev/null 2>&1; then
-    nohup openrgb --noautoconnect --server --loglevel warning </dev/null >"$OPENRGB_LOG_DIR/sdk.log" 2>&1 &!
+    nohup openrgb --noautoconnect --server --loglevel warning </dev/null >"$OPENRGB_LOG_DIR/sdk.log" 2>&1 &
+    disown "$!" 2>/dev/null || true
   elif command -v flatpak >/dev/null 2>&1 && flatpak info org.openrgb.OpenRGB >/dev/null 2>&1; then
-    nohup flatpak run org.openrgb.OpenRGB --noautoconnect --server --loglevel warning </dev/null >"$OPENRGB_LOG_DIR/sdk.log" 2>&1 &!
+    nohup flatpak run org.openrgb.OpenRGB --noautoconnect --server --loglevel warning </dev/null >"$OPENRGB_LOG_DIR/sdk.log" 2>&1 &
+    disown "$!" 2>/dev/null || true
   else
     echo "❌ OpenRGB command not found (native or Flatpak)." >&2
     return 1
@@ -296,7 +306,13 @@ openrgb-sdk-ensure() {
 # Reload current shell configuration
 reload() {
   echo "🔄 Restarting shell..."
-  exec zsh -l
+  if [[ -n "${ZSH_VERSION:-}" ]]; then
+    exec zsh -l
+  elif [[ -n "${BASH_VERSION:-}" ]]; then
+    exec bash -l
+  else
+    exec "${SHELL:-/bin/sh}" -l
+  fi
 }
 
 # Emergency stop for all OpenRGB effect scripts
@@ -370,7 +386,8 @@ rgb-effect() {
 
   local log_file="$OPENRGB_LOG_DIR/${script_name}.log"
   : >"$log_file"
-  nohup "$py_exec" "$script" "$@" </dev/null >"$log_file" 2>&1 &!
+  nohup "$py_exec" "$script" "$@" </dev/null >"$log_file" 2>&1 &
+  disown "$!" 2>/dev/null || true
   local pid=$!
 
   if [ "$script_name" = "matrix" ]; then
@@ -706,7 +723,9 @@ alias composer-fpm='docker-compose exec -u $(id -u):$(id -g) php-fpm composer'
 # 🤖 OLLAMA ALIASES (GPU + CPU)
 # ==============================
 
-alias ollama='nocorrect ollama'
+if [[ -n "${ZSH_VERSION:-}" ]]; then
+  alias ollama='nocorrect ollama'
+fi
 
 # --- Model management ---
 alias ollama-list="ollama list"

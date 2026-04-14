@@ -13,7 +13,12 @@ if [[ -f "$HOME/.dotfiles/dircolors" ]]; then
   eval "$(dircolors -b "$HOME/.dotfiles/dircolors")"
 fi
 
-# Shared aliases/functions for bash.
+# Shared aliases/functions across shells.
+if [[ -f "$HOME/.aliases" ]]; then
+  source "$HOME/.aliases"
+fi
+
+# Bash-specific aliases/functions.
 if [[ -f "$HOME/.bash_aliases" ]]; then
   source "$HOME/.bash_aliases"
 fi
@@ -51,7 +56,9 @@ export EDITOR=nvim
 export VISUAL=nvim
 export SYSTEMD_EDITOR=nvim
 
-# Starship prompt (preferred cross-shell prompt backend).
-if command -v starship >/dev/null 2>&1; then
+# Prompt backend selector.
+# Bash supports Starship; set PROMPT_BACKEND=none to disable prompt init.
+PROMPT_BACKEND="${PROMPT_BACKEND:-starship}"
+if [[ "$PROMPT_BACKEND" == "starship" ]] && command -v starship >/dev/null 2>&1; then
   eval "$(starship init bash)"
 fi

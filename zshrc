@@ -9,14 +9,20 @@ if [[ -o interactive ]] && command -v fastfetch >/dev/null 2>&1; then
   fastfetch
 fi
 
-# Prefer Starship for a shared prompt across bash and zsh.
-if command -v starship >/dev/null 2>&1; then
-  eval "$(starship init zsh)"
-elif [[ "${PROMPT_BACKEND:-starship}" == "p10k" ]]; then
-  # Optional fallback for users who explicitly keep p10k.
+# Prompt backend selector.
+# Set PROMPT_BACKEND=starship to force Starship.
+PROMPT_BACKEND="${PROMPT_BACKEND:-p10k}"
+
+if [[ "$PROMPT_BACKEND" == "p10k" ]]; then
   [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]] && source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
   [[ -f ~/.powerlevel10k/powerlevel10k.zsh-theme ]] && source ~/.powerlevel10k/powerlevel10k.zsh-theme
-  [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+  if [[ -f ~/.p10k.zsh ]]; then
+    source ~/.p10k.zsh
+  elif [[ -f ~/.dotfiles/p10k.zsh ]]; then
+    source ~/.dotfiles/p10k.zsh
+  fi
+elif command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
 fi
 
 # ==============================
@@ -107,22 +113,24 @@ bindkey "^[[F" end-of-line
 # ==============================
 # 🎯 Vi Mode Prompt Indicator
 # ==============================
-# Save the original prompt and dynamically update it
-# to show [NORMAL] or [INSERT] based on Vi key mode.
-: "${ORIGINAL_PROMPT:=$PROMPT}"
-function zle-keymap-select {
-  case $KEYMAP in
-    vicmd)
-      PROMPT="%F{green}[NORMAL]%f $ORIGINAL_PROMPT"
-      ;;
-    main|viins)
-      PROMPT="%F{blue}[INSERT]%f $ORIGINAL_PROMPT"
-      ;;
-  esac
-  zle reset-prompt
-}
+# Keep this lightweight indicator only for Starship.
+# p10k has native vi mode support in its own config.
+if [[ "$PROMPT_BACKEND" == "starship" ]]; then
+  : "${ORIGINAL_PROMPT:=$PROMPT}"
+  function zle-keymap-select {
+    case $KEYMAP in
+      vicmd)
+        PROMPT="%F{green}[NORMAL]%f $ORIGINAL_PROMPT"
+        ;;
+      main|viins)
+        PROMPT="%F{blue}[INSERT]%f $ORIGINAL_PROMPT"
+        ;;
+    esac
+    zle reset-prompt
+  }
 
-zle -N zle-keymap-select
+  zle -N zle-keymap-select
+fi
 
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env" # ghcup-env
 export EDITOR=nvim
