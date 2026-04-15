@@ -516,6 +516,42 @@ install_starship() {
     fi
 }
 
+install_wezterm() {
+    if command -v wezterm >/dev/null 2>&1; then
+        echo "WezTerm is already installed. Skipping."
+        return 0
+    fi
+
+    echo "Installing WezTerm..."
+
+    if [[ "$(uname)" == "Darwin" ]]; then
+        if command -v brew >/dev/null 2>&1; then
+            brew install wezterm || true
+        else
+            echo "WezTerm not in PATH and Homebrew not found. Install manually from https://wezfurlong.org/wezterm/"
+        fi
+        return
+    fi
+
+    if [[ -x "$(command -v pacman)" ]]; then
+        sudo pacman -S --needed wezterm || true
+    elif [[ -x "$(command -v apt-get)" ]]; then
+        sudo apt-get update
+        sudo apt-get install -y wezterm || {
+            echo "WezTerm not available in APT. Download from https://wezfurlong.org/wezterm/install/linux.html"
+        }
+    elif [[ -x "$(command -v dnf)" ]]; then
+        sudo dnf install -y wezterm || true
+    elif [[ -x "$(command -v yum)" ]]; then
+        sudo yum install -y wezterm || true
+    elif [[ -x "$(command -v emerge)" ]]; then
+        sudo emerge --noreplace app-misc/wezterm || true
+    else
+        echo "Unsupported Linux distribution for WezTerm auto-install."
+        echo "Install manually from https://wezfurlong.org/wezterm/install/linux.html"
+    fi
+}
+
 install_papirus_icon_theme() {
     # Papirus is only relevant for Linux desktop environments.
     if [[ "$(uname)" == "Darwin" ]]; then
@@ -734,6 +770,10 @@ function create_dotfiles() {
         link_repo_config_path "$repo_root" "starship.toml"
     fi
 
+    if [[ -d "$repo_root/config/wezterm" ]]; then
+        link_repo_config_path "$repo_root" "wezterm"
+    fi
+
     if should_install_kde_config; then
         echo "Detected KDE Plasma. Linking KDE config files..."
         for kde_config in \
@@ -877,6 +917,11 @@ function install_fonts() {
         if [[ -d "fonts/MesloLGS NF" ]]; then
             mkdir -p ~/.local/share/fonts/MesloLGS_NF
             cp -r fonts/MesloLGS\ NF/* ~/.local/share/fonts/MesloLGS_NF/
+        fi
+
+        if [[ -d "fonts/IBMPlexMono" ]]; then
+            mkdir -p ~/.local/share/fonts/IBMPlexMono
+            cp -r fonts/IBMPlexMono/* ~/.local/share/fonts/IBMPlexMono/
         fi
 
         if [[ -x "$(command -v fc-cache)" ]]; then
@@ -1225,6 +1270,7 @@ function install_media_tools() {
 run_nonfatal "Install nvm" install_nvm
 run_nonfatal "Setup tmux plugins" setup_tmux_plugins
 run_nonfatal "Install Starship" install_starship
+run_nonfatal "Install WezTerm" install_wezterm
 run_nonfatal "Setup starship" setup_starship
 run_nonfatal "Setup powerlevel10k" setup_p10k
 run_nonfatal "Install fonts" install_fonts
