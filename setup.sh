@@ -41,6 +41,56 @@ bool_is_false() {
     return 1
 }
 
+detect_current_shell_mode() {
+    case "$SHELL" in
+        */zsh)
+            echo "zsh"
+            ;;
+        */fish)
+            echo "fish"
+            ;;
+        *)
+            echo "bash"
+            ;;
+    esac
+}
+
+shell_mode_prompt_decision() {
+    local default_shell answer
+    default_shell="$(detect_current_shell_mode)"
+
+    while true; do
+        echo "Choose your default shell:"
+        echo "  1) bash"
+        echo "  2) zsh"
+        echo "  3) fish"
+        echo "Press Enter to keep the current shell (${default_shell})."
+        read -r answer
+
+        case "${answer:-}" in
+            "")
+                SHELL_MODE_RESOLVED="$default_shell"
+                return 0
+                ;;
+            1|bash|BASH)
+                SHELL_MODE_RESOLVED="bash"
+                return 0
+                ;;
+            2|zsh|ZSH)
+                SHELL_MODE_RESOLVED="zsh"
+                return 0
+                ;;
+            3|fish|FISH)
+                SHELL_MODE_RESOLVED="fish"
+                return 0
+                ;;
+            *)
+                echo "Invalid selection '$answer'. Choose bash, zsh, or fish."
+                ;;
+        esac
+    done
+}
+
 resolve_shell_mode() {
     if [[ -n "$SHELL_MODE_RESOLVED" ]]; then
         return 0
@@ -56,33 +106,39 @@ resolve_shell_mode() {
         bash|BASH)
             SHELL_MODE_RESOLVED="bash"
             ;;
+        fish|FISH)
+            SHELL_MODE_RESOLVED="fish"
+            ;;
         auto|AUTO|"")
-            case "$SHELL" in
-                */zsh)
-                    SHELL_MODE_RESOLVED="zsh"
-                    ;;
-                *)
-                    SHELL_MODE_RESOLVED="bash"
-                    ;;
-            esac
+            if is_interactive_tty; then
+                shell_mode_prompt_decision
+            else
+                SHELL_MODE_RESOLVED="$(detect_current_shell_mode)"
+            fi
             ;;
         *)
             echo "Unknown SHELL_MODE='$requested'. Falling back to auto detection."
-            case "$SHELL" in
-                */zsh)
-                    SHELL_MODE_RESOLVED="zsh"
-                    ;;
-                *)
-                    SHELL_MODE_RESOLVED="bash"
-                    ;;
-            esac
+            if is_interactive_tty; then
+                shell_mode_prompt_decision
+            else
+                SHELL_MODE_RESOLVED="$(detect_current_shell_mode)"
+            fi
             ;;
     esac
 }
 
-should_use_zsh() {
+shell_mode_is() {
+    local expected="$1"
     resolve_shell_mode
-    [[ "$SHELL_MODE_RESOLVED" == "zsh" ]]
+    [[ "$SHELL_MODE_RESOLVED" == "$expected" ]]
+}
+
+should_use_zsh() {
+    shell_mode_is "zsh"
+}
+
+should_use_fish() {
+    shell_mode_is "fish"
 }
 
 hyprland_prompt_decision() {
@@ -146,44 +202,65 @@ decide_hyprland_setup() {
     return 1
 }
 
-function set_zsh() {
-    echo "Setting shell to zsh..."
-    local zsh_path
+set_default_shell() {
+    local shell_name="$1"
+    local shell_path
 
-    zsh_path="$(command -v zsh 2>/dev/null || true)"
-    if [[ -z "$zsh_path" ]]; then
-        echo "zsh is not installed or not in PATH. Skipping shell change."
+    echo "Setting shell to ${shell_name}..."
+
+    shell_path="$(command -v "$shell_name" 2>/dev/null || true)"
+    if [[ -z "$shell_path" ]]; then
+        echo "${shell_name} is not installed or not in PATH. Skipping shell change."
         return 0
     fi
 
-    if ! chsh -s "$zsh_path"; then
+    if ! chsh -s "$shell_path"; then
         echo "Could not change shell automatically."
-        echo "Run this manually after setup: chsh -s $zsh_path"
+        echo "Run this manually after setup: chsh -s $shell_path"
     fi
 }
 
 function setup_shell() {
-    if should_use_zsh; then
-        case "$SHELL" in
-            */zsh)
-                echo "Default shell already zsh. Skipping shell change."
-            ;;
-            */bash|*/sh)
-                set_zsh
-            ;;
-            *)
-                echo "Current shell is $SHELL. Skipping automatic shell change."
-            ;;
-        esac
-        return 0
-    fi
+    resolve_shell_mode
 
-    echo "Shell mode is bash. Keeping the current shell unchanged."
+    case "$SHELL_MODE_RESOLVED" in
+        bash)
+            case "$SHELL" in
+                */bash|*/sh)
+                    echo "Default shell already bash-compatible. Skipping shell change."
+                    ;;
+                *)
+                    set_default_shell "bash"
+                    ;;
+            esac
+            ;;
+        zsh)
+            case "$SHELL" in
+                */zsh)
+                    echo "Default shell already zsh. Skipping shell change."
+                    ;;
+                *)
+                    set_default_shell "zsh"
+                    ;;
+            esac
+            ;;
+        fish)
+            case "$SHELL" in
+                */fish)
+                    echo "Default shell already fish. Skipping shell change."
+                    ;;
+                *)
+                    set_default_shell "fish"
+                    ;;
+            esac
+            ;;
+    esac
 }
 
 function clear_old_dotfiles() {
     echo "Removing previous dotfiles..."
     rm -f ~/.aliases ~/.gitconfig ~/.zshrc ~/.tmux.conf ~/.p10k.zsh ~/.zprofile ~/.zlogin ~/.dircolors
+    rm -f ~/.bashrc ~/.bash_profile ~/.bash_aliases ~/.config/fish/config.fish
     rm -rf ~/.zsh ~/.bin
 }
 
@@ -241,6 +318,8 @@ function install_homebrew_packages() {
     local brew_packages=(tmux neovim ripgrep node fastfetch pyenv rbenv ruby-build eza starship)
     if should_use_zsh; then
         brew_packages+=(zsh)
+    elif should_use_fish; then
+        brew_packages+=(fish)
     fi
 
     brew install "${brew_packages[@]}" \
@@ -253,6 +332,8 @@ install_with_pacman() {
     local core_packages=(curl git tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build eza starship)
     if should_use_zsh; then
         core_packages+=(zsh)
+    elif should_use_fish; then
+        core_packages+=(fish)
     fi
 
     sudo pacman -S --needed "${core_packages[@]}" \
@@ -337,6 +418,8 @@ install_with_apt() {
     local core_packages=(curl git tmux neovim ripgrep nodejs eza)
     if should_use_zsh; then
         core_packages+=(zsh)
+    elif should_use_fish; then
+        core_packages+=(fish)
     fi
 
     sudo apt-get install -y "${core_packages[@]}"
@@ -363,6 +446,8 @@ install_with_dnf() {
     local core_packages=(curl git tmux neovim ripgrep nodejs fastfetch eza)
     if should_use_zsh; then
         core_packages+=(zsh)
+    elif should_use_fish; then
+        core_packages+=(fish)
     fi
 
     sudo dnf install -y "${core_packages[@]}"
@@ -398,6 +483,8 @@ install_with_yum() {
     local core_packages=(curl git tmux neovim ripgrep nodejs fastfetch eza)
     if should_use_zsh; then
         core_packages+=(zsh)
+    elif should_use_fish; then
+        core_packages+=(fish)
     fi
 
     sudo yum install -y "${core_packages[@]}"
@@ -457,6 +544,8 @@ EOF
         )
         if should_use_zsh; then
                 core_packages+=(app-shells/zsh)
+        elif should_use_fish; then
+            core_packages+=(app-shells/fish)
         fi
 
         sudo emerge --noreplace "${core_packages[@]}"
@@ -735,6 +824,10 @@ function create_dotfiles() {
     fi
     if [[ -f "$repo_root/bash_profile" ]]; then
         ln -sfn "$repo_root/bash_profile" ~/.bash_profile
+    fi
+    if [[ -f "$repo_root/config/fish/config.fish" ]]; then
+        mkdir -p ~/.config/fish
+        ln -sfn "$repo_root/config/fish/config.fish" ~/.config/fish/config.fish
     fi
     ln -sfn "$repo_root/tmux.conf" ~/.tmux.conf
     if [[ -f "$repo_root/p10k.zsh" ]]; then

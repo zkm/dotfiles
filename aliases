@@ -198,6 +198,8 @@ fvim() {
 # ==============================
 # 🎨 System Info & Utilities
 # ==============================
+alias meminfo='zramctl && free -h'
+
 # Smart system info display (fastfetch > neofetch)
 neofetch() {
   if command -v fastfetch >/dev/null 2>&1; then

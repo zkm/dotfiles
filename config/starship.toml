@@ -1,31 +1,149 @@
 add_newline = true
-
-format = "$username$hostname$directory$git_branch$git_status$python$nodejs$rust$golang$cmd_duration$line_break$character"
+scan_timeout = 30
+command_timeout = 5000
+format = """
+$username$hostname$ssh_connection$directory$git_branch$git_status$git_metrics$hg_branch$python$nodejs$rust$golang$java$package$helm$kubectl$terraform$aws$gcloud$context$env$custom$line_break$character"""
 
 [character]
-success_symbol = "[>](bold green)"
-error_symbol = "[>](bold red)"
-
-[directory]
-truncation_length = 4
-truncate_to_repo = false
-style = "bold cyan"
-
-[git_branch]
-symbol = "git:"
-style = "bold yellow"
-
-[git_status]
-style = "bold red"
+success_symbol = "[❯](bold #9ece6a)"
+error_symbol = "[❯](bold #f7768e)"
+vimcmd_symbol = "[❮](bold #9ece6a)"
+vimcmd_replace_one_symbol = "[❮](bold #e0af68)"
+vimcmd_replace_symbol = "[❮](bold #e0af68)"
+vimcmd_visual_symbol = "[❮](bold #bb9af7)"
 
 [cmd_duration]
-min_time = 1000
-format = "took [$duration](bold blue) "
+min_time = 2000
+format = "took [$duration](bold #7dcfff) "
+disabled = false
+
+[directory]
+home_symbol = "~"
+truncation_length = 4
+truncation_symbol = "…/"
+style = "bold #7aa2f7"
+format = "[$path]($style)[$read_only]($read_only_style)[$enter]($transition_style) "
+
+[git_branch]
+format = "on [$symbol$branch]($style) "
+symbol = " "
+style = "bold #e0af68"
+truncation_symbol = ""
+
+[git_metrics]
+disabled = true
+format = "([+$added](green) /([~$deleted](red)))"
+style = "#e0af68"
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = "#f7768e"
+
+[golang]
+format = "via [$symbol($version )]($style)"
+symbol = " "
+style = "#7dcfff"
+
+[helm]
+format = "via [$symbol$version ]($style)"
+symbol = ""
+style = "#7aa2f7"
 
 [hostname]
 ssh_only = false
-format = "[@$hostname](bold dimmed white) "
+format = "[$ssh_symbol](dimmed #7aa2f7)[$hostname](dimmed #7aa2f7) "
+style = "dimmed #7aa2f7"
+ssh_symbol = "ssh "
+trim_at = ".local"
+
+[java]
+format = "via [$symbol($version )]($style)"
+symbol = ""
+style = "bold #bb9af7"
+
+[jobs]
+format = "[$symbol$count]($style)"
+symbol = " "
+style = "#9ece6a"
+number_threshold = 1
+color = "#9ece6a"
+
+[kubernetes]
+format = "on [$symbol$context]($style) "
+symbol = ""
+style = "#7aa2f7"
+disabled = false
+
+[line_break]
+disabled = false
+
+[nodejs]
+format = "via [$symbol($version )]($style)"
+symbol = ""
+style = "#9ece6a"
+detect_files = ["package.json", ".node-version"]
+
+[package]
+format = "via [$symbol$version]($style)"
+symbol = "📦 "
+style = "#d4a0e0"
+
+[python]
+format = "via [$symbol($version )]($style)"
+symbol = ""
+style = "#9ece6a"
+python_binary = ["python", "python3", "py"]
+detect_files = ["pyproject.toml", "Pipfile", ".python-version", "requirements.txt", "setup.py", "__init__.py"]
+
+[rust]
+format = "via [$symbol($version )]($style)"
+symbol = ""
+style = "#e0af68"
+
+[shell]
+bash_indicator = ""
+fish_indicator = ""
+ion_indicator = ""
+nu_indicator = ""
+powershell_indicator = ""
+zsh_indicator = ""
+
+[shlvl]
+max = 3
+symbol = "↕ "
+disabled = false
+format = "$symbol$shlvl"
+
+[terraform]
+format = "via [$symbol$workspace]($style)"
+symbol = ""
+style = "#7aa2f7"
 
 [username]
-show_always = true
-format = "[$user](bold white)"
+show_always = false
+format = "[$user]($style) "
+style_root = "bold #f7768e"
+style_user = "bold #7aa2f7"
+
+[aws]
+format = 'on [$symbol($profile )(\[$region\] )]($style)'
+style = "#f7768e"
+symbol = "aws "
+
+[gcloud]
+format = "on [$symbol$account]($style) "
+style = "#7dcfff"
+symbol = "gcloud "
+
+[env_var]
+variable = "CHAMELEON"
+default = "ignore"
+format = "with [$value]($style) "
+style = "bold #e0af68"
+
+[custom.banger]
+command = "echo ${BANGERS:-''}"
+when = "true"
+symbol = " "
+style = "bold #f7768e"
+format = "[$output]($style) "
