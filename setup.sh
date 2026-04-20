@@ -46,9 +46,6 @@ detect_current_shell_mode() {
         */zsh)
             echo "zsh"
             ;;
-        */fish)
-            echo "fish"
-            ;;
         *)
             echo "bash"
             ;;
@@ -63,7 +60,6 @@ shell_mode_prompt_decision() {
         echo "Choose your default shell:"
         echo "  1) bash"
         echo "  2) zsh"
-        echo "  3) fish"
         echo "Press Enter to keep the current shell (${default_shell})."
         read -r answer
 
@@ -80,12 +76,8 @@ shell_mode_prompt_decision() {
                 SHELL_MODE_RESOLVED="zsh"
                 return 0
                 ;;
-            3|fish|FISH)
-                SHELL_MODE_RESOLVED="fish"
-                return 0
-                ;;
             *)
-                echo "Invalid selection '$answer'. Choose bash, zsh, or fish."
+                echo "Invalid selection '$answer'. Choose bash or zsh."
                 ;;
         esac
     done
@@ -105,9 +97,6 @@ resolve_shell_mode() {
             ;;
         bash|BASH)
             SHELL_MODE_RESOLVED="bash"
-            ;;
-        fish|FISH)
-            SHELL_MODE_RESOLVED="fish"
             ;;
         auto|AUTO|"")
             if is_interactive_tty; then
@@ -135,10 +124,6 @@ shell_mode_is() {
 
 should_use_zsh() {
     shell_mode_is "zsh"
-}
-
-should_use_fish() {
-    shell_mode_is "fish"
 }
 
 hyprland_prompt_decision() {
@@ -244,23 +229,13 @@ function setup_shell() {
                     ;;
             esac
             ;;
-        fish)
-            case "$SHELL" in
-                */fish)
-                    echo "Default shell already fish. Skipping shell change."
-                    ;;
-                *)
-                    set_default_shell "fish"
-                    ;;
-            esac
-            ;;
     esac
 }
 
 function clear_old_dotfiles() {
     echo "Removing previous dotfiles..."
     rm -f ~/.aliases ~/.gitconfig ~/.zshrc ~/.tmux.conf ~/.p10k.zsh ~/.zprofile ~/.zlogin ~/.dircolors
-    rm -f ~/.bashrc ~/.bash_profile ~/.bash_aliases ~/.config/fish/config.fish
+    rm -f ~/.bashrc ~/.bash_profile ~/.bash_aliases
     rm -rf ~/.zsh ~/.bin
 }
 
@@ -318,8 +293,6 @@ function install_homebrew_packages() {
     local brew_packages=(tmux neovim ripgrep node fastfetch pyenv rbenv ruby-build eza starship)
     if should_use_zsh; then
         brew_packages+=(zsh)
-    elif should_use_fish; then
-        brew_packages+=(fish)
     fi
 
     brew install "${brew_packages[@]}" \
@@ -332,8 +305,6 @@ install_with_pacman() {
     local core_packages=(curl git tmux neovim ripgrep nodejs fastfetch pyenv rbenv ruby-build eza starship)
     if should_use_zsh; then
         core_packages+=(zsh)
-    elif should_use_fish; then
-        core_packages+=(fish)
     fi
 
     sudo pacman -S --needed "${core_packages[@]}" \
@@ -418,8 +389,6 @@ install_with_apt() {
     local core_packages=(curl git tmux neovim ripgrep nodejs eza)
     if should_use_zsh; then
         core_packages+=(zsh)
-    elif should_use_fish; then
-        core_packages+=(fish)
     fi
 
     sudo apt-get install -y "${core_packages[@]}"
@@ -446,8 +415,6 @@ install_with_dnf() {
     local core_packages=(curl git tmux neovim ripgrep nodejs fastfetch eza)
     if should_use_zsh; then
         core_packages+=(zsh)
-    elif should_use_fish; then
-        core_packages+=(fish)
     fi
 
     sudo dnf install -y "${core_packages[@]}"
@@ -483,8 +450,6 @@ install_with_yum() {
     local core_packages=(curl git tmux neovim ripgrep nodejs fastfetch eza)
     if should_use_zsh; then
         core_packages+=(zsh)
-    elif should_use_fish; then
-        core_packages+=(fish)
     fi
 
     sudo yum install -y "${core_packages[@]}"
@@ -544,8 +509,6 @@ EOF
         )
         if should_use_zsh; then
                 core_packages+=(app-shells/zsh)
-        elif should_use_fish; then
-            core_packages+=(app-shells/fish)
         fi
 
         sudo emerge --noreplace "${core_packages[@]}"
@@ -824,10 +787,6 @@ function create_dotfiles() {
     fi
     if [[ -f "$repo_root/bash_profile" ]]; then
         ln -sfn "$repo_root/bash_profile" ~/.bash_profile
-    fi
-    if [[ -f "$repo_root/config/fish/config.fish" ]]; then
-        mkdir -p ~/.config/fish
-        ln -sfn "$repo_root/config/fish/config.fish" ~/.config/fish/config.fish
     fi
     ln -sfn "$repo_root/tmux.conf" ~/.tmux.conf
     if [[ -f "$repo_root/p10k.zsh" ]]; then

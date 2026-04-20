@@ -2,7 +2,7 @@
 
 Personal dotfiles for Linux, mainly Arch, and macOS.
 
-Includes config for Bash, Zsh, Fish, Git, tmux, kitty, KDE/GTK theming, OpenRGB, REAPER, and related tools.
+Includes config for Bash, Zsh, Git, tmux, kitty, KDE/GTK theming, OpenRGB, REAPER, and related tools.
 
 Neovim configuration now lives in a separate repository: [zkm/nvim-config](https://github.com/zkm/nvim-config).
 
@@ -34,7 +34,6 @@ Before it creates fresh symlinks, it removes existing files and directories such
 - `~/.bashrc`
 - `~/.bash_profile`
 - `~/.bash_aliases`
-- `~/.config/fish/config.fish`
 - `~/.bin`
 
 Back up anything important first.
@@ -44,11 +43,10 @@ Back up anything important first.
 `setup.sh` does the following:
 
 1. Detects your shell mode.
-   - Interactive terminals: prompts for `bash`, `zsh`, or `fish`, defaulting to your current shell.
-   - Default (`SHELL_MODE=auto`) in non-interactive mode: keeps zsh users on zsh, fish users on fish, and falls back to bash otherwise.
+   - Interactive terminals: prompts for `bash` or `zsh`, defaulting to your current shell.
+   - Default (`SHELL_MODE=auto`) in non-interactive mode: keeps zsh users on zsh and falls back to bash otherwise.
    - Force zsh: `SHELL_MODE=zsh ./setup.sh`
    - Force bash: `SHELL_MODE=bash ./setup.sh`
-   - Force fish: `SHELL_MODE=fish ./setup.sh`
 2. Installs core packages:
    - macOS: Homebrew + packages
    - Linux: `pacman`, `dnf`, `apt`, or `yum`
@@ -56,7 +54,7 @@ Back up anything important first.
    - Linux: tries to install `papirus-icon-theme` (best effort; skipped if unavailable)
 3. Creates directories used by shortcuts (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
 4. Symlinks repo-managed dotfiles into `$HOME`.
-   - Includes bash files (`~/.bashrc`, `~/.bash_profile`, `~/.bash_aliases`), zsh files, and Fish config (`~/.config/fish/config.fish`).
+   - Includes bash files (`~/.bashrc`, `~/.bash_profile`, `~/.bash_aliases`) and zsh files.
    - Includes app config such as `~/.config/kitty` and `~/.config/starship.toml` when present in-repo.
    - Links `~/.config/hypr` only when Hyprland setup is enabled.
    - Links KDE Plasma config files only when setup is run in a KDE session, or when overridden with `INSTALL_KDE_CONFIG=1`.
@@ -64,7 +62,7 @@ Back up anything important first.
    - `Icons/dark-side` -> `~/.local/share/icons/dark-side`
    - `Wallpapers` -> `~/Pictures/Wallpapers`
 6. Uses repo-managed shell configs to initialize `pyenv`, `rbenv`, and `nvm` when installed.
-7. Configures Starship prompt for bash and Fish, and keeps the existing zsh prompt flow.
+7. Configures Starship prompt for bash and keeps the existing zsh prompt flow.
 8. Optionally installs Powerlevel10k only when `PROMPT_BACKEND=p10k` and zsh mode is active.
 9. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
 10. Sets the default Terminal.app profile on macOS to `Pro`.
@@ -232,7 +230,7 @@ INSTALL_HYPRLAND=0 ./setup.sh
 - Override detection with `INSTALL_KDE_CONFIG=1 ./setup.sh` or force-skip with `INSTALL_KDE_CONFIG=0 ./setup.sh`.
 - Package install paths are tuned mostly for Arch first, with `dnf`/`apt`/`yum` fallbacks.
 - On Debian Bookworm (including Raspberry Pi OS Bookworm), `fastfetch` may be unavailable in default APT repositories. Setup now treats it as optional and continues.
-- Fish support currently includes a repo-managed `config.fish`, Starship init, and language manager hooks. The large shared alias catalog remains bash/zsh-oriented.
+- Shell setup is bash/zsh-focused, and the alias catalog is bash/zsh-oriented.
 - Tested environments are listed below.
 
 ### macOS
