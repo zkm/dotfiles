@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+set -o pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -202,6 +203,7 @@ set_default_shell() {
     if ! chsh -s "$shell_path"; then
         echo "Could not change shell automatically."
         echo "Run this manually after setup: chsh -s $shell_path"
+        echo "If chsh fails on your distro, try: sudo usermod -s $shell_path $(id -un)"
     fi
 }
 
@@ -417,7 +419,12 @@ install_with_dnf() {
         core_packages+=(zsh)
     fi
 
-    sudo dnf install -y "${core_packages[@]}"
+    local core_pkg
+    for core_pkg in "${core_packages[@]}"; do
+        if ! sudo dnf install -y "$core_pkg"; then
+            echo "Skipping unavailable core package: $core_pkg"
+        fi
+    done
     install_opencode
 
     local tool_pkg
@@ -436,10 +443,13 @@ install_with_dnf() {
       readline-devel sqlite-devel tk-devel xz-devel \
       ncurses-devel gdbm-devel libuuid-devel
 
-    # Some Fedora derivatives do not ship pyenv/rbenv in enabled repos.
-    if ! sudo dnf install -y --skip-unavailable pyenv rbenv starship; then
-        echo "Skipping unavailable optional packages: pyenv, rbenv, and/or starship"
-    fi
+    # Some Fedora derivatives do not ship pyenv/rbenv/starship in enabled repos.
+    local optional_pkg
+    for optional_pkg in pyenv rbenv starship; do
+        if ! sudo dnf install -y "$optional_pkg"; then
+            echo "Skipping unavailable optional package: $optional_pkg"
+        fi
+    done
 
     install_pyenv_from_upstream
 }
@@ -542,11 +552,19 @@ install_opencode() {
     local install_dir="$HOME/.local/bin"
     mkdir -p "$install_dir"
 
-    if curl -fsSL https://opencode.ai/install.sh | sh -s -- -p "$install_dir"; then
+    local installer_url="https://opencode.ai/install.sh"
+    local installer_file
+    installer_file="$(mktemp)"
+
+    if curl -fsSL "$installer_url" -o "$installer_file" \
+        && sh "$installer_file" -p "$install_dir" \
+        && command -v opencode >/dev/null 2>&1; then
         echo "OpenCode installed to $install_dir"
     else
         echo "Failed to install OpenCode. Install manually from https://opencode.ai"
     fi
+
+    rm -f "$installer_file"
 }
 
 install_starship() {
@@ -1103,6 +1121,10 @@ function install_docker() {
     elif [[ -x "$(command -v apt-get)" ]]; then
         sudo apt-get update
         sudo apt-get install -y docker.io docker-compose-plugin || sudo apt-get install -y docker.io docker-compose || true
+    elif [[ -x "$(command -v dnf)" ]]; then
+        if ! sudo dnf install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin; then
+            sudo dnf install -y docker docker-compose-plugin || sudo dnf install -y docker docker-compose || true
+        fi
     elif [[ -x "$(command -v yum)" ]]; then
         sudo yum install -y docker docker-compose-plugin || sudo yum install -y docker docker-compose || true
     elif [[ -x "$(command -v emerge)" ]]; then
@@ -1113,15 +1135,23 @@ function install_docker() {
     fi
 
     if [[ -x "$(command -v systemctl)" ]]; then
-        sudo systemctl enable --now docker || sudo systemctl enable --now docker.service || true
+        if systemctl list-unit-files 2>/dev/null | grep -q '^docker\.service'; then
+            sudo systemctl enable --now docker.service || true
+        else
+            echo "Docker service unit not found. Skipping service enable/start."
+        fi
     elif [[ -x "$(command -v rc-update)" ]]; then
         sudo rc-update add docker default || true
         sudo rc-service docker start || true
     fi
 
     if [[ -x "$(command -v usermod)" ]] && [[ "$(id -u)" -ne 0 ]]; then
-        sudo usermod -aG docker "$USER" || true
-        echo "Added $USER to docker group. Log out and back in for group changes to take effect."
+        if getent group docker >/dev/null 2>&1; then
+            sudo usermod -aG docker "$USER" || true
+            echo "Added $USER to docker group. Log out and back in for group changes to take effect."
+        else
+            echo "Docker group does not exist. Skipping docker group membership step."
+        fi
     fi
 }
 
