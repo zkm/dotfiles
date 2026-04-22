@@ -102,7 +102,6 @@ style = "#e0af68"
 
 [shell]
 bash_indicator = ""
-fish_indicator = ""
 ion_indicator = ""
 nu_indicator = ""
 powershell_indicator = ""
