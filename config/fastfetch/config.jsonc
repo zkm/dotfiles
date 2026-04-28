@@ -21,7 +21,7 @@
         {
             "type": "command",
             "key": "Disk",
-            "text": "df -B1 --output=size,used / | awk 'NR==2 {if($1>0) printf \"%.2f TiB / %.2f TiB (%.0f%%)\", $2/1099511627776, $1/1099511627776, ($2/$1)*100; else print \"n/a\"}'"
+            "text": "df -B1 -x tmpfs -x devtmpfs -x squashfs -x overlay --output=size,used | awk 'NR>1 {s+=$1; u+=$2} END {if(s>0) printf \"%.2f TiB / %.2f TiB (%.0f%%)\", u/1099511627776, s/1099511627776, (u/s)*100; else print \"n/a\"}'"
         },
         "memory",
         "swap",
