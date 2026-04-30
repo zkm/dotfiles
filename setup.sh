@@ -844,6 +844,10 @@ function create_dotfiles() {
         link_repo_config_path "$repo_root" "wezterm"
     fi
 
+    if [[ -d "$repo_root/config/ghostty" ]]; then
+        link_repo_config_path "$repo_root" "ghostty"
+    fi
+
     if should_install_kde_config; then
         echo "Detected KDE Plasma. Linking KDE config files..."
         for kde_config in \
