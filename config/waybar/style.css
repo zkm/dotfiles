@@ -12,8 +12,7 @@ window#waybar {
 #custom-gpu_spec,
 #custom-weather,
 #network,
-#pulseaudio,
-#hyprland-workspaces {
+#pulseaudio {
   background: #181825;
   border: 1px solid #313244;
   border-radius: 9px;
@@ -27,8 +26,7 @@ window#waybar {
 #custom-gpu_spec:hover,
 #custom-weather:hover,
 #network:hover,
-#pulseaudio:hover,
-#hyprland-workspaces:hover {
+#pulseaudio:hover {
   background: #1f1f2e;
 }
 
@@ -113,28 +111,6 @@ window#waybar {
 #pulseaudio.muted {
   border-color: #6c7086;
   color: #9399b2;
-}
-
-#hyprland-workspaces {
-  padding: 0 6px;
-}
-
-#hyprland-workspaces button {
-  color: #a6adc8;
-  border: none;
-  border-radius: 6px;
-  padding: 0 7px;
-  margin: 2px;
-}
-
-#hyprland-workspaces button.active {
-  background: #89b4fa;
-  color: #11111b;
-}
-
-#hyprland-workspaces button.urgent {
-  background: #f38ba8;
-  color: #11111b;
 }
 
 tooltip {

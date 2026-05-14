@@ -6,8 +6,6 @@ set -o pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 SHELL_MODE_RESOLVED=""
-HYPRLAND_SETUP_DECIDED=""
-HYPRLAND_SETUP_ENABLED="0"
 
 run_nonfatal() {
     local step_name="$1"
@@ -125,67 +123,6 @@ shell_mode_is() {
 
 should_use_zsh() {
     shell_mode_is "zsh"
-}
-
-hyprland_prompt_decision() {
-    local answer
-    echo "Would you like to install/setup Hyprland? [y/N]"
-    read -r answer
-
-    if bool_is_true "$answer"; then
-        return 0
-    fi
-
-    return 1
-}
-
-decide_hyprland_setup() {
-    if [[ -n "$HYPRLAND_SETUP_DECIDED" ]]; then
-        [[ "$HYPRLAND_SETUP_ENABLED" == "1" ]]
-        return $?
-    fi
-
-    HYPRLAND_SETUP_DECIDED="1"
-
-    if [[ "$(uname)" == "Darwin" ]]; then
-        HYPRLAND_SETUP_ENABLED="0"
-        return 1
-    fi
-
-    if bool_is_true "${INSTALL_HYPRLAND:-}"; then
-        HYPRLAND_SETUP_ENABLED="1"
-        return 0
-    fi
-
-    if bool_is_false "${INSTALL_HYPRLAND:-}"; then
-        HYPRLAND_SETUP_ENABLED="0"
-        return 1
-    fi
-
-    case "${INSTALL_HYPRLAND:-auto}" in
-        auto|AUTO|"")
-            ;;
-        *)
-            echo "Unrecognized INSTALL_HYPRLAND value '${INSTALL_HYPRLAND}'. Use auto, 1, or 0."
-            HYPRLAND_SETUP_ENABLED="0"
-            return 1
-            ;;
-    esac
-
-    if is_interactive_tty; then
-        if hyprland_prompt_decision; then
-            HYPRLAND_SETUP_ENABLED="1"
-            return 0
-        fi
-
-        HYPRLAND_SETUP_ENABLED="0"
-        return 1
-    fi
-
-    echo "Skipping Hyprland setup (non-interactive mode)."
-    echo "To force install, run: INSTALL_HYPRLAND=1 ./setup.sh"
-    HYPRLAND_SETUP_ENABLED="0"
-    return 1
 }
 
 set_default_shell() {
@@ -655,72 +592,6 @@ install_papirus_icon_theme() {
     fi
 }
 
-install_hypr_stack() {
-    # Hyprland stack is Linux-only.
-    if [[ "$(uname)" == "Darwin" ]]; then
-        return 0
-    fi
-
-    echo "Installing Hyprland stack packages..."
-
-    if [[ -x "$(command -v pacman)" ]]; then
-        local pacman_packages=(
-            hyprland hyprpaper hyprlock waybar mako rofi-wayland kitty
-            wl-clipboard grim slurp swappy brightnessctl playerctl
-            pavucontrol network-manager-applet
-        )
-        local pkg
-        for pkg in "${pacman_packages[@]}"; do
-            sudo pacman -S --needed "$pkg" || echo "Skipping unavailable package: $pkg"
-        done
-    elif [[ -x "$(command -v apt-get)" ]]; then
-        # Package availability differs by distro release, so install best-effort.
-        local apt_packages=(
-            hyprland hyprpaper hyprlock waybar mako-notifier rofi-wayland kitty
-            wl-clipboard grim slurp swappy brightnessctl playerctl pavucontrol
-            network-manager-gnome
-        )
-        local pkg
-        sudo apt-get update
-        for pkg in "${apt_packages[@]}"; do
-            sudo apt-get install -y "$pkg" || echo "Skipping unavailable package: $pkg"
-        done
-    elif [[ -x "$(command -v dnf)" ]]; then
-        local dnf_packages=(
-            hyprland hyprpaper hyprlock waybar mako rofi-wayland kitty
-            wl-clipboard grim slurp swappy brightnessctl playerctl pavucontrol
-            network-manager-applet
-        )
-        local pkg
-        for pkg in "${dnf_packages[@]}"; do
-            sudo dnf install -y "$pkg" || echo "Skipping unavailable package: $pkg"
-        done
-    elif [[ -x "$(command -v yum)" ]]; then
-        local yum_packages=(
-            hyprland hyprpaper hyprlock waybar mako rofi-wayland kitty
-            wl-clipboard grim slurp swappy brightnessctl playerctl pavucontrol
-            network-manager-applet
-        )
-        local pkg
-        for pkg in "${yum_packages[@]}"; do
-            sudo yum install -y "$pkg" || echo "Skipping unavailable package: $pkg"
-        done
-    elif [[ -x "$(command -v emerge)" ]]; then
-        local emerge_packages=(
-            gui-wm/hyprland gui-apps/hyprpaper gui-apps/hyprlock gui-apps/waybar
-            x11-misc/mako x11-misc/rofi x11-terms/kitty gui-apps/wl-clipboard
-            media-gfx/grim media-gfx/slurp media-gfx/swappy app-misc/brightnessctl
-            media-sound/playerctl media-sound/pavucontrol gnome-extra/nm-applet
-        )
-        local pkg
-        for pkg in "${emerge_packages[@]}"; do
-            sudo emerge --noreplace "$pkg" || echo "Skipping unavailable package: $pkg"
-        done
-    else
-        echo "Unsupported Linux distribution for Hyprland auto-install."
-    fi
-}
-
 function setup_lang_envs() {
     echo "Shell language env init is managed by repo shell configs. Skipping direct rc file edits."
 }
@@ -815,13 +686,6 @@ function create_dotfiles() {
     fi
     if [[ -f "$repo_root/zlogin" ]]; then
         ln -sfn "$repo_root/zlogin" ~/.zlogin
-    fi
-
-    # Keep repo-managed app config tracked in-repo while preserving standard config paths.
-    if [[ -d "$repo_root/config/hypr" ]] && decide_hyprland_setup; then
-        link_repo_config_path "$repo_root" "hypr"
-    elif [[ -d "$repo_root/config/hypr" ]]; then
-        echo "Skipping Hyprland config links."
     fi
 
     if [[ -d "$repo_root/config/mako" ]]; then
@@ -957,12 +821,6 @@ else
     fi
 
     run_nonfatal "Install Papirus icon theme" install_papirus_icon_theme
-fi
-
-if decide_hyprland_setup; then
-    run_nonfatal "Install Hyprland stack" install_hypr_stack
-else
-    echo "Skipping Hyprland stack installation."
 fi
 
 function install_fonts() {

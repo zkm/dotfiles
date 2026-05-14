@@ -1,13 +1,7 @@
 {
-  "modules-left": ["hyprland/workspaces"],
+  "modules-left": [],
   "modules-center": ["clock"],
   "modules-right": ["custom/cpu_spec", "custom/gpu_spec", "custom/weather", "network", "pulseaudio"],
-  "hyprland/workspaces": {
-    "format": "{id}",
-    "all-outputs": true,
-    "active-only": false,
-    "on-click": "activate"
-  },
   "clock": {
     "format": "{:%H:%M:%S}\n{:%a %m/%d/%y}",
     "format-alt": "{:%a %b %d}\n{:%H:%M}",

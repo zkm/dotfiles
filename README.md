@@ -5,8 +5,6 @@ Personal dotfiles for Linux, mainly Arch, and macOS.
 Includes config for Bash, Zsh, Git, tmux, kitty, KDE/GTK theming, OpenRGB, REAPER, and related tools.
 
 Neovim configuration now lives in a separate repository: [zkm/nvim-config](https://github.com/zkm/nvim-config).
-
-Hyprland installs also include a basic Hyprlock setup, with `SUPER+L` bound to lock the screen.
 Prompt setup defaults to Starship for both bash and zsh.
 
 ## ⚙️ Install
@@ -56,7 +54,6 @@ Back up anything important first.
 4. Symlinks repo-managed dotfiles into `$HOME`.
    - Includes bash files (`~/.bashrc`, `~/.bash_profile`, `~/.bash_aliases`) and zsh files.
    - Includes app config such as `~/.config/kitty` and `~/.config/starship.toml` when present in-repo.
-   - Links `~/.config/hypr` only when Hyprland setup is enabled.
    - Links KDE Plasma config files only when setup is run in a KDE session, or when overridden with `INSTALL_KDE_CONFIG=1`.
 5. Syncs custom desktop assets when present:
    - `Icons/dark-side` -> `~/.local/share/icons/dark-side`
@@ -73,7 +70,6 @@ Back up anything important first.
    - macOS: installs Docker Desktop (Homebrew cask)
    - Linux: installs Docker engine + compose plugin/package, enables the service, and adds your user to the `docker` group
 14. Optionally installs OpenRGB and REAPER.
-15. Optionally installs Hyprland stack with a prompt in interactive terminals.
 
 ## Useful shortcuts
 
@@ -203,23 +199,6 @@ Notes:
 - macOS: tries the Homebrew casks `openrgb` and `reaper`.
 - Arch: installs `openrgb` via pacman; tries `reaper` via `yay` (AUR).
 - apt/dnf/yum systems: try to install `openrgb`; REAPER is usually installed manually.
-
-## 🧱 Optional: Hyprland install/setup
-
-Hyprland setup is opt-in by default.
-
-- Interactive terminal: setup asks `Would you like to install/setup Hyprland? [y/N]`.
-- Non-interactive terminal: setup skips Hyprland to avoid hangs and prints a tip.
-
-Use environment overrides:
-
-```sh
-# Force install and link Hyprland config
-INSTALL_HYPRLAND=1 ./setup.sh
-
-# Force skip and do not link Hyprland config
-INSTALL_HYPRLAND=0 ./setup.sh
-```
 
 ## 🖥️ Platform notes
 
