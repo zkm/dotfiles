@@ -3,8 +3,8 @@
 theme = Monokai Pro
 
 font-family = Meslo LGS Nerd Font Mono
-font-size = 16
-gtk-titlebar = false
+font-size = 12
+gtk-titlebar = true
 
 cursor-style = block
 cursor-text = white
