@@ -255,8 +255,8 @@ Notes:
 
 ## 🧪 Tested on
 
-- Arch Linux + KDE Plasma
-- Fedora Linux Asahi Remix 43 (Workstation Edition, GNOME 49.5, Mutter/Wayland, aarch64)
+- Arch Linux + KDE Plasma 6.6.5
+- Fedora Linux 44 + GNOME 50.1
 - Gentoo + KDE Plasma
 - Ubuntu + GNOME
 - Linux Mint + Cinnamon
