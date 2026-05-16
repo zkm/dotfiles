@@ -13,33 +13,30 @@
         {
             "type": "custom", // HardwareStart
             // {#1} is equivalent to `\u001b[1m`. {#} is equivalent to `\u001b[m`
-            "format": "┌{$1} {#1}Hardware Information{#} {$1}┐"
+            "format": "┌{$1}{#1}Hardware Information{#}{$1}┐"
         },
-        "host",
-        "cpu",
-        "gpu",
+        { "type": "host"},
+        { "type": "cpu"},
+        { "type": "gpu"},
         {
             "type": "command",
             "key": "Disk",
+            "keyIcon": "󰋊",
             "text": "df -B1 -x tmpfs -x devtmpfs -x squashfs -x overlay --output=size,used | awk 'NR>1 {s+=$1; u+=$2} END {if(s>0) printf \"%.2f TiB / %.2f TiB (%.0f%%)\", u/1099511627776, s/1099511627776, (u/s)*100; else print \"n/a\"}'"
         },
-        "memory",
-        "swap",
-        "display",
-        "brightness",
+        { "type": "memory"},
+        { "type": "display", "keyIcon": "󰍹" },
         {
             "type": "command",
             "key": "Battery",
             "keyIcon": "",
             "text": "bat=$(ls -d /sys/class/power_supply/BAT* 2>/dev/null | head -n1); if [ -n \"$bat\" ] && [ -r \"$bat/capacity\" ]; then cap=$(cat \"$bat/capacity\" 2>/dev/null); status=$(cat \"$bat/status\" 2>/dev/null); if [ -n \"$cap\" ]; then if [ -n \"$status\" ]; then printf '%s%% [%s]' \"$cap\" \"$status\"; else printf '%s%%' \"$cap\"; fi; fi; fi"
         },
-        "poweradapter",
-        "bluetooth",
-        "sound",
-        "gamepad",
+        { "type": "bluetooth", "keyIcon": "" },
+        { "type": "sound", "keyIcon": "" },
         {
             "type": "custom", // SoftwareStart
-            "format": "├{$1} {#1}Software Information{#} {$1}┤"
+            "format": "├{$1}{#1}Software Information{#}{$1}┤"
         },
         {
             "type": "title",
@@ -47,19 +44,20 @@
             "key": "Title", // Title module has no key by default, so that icon is not displayed
             "format": "{user-name}@{host-name}"
         },
-        "os",
-        "kernel",
-        "lm",
-        "de",
-        "wm",
-        "shell",
-        "terminal",
-        "terminalfont",
-        "theme",
-        "icons",
-        "packages",
-        "uptime",
-        "media",
+        { "type": "os"},
+        { "type": "kernel"},
+        { "type": "lm"},
+        { "type": "de", "keyIcon": "" },
+        { "type": "wm", "keyIcon": "" },
+        { "type": "shell", "keyIcon": "" },
+        { "type": "terminal", "keyIcon": "" },
+        { "type": "theme", "keyIcon": "" },
+        { "type": "icons", "keyIcon": "" },
+        { "type": "packages"},
+        {
+            "type": "custom", // SystemStatusStart
+            "format": "├{$1}{#1}System & Network{#}{$1}┤"
+        },
         {
             "type": "localip",
             "compact": true
@@ -74,10 +72,22 @@
             "keyIcon": "",
             "text": "ssid=$(nmcli -t -f active,ssid dev wifi 2>/dev/null | awk -F: '$1==\"yes\"{print $2; exit}'); if [ -n \"$ssid\" ]; then printf '%s' \"$ssid\"; else iwgetid -r 2>/dev/null; fi"
         },
-        "locale",
+        { "type": "uptime", "keyIcon": "" },
+        {
+            "type": "command",
+            "key": "OS Age",
+            "keyIcon": "",
+            "text": "birth_date=$(stat / --format='%w' 2>/dev/null | cut -d' ' -f1-2); if [ -n \"$birth_date\" ]; then birth_timestamp=$(date -d \"$birth_date\" +%s 2>/dev/null); if [ -n \"$birth_timestamp\" ]; then now=$(date +%s); age_seconds=$((now - birth_timestamp)); age_days=$((age_seconds / 86400)); if [ $age_days -lt 1 ]; then echo 'Less than 1 day'; elif [ $age_days -lt 365 ]; then echo \"$age_days days\"; else years=$((age_days / 365)); months=$(((age_days % 365) / 30)); if [ $months -eq 0 ]; then echo \"$years years\"; else echo \"$years years, $months months\"; fi; fi; fi; fi"
+        },
+        {
+            "type": "command",
+            "key": "Datetime",
+            "keyIcon": "",
+            "text": "date '+%Y-%m-%d %H:%M:%S'"
+        },
         {
             "type": "custom", // InformationEnd
-            "format": "└{$1}──────────────────────{$1}┘"
+            "format": "└{$1}{$1}{$1}┘"
         },
         {
             "type": "colors",
