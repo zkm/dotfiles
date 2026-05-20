@@ -445,6 +445,316 @@ alias gd="git diff"
 # Navidrome sync operations
 alias sync-local-music='rsync -avh --progress ~/Music/ /mnt/zombie/navidrome/Music/ | tee ~/syncmusic.log'
 alias naviscan='docker restart navidrome && sleep 5 && docker exec navidrome /app/navidrome scan'
+alias naviscan-server="ssh do-navipi 'docker restart navidrome && sleep 5 && docker exec navidrome /app/navidrome scan'"
+alias naviscan-full-server="ssh do-navipi 'docker exec navidrome /app/navidrome scan --full'"
+
+# Remove duplicate MP3s where FLAC versions exist (FLAC-primary with MP3 fallback)
+# Logs saved to: ~/.local/state/navidrome/cleanup-*.log
+# Handles different naming conventions (e.g., "01 - Title.mp3" vs "01 Title.flac")
+# Usage: navidrome-cleanup-duplicates [path] [--force]
+# Examples:
+#   navidrome-cleanup-duplicates                    # Dry-run: zombie backup
+#   navidrome-cleanup-duplicates --force            # Delete: zombie backup
+#   navidrome-cleanup-duplicates do-navipi:/media/zkm/NapsterX/Music  # Dry-run: remote server
+#   navidrome-cleanup-duplicates do-navipi:/media/zkm/NapsterX/Music --force  # Delete: remote server
+navidrome-cleanup-duplicates() {
+  local music_dir="${1:-/mnt/zombie/navidrome/Music}"
+  local dry_run=true
+  local force_flag="${2:-}"
+  local log_dir="${XDG_STATE_HOME:-$HOME/.local/state}/navidrome"
+  local timestamp=$(date +%Y%m%d_%H%M%S)
+  local log_file="$log_dir/cleanup-$timestamp.log"
+  
+  # Create log directory
+  mkdir -p "$log_dir" 2>/dev/null
+  
+  # Check for --force flag in second position
+  if [ "${2:-}" = "--force" ]; then
+    dry_run=false
+    force_flag="--force"
+  elif [ "${1:-}" = "--force" ]; then
+    dry_run=false
+    force_flag="--force"
+  fi
+  
+  # Helper function to normalize filenames for comparison
+  # Strips track numbers and extra dashes/spaces to match similar files
+  normalize_name() {
+    local name="$1"
+    # Remove leading track numbers (e.g., "01 - " or "01 ")
+    name=$(echo "$name" | sed -E 's/^[0-9]+[[:space:]]*[-–—]?[[:space:]]*//i')
+    # Convert to lowercase for comparison
+    echo "$name" | tr '[:upper:]' '[:lower:]'
+  }
+  
+  {
+    if [ "$dry_run" = false ]; then
+      echo "🔥 Running in FORCE mode - files will be deleted"
+    else
+      echo "🔍 Running in DRY-RUN mode - no files will be deleted"
+      if [[ "$music_dir" == *":"* ]]; then
+        echo "   Use 'navidrome-cleanup-duplicates \"$music_dir\" --force' to actually delete files"
+      else
+        echo "   Use 'navidrome-cleanup-duplicates --force' to actually delete files"
+      fi
+    fi
+    
+    # Check if it's a remote path
+    if [[ "$music_dir" == *":"* ]]; then
+      # Remote path (SSH)
+      local remote_host="${music_dir%:*}"
+      local remote_path="${music_dir#*:}"
+      
+      echo -e "\n📊 Scanning remote server '$remote_host' for duplicate MP3s with FLAC versions...\n"
+      
+      # Use SSH to find duplicates on remote server with improved matching
+      ssh "$remote_host" "
+        normalize_name() {
+          local name=\"\$1\"
+          name=\$(echo \"\$name\" | sed -E 's/^[0-9]+[[:space:]]*[-–—]?[[:space:]]*//i')
+          echo \"\$name\" | tr '[:upper:]' '[:lower:]'
+        }
+        
+        find '$remote_path' -maxdepth 3 -type f -iname '*.mp3' | while read -r mp3_file; do
+          mp3_base=\"\${mp3_file%.*}\"
+          mp3_name=\$(normalize_name \"\$(basename \"\$mp3_base\")\")
+          
+          # Look for matching FLAC in same directory
+          mp3_dir=\"\$(dirname \"\$mp3_file\")\"
+          
+          found_flac=false
+          while IFS= read -r flac_file; do
+            flac_base=\"\${flac_file%.*}\"
+            flac_name=\$(normalize_name \"\$(basename \"\$flac_base\")\")
+            
+            if [ \"\$mp3_name\" = \"\$flac_name\" ]; then
+              found_flac=true
+              break
+            fi
+          done < <(find \"\$mp3_dir\" -maxdepth 1 -type f -iname '*.flac')
+          
+          if [ \"\$found_flac\" = true ]; then
+            size=\$(du -h \"\$mp3_file\" | cut -f1)
+            rel_path=\"\${mp3_file#$remote_path/}\"
+            echo \"🗑️  Would delete: \$rel_path (\$size)\"
+            
+            if [ \"$dry_run\" = false ]; then
+              rm -f \"\$mp3_file\"
+              echo \"   ✅ Deleted\"
+            fi
+          fi
+        done
+      "
+    else
+      # Local path
+      [ ! -d "$music_dir" ] && echo "❌ Music directory not found: $music_dir" && return 1
+      
+      echo -e "\n📊 Scanning for duplicate MP3s with FLAC versions...\n"
+      
+      # Find all MP3 files and check if FLAC equivalent exists (with flexible matching)
+      find "$music_dir" -maxdepth 3 -type f -iname "*.mp3" | while read -r mp3_file; do
+        mp3_base="${mp3_file%.*}"
+        mp3_name=$(normalize_name "$(basename "$mp3_base")")
+        
+        # Look for matching FLAC in same directory
+        mp3_dir="$(dirname "$mp3_file")"
+        found_flac=false
+        
+        for flac_file in "$mp3_dir"/*.flac; do
+          [ ! -f "$flac_file" ] && continue
+          flac_base="${flac_file%.*}"
+          flac_name=$(normalize_name "$(basename "$flac_base")")
+          
+          if [ "$mp3_name" = "$flac_name" ]; then
+            found_flac=true
+            break
+          fi
+        done
+        
+        if [ "$found_flac" = true ]; then
+          local size=$(du -h "$mp3_file" | cut -f1)
+          local rel_path="${mp3_file#$music_dir/}"
+          
+          echo "🗑️  Would delete: $rel_path ($size)"
+          
+          if [ "$dry_run" = false ]; then
+            rm -f "$mp3_file"
+            echo "   ✅ Deleted"
+          fi
+        fi
+      done
+    fi
+    
+    echo -e "\n📈 Summary: Scan complete"
+  } | tee "$log_file"
+  
+  echo -e "\n📝 Full report saved: $log_file"
+}
+
+alias navi-cleanup='navidrome-cleanup-duplicates'
+alias navi-cleanup-force='navidrome-cleanup-duplicates --force'
+alias navi-cleanup-server='navidrome-cleanup-duplicates "do-navipi:/media/zkm/NapsterX/Music"'
+alias navi-cleanup-server-force='navidrome-cleanup-duplicates "do-navipi:/media/zkm/NapsterX/Music" --force'
+alias navi-logs='ls -lh ${XDG_STATE_HOME:-$HOME/.local/state}/navidrome/cleanup-*.log | tail -10'
+alias navi-logs-latest='cat $(ls -t ${XDG_STATE_HOME:-$HOME/.local/state}/navidrome/cleanup-*.log 2>/dev/null | head -1)'
+
+# Rebuild album .m3u playlists so imported Navidrome playlists match actual files.
+# Logs saved to: ~/.local/state/navidrome/playlist-rebuild-*.log
+# Usage: navidrome-rebuild-playlists [path] [--force]
+# Examples:
+#   navidrome-rebuild-playlists
+#   navidrome-rebuild-playlists --force
+#   navidrome-rebuild-playlists do-navipi:/media/zkm/NapsterX/Music --force
+navidrome-rebuild-playlists() {
+  local music_dir="${1:-/mnt/zombie/navidrome/Music}"
+  local dry_run=true
+  local log_dir="${XDG_STATE_HOME:-$HOME/.local/state}/navidrome"
+  local timestamp=$(date +%Y%m%d_%H%M%S)
+  local log_file="$log_dir/playlist-rebuild-$timestamp.log"
+
+  mkdir -p "$log_dir" 2>/dev/null
+
+  if [ "${2:-}" = "--force" ]; then
+    dry_run=false
+  elif [ "${1:-}" = "--force" ]; then
+    dry_run=false
+    music_dir="/mnt/zombie/navidrome/Music"
+  fi
+
+  {
+    if [ "$dry_run" = false ]; then
+      echo "🔥 Running in FORCE mode - playlist files will be rewritten"
+    else
+      echo "🔍 Running in DRY-RUN mode - playlist files will not be changed"
+      if [[ "$music_dir" == *":"* ]]; then
+        echo "   Use 'navidrome-rebuild-playlists \"$music_dir\" --force' to rewrite playlists"
+      else
+        echo "   Use 'navidrome-rebuild-playlists --force' to rewrite playlists"
+      fi
+    fi
+
+    if [[ "$music_dir" == *":"* ]]; then
+      local remote_host="${music_dir%:*}"
+      local remote_path="${music_dir#*:}"
+
+      echo -e "\n🎼 Scanning remote server '$remote_host' for .m3u playlists to rebuild...\n"
+
+      ssh "$remote_host" "
+        timestamp='$timestamp'
+        dry_run='$dry_run'
+        rebuilt=0
+        skipped=0
+        find '$remote_path' -type f -iname '*.m3u' | while read -r playlist; do
+          playlist_dir=\"\$(dirname \"\$playlist\")\"
+          rel_path=\"\${playlist#$remote_path/}\"
+          tmp_file=\"\$playlist.tmp.\$$\"
+          track_count=\$(find \"\$playlist_dir\" -maxdepth 1 -type f \\( -iname '*.flac' -o -iname '*.mp3' -o -iname '*.m4a' -o -iname '*.ogg' -o -iname '*.opus' -o -iname '*.aac' -o -iname '*.wav' -o -iname '*.ape' \\) -printf '%f\\n' | LC_ALL=C sort | wc -l)
+
+          if [ \"\$track_count\" -eq 0 ]; then
+            echo \"⏭️  Skipping: \$rel_path (no audio files in playlist directory)\"
+            skipped=\$((skipped + 1))
+            continue
+          fi
+
+          if [ \"\$dry_run\" = true ]; then
+            echo \"📝 Would rebuild: \$rel_path (\$track_count tracks)\"
+            rebuilt=\$((rebuilt + 1))
+            continue
+          fi
+
+          backup_file=\"\$playlist.bak.\$timestamp\"
+          cp \"\$playlist\" \"\$backup_file\"
+          find \"\$playlist_dir\" -maxdepth 1 -type f \\( -iname '*.flac' -o -iname '*.mp3' -o -iname '*.m4a' -o -iname '*.ogg' -o -iname '*.opus' -o -iname '*.aac' -o -iname '*.wav' -o -iname '*.ape' \\) -printf '%f\\n' | LC_ALL=C sort > \"\$tmp_file\"
+          mv \"\$tmp_file\" \"\$playlist\"
+          echo \"✅ Rebuilt: \$rel_path (\$track_count tracks, backup: \$(basename \"\$backup_file\"))\"
+          rebuilt=\$((rebuilt + 1))
+        done
+
+        echo
+        echo \"📈 Summary: processed \$rebuilt playlists, skipped \$skipped\"
+      "
+    else
+      [ ! -d "$music_dir" ] && echo "❌ Music directory not found: $music_dir" && return 1
+
+      echo -e "\n🎼 Scanning for .m3u playlists to rebuild...\n"
+
+      local rebuilt=0
+      local skipped=0
+      find "$music_dir" -type f -iname "*.m3u" | while read -r playlist; do
+        local playlist_dir="$(dirname "$playlist")"
+        local rel_path="${playlist#$music_dir/}"
+        local tmp_file="$playlist.tmp.$$"
+        local track_count
+        track_count=$(find "$playlist_dir" -maxdepth 1 -type f \( -iname "*.flac" -o -iname "*.mp3" -o -iname "*.m4a" -o -iname "*.ogg" -o -iname "*.opus" -o -iname "*.aac" -o -iname "*.wav" -o -iname "*.ape" \) -printf '%f\n' | LC_ALL=C sort | wc -l)
+
+        if [ "$track_count" -eq 0 ]; then
+          echo "⏭️  Skipping: $rel_path (no audio files in playlist directory)"
+          skipped=$((skipped + 1))
+          continue
+        fi
+
+        if [ "$dry_run" = true ]; then
+          echo "📝 Would rebuild: $rel_path ($track_count tracks)"
+          rebuilt=$((rebuilt + 1))
+          continue
+        fi
+
+        local backup_file="$playlist.bak.$timestamp"
+        cp "$playlist" "$backup_file"
+        find "$playlist_dir" -maxdepth 1 -type f \( -iname "*.flac" -o -iname "*.mp3" -o -iname "*.m4a" -o -iname "*.ogg" -o -iname "*.opus" -o -iname "*.aac" -o -iname "*.wav" -o -iname "*.ape" \) -printf '%f\n' | LC_ALL=C sort > "$tmp_file"
+        mv "$tmp_file" "$playlist"
+        echo "✅ Rebuilt: $rel_path ($track_count tracks, backup: $(basename "$backup_file"))"
+        rebuilt=$((rebuilt + 1))
+      done
+
+      echo -e "\n📈 Summary: processed $rebuilt playlists, skipped $skipped"
+    fi
+  } | tee "$log_file"
+
+  echo -e "\n📝 Full report saved: $log_file"
+}
+
+alias navi-playlists-rebuild='navidrome-rebuild-playlists'
+alias navi-playlists-rebuild-force='navidrome-rebuild-playlists --force'
+alias navi-playlists-rebuild-server='navidrome-rebuild-playlists "do-navipi:/media/zkm/NapsterX/Music"'
+alias navi-playlists-rebuild-server-force='navidrome-rebuild-playlists "do-navipi:/media/zkm/NapsterX/Music" --force'
+
+# List album directories that contain MP3s but no FLAC files (upgrade candidates)
+# Usage: navi-mp3-only [path]
+# Examples:
+#   navi-mp3-only                                           # Local zombie backup
+#   navi-mp3-only "do-navipi:/media/zkm/NapsterX/Music"    # Remote server
+navi-mp3-only() {
+  local music_dir="${1:-/mnt/zombie/navidrome/Music}"
+
+  if [[ "$music_dir" == *":"* ]]; then
+    local remote_host="${music_dir%:*}"
+    local remote_path="${music_dir#*:}"
+    echo "🔍 MP3-only albums on '$remote_host' (no FLAC present):\n"
+    ssh "$remote_host" "
+      find '$remote_path' -mindepth 1 -maxdepth 3 -type d | while read -r dir; do
+        mp3_count=\$(find \"\$dir\" -maxdepth 1 -type f -iname '*.mp3' | wc -l)
+        flac_count=\$(find \"\$dir\" -maxdepth 1 -type f -iname '*.flac' | wc -l)
+        if [ \"\$mp3_count\" -gt 0 ] && [ \"\$flac_count\" -eq 0 ]; then
+          echo \"\${dir#$remote_path/} (\$mp3_count tracks)\"
+        fi
+      done | sort
+    "
+  else
+    [ ! -d "$music_dir" ] && echo "❌ Music directory not found: $music_dir" && return 1
+    echo "🔍 MP3-only albums (no FLAC present):\n"
+    find "$music_dir" -mindepth 1 -maxdepth 3 -type d | while read -r dir; do
+      local mp3_count flac_count
+      mp3_count=$(find "$dir" -maxdepth 1 -type f -iname "*.mp3" | wc -l)
+      flac_count=$(find "$dir" -maxdepth 1 -type f -iname "*.flac" | wc -l)
+      if [ "$mp3_count" -gt 0 ] && [ "$flac_count" -eq 0 ]; then
+        echo "${dir#$music_dir/} ($mp3_count tracks)"
+      fi
+    done | sort
+  fi
+}
+
+alias navi-mp3-only-server='navi-mp3-only "do-navipi:/media/zkm/NapsterX/Music"'
 
 # iPod sync operations
 #alias syncipod='rsync -avh --progress --ignore-existing /mnt/zombie/navidrome/Music_iPod/ /run/media/$USER/IPOD/Music/'
