@@ -762,8 +762,9 @@ alias syncipod='rsync -avh --progress --ignore-existing --delete /mnt/zombie/nav
 
 
 # Remote music sync operations  
-alias dryrun-music='rsync -avh --progress --delete --dry-run /mnt/zombie/navidrome/Music/ do-navipi:/media/zkm/NapsterX/Music/'
-alias sync-music='rsync -avh --progress --delete /mnt/zombie/navidrome/Music/ do-navipi:/media/zkm/NapsterX/Music/'
+# alias dryrun-music='rsync -avh --progress --delete --dry-run /mnt/zombie/navidrome/Music/ do-navipi:/media/zkm/NapsterX/Music/'
+alias dryrun-music='rsync -avh --progress --delete --dry-run /mnt/zombie/NapsterX/Music/ do-navipi:/media/zkm/NapsterX/Music/'
+alias sync-music='rsync -avh --progress --delete /mnt/zombie/NapsterX/Music/ do-navipi:/media/zkm/NapsterX/Music/'
 
 # ==============================
 # 🐳 Docker
