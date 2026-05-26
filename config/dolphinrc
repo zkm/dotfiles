@@ -5,7 +5,7 @@ DirHistory[$e]=$HOME/Documents/work/GDIT/Luna/sanshal/
 
 [General]
 Version=202
-ViewPropsTimestamp=2025,3,12,20,11,23.778
+ViewPropsTimestamp=2026,5,26,11,28,5.881
 
 [IconsMode]
 IconSize=112
@@ -13,6 +13,9 @@ IconSize=112
 [KFileDialog Settings]
 Places Icons Auto-resize=false
 Places Icons Static Size=22
+
+[MainWindow]
+MenuBar=Disabled
 
 [PreviewSettings]
 Plugins=appimagethumbnail,audiothumbnail,comicbookthumbnail,cursorthumbnail,directorythumbnail,djvuthumbnail,ebookthumbnail,exrthumbnail,imagethumbnail,jpegthumbnail,kraorathumbnail,opendocumentthumbnail,svgthumbnail,windowsexethumbnail,windowsimagethumbnail,mltpreview,fontthumbnail,ffmpegthumbs,evince,gdk-pixbuf-thumbnailer

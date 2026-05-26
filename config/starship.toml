@@ -2,7 +2,9 @@ add_newline = true
 scan_timeout = 30
 command_timeout = 5000
 format = """
-$username$hostname$ssh_connection$directory$git_branch$git_status$git_metrics$hg_branch$python$nodejs$rust$golang$java$package$helm$kubectl$terraform$aws$gcloud$context$env$custom$line_break$character"""
+[╭─](bold #565f89) $username$hostname$ssh_connection$directory$git_branch$git_status
+[╰─](bold #565f89) $character"""
+right_format = "$python$nodejs$rust$golang$java$package$helm$kubectl$terraform$aws$gcloud$context$env$custom$cmd_duration"
 
 [character]
 success_symbol = "[❯](bold #9ece6a)"

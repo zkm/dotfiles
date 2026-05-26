@@ -10,8 +10,8 @@ if [[ -o interactive ]] && command -v fastfetch >/dev/null 2>&1; then
 fi
 
 # Prompt backend selector.
-# Set PROMPT_BACKEND=starship to force Starship.
-PROMPT_BACKEND="${PROMPT_BACKEND:-p10k}"
+# Set PROMPT_BACKEND=p10k to opt into Powerlevel10k.
+PROMPT_BACKEND="${PROMPT_BACKEND:-starship}"
 
 if [[ "$PROMPT_BACKEND" == "p10k" ]]; then
   [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]] && source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -23,6 +23,14 @@ if [[ "$PROMPT_BACKEND" == "p10k" ]]; then
   fi
 elif command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
+elif [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+  [[ -f ~/.powerlevel10k/powerlevel10k.zsh-theme ]] && source ~/.powerlevel10k/powerlevel10k.zsh-theme
+  if [[ -f ~/.p10k.zsh ]]; then
+    source ~/.p10k.zsh
+  elif [[ -f ~/.dotfiles/p10k.zsh ]]; then
+    source ~/.dotfiles/p10k.zsh
+  fi
 fi
 
 # ==============================
@@ -95,6 +103,12 @@ HISTFILE=~/.zsh_history
 # Shell options
 setopt correct         # Auto-correct minor typos in commands
 setopt nocaseglob      # Enable case-insensitive globbing
+
+# If the system does not have `less`, make git use a non-interactive pager.
+if ! command -v less >/dev/null 2>&1; then
+  export GIT_PAGER=cat
+fi
+
 autoload -Uz compinit
 zcompdump_file="${XDG_CACHE_HOME:-$HOME/.cache}/zcompdump-$ZSH_VERSION"
 zcompdump_mtime="$(stat -c %Y "$zcompdump_file" 2>/dev/null || echo 0)"
