@@ -158,8 +158,6 @@ main() {
         dolphinrc \
         kcminputrc \
         kdeglobals \
-        kwinrc \
-        mimeapps.list \
         plasma-org.kde.plasma.desktop-appletsrc \
         plasmarc; do
         remove_if_symlink_to_repo "$HOME/.config/$kde_config"

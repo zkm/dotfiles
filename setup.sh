@@ -718,8 +718,6 @@ function create_dotfiles() {
             dolphinrc \
             kcminputrc \
             kdeglobals \
-            kwinrc \
-            mimeapps.list \
             plasma-org.kde.plasma.desktop-appletsrc \
             plasmanotifyrc \
             plasmarc; do
