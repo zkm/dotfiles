@@ -2,9 +2,31 @@ add_newline = true
 scan_timeout = 30
 command_timeout = 5000
 format = """
-[╭─](bold #565f89) $username$hostname$ssh_connection$directory$git_branch$git_status
+[╭─](bold #565f89) $os$username$hostname$directory$git_branch${custom.git_host}$git_status$fill$cmd_duration
 [╰─](bold #565f89) $character"""
-right_format = "$python$nodejs$rust$golang$java$package$helm$kubectl$terraform$aws$gcloud$context$env$custom$cmd_duration"
+right_format = "$jobs$python$nodejs$rust$golang$java$package$helm$kubernetes$terraform$aws$gcloud$time$battery${custom.banger}${env_var.CHAMELEON}"
+
+[fill]
+symbol = " "
+
+[os]
+disabled = false
+format = "[$symbol ]($style)"
+style = "bold #7aa2f7"
+
+[os.symbols]
+AlmaLinux = ""
+Arch = ""
+Debian = ""
+Fedora = ""
+Gentoo = ""
+Linux = ""
+Macos = ""
+NixOS = ""
+openSUSE = ""
+Ubuntu = ""
+Unknown = ""
+Windows = "󰍲"
 
 [character]
 success_symbol = "[❯](bold #9ece6a)"
@@ -16,7 +38,7 @@ vimcmd_visual_symbol = "[❮](bold #bb9af7)"
 
 [cmd_duration]
 min_time = 2000
-format = "took [$duration](bold #7dcfff) "
+format = "󱎫 [$duration](bold #7dcfff) "
 disabled = false
 
 [directory]
@@ -24,55 +46,72 @@ home_symbol = "~"
 truncation_length = 4
 truncation_symbol = "…/"
 style = "bold #7aa2f7"
-format = "[$path]($style)[$read_only]($read_only_style)[$enter]($transition_style) "
+read_only = " 󰌾"
+format = "[$path]($style)[$read_only]($read_only_style) "
 
 [git_branch]
 format = "on [$symbol$branch]($style) "
-symbol = " "
+symbol = " "
 style = "bold #e0af68"
 truncation_symbol = ""
 
 [git_metrics]
 disabled = true
 format = "([+$added](green) /([~$deleted](red)))"
-style = "#e0af68"
 
 [git_status]
 format = '([\[$all_status$ahead_behind\]]($style) )'
 style = "#f7768e"
+conflicted = "󰞇 "
+ahead = "⇡"
+behind = "⇣"
+diverged = "⇕"
+up_to_date = ""
+untracked = "󰞋 "
+stashed = "󰏗 "
+modified = "󰷫 "
+staged = "󰄬 "
+renamed = "󰑕 "
+deleted = "󰆴 "
+
+[custom.git_host]
+command = "url=\"$(git remote get-url origin 2>/dev/null || true)\"; case \"$url\" in *github* ) echo \"\" ;; *gitlab* ) echo \"\" ;; *gitea*|*forgejo*|*localhost*|*127.0.0.1*|*.local*|*.lan* ) echo \"󰟓\" ;; * ) echo \"\" ;; esac"
+when = "git rev-parse --is-inside-work-tree >/dev/null 2>&1"
+require_repo = true
+format = "[$output ]($style)"
+style = "bold #e0af68"
 
 [golang]
 format = "via [$symbol($version )]($style)"
-symbol = " "
+symbol = " "
 style = "#7dcfff"
 
 [helm]
 format = "via [$symbol$version ]($style)"
-symbol = ""
+symbol = "⎈ "
 style = "#7aa2f7"
 
 [hostname]
 ssh_only = false
 format = "[$ssh_symbol](dimmed #7aa2f7)[$hostname](dimmed #7aa2f7) "
 style = "dimmed #7aa2f7"
-ssh_symbol = "ssh "
+ssh_symbol = "󰣀 "
 trim_at = ".local"
 
 [java]
 format = "via [$symbol($version )]($style)"
-symbol = ""
+symbol = " "
 style = "bold #bb9af7"
 
 [jobs]
 format = "[$symbol$count]($style)"
-symbol = " "
+symbol = " "
 style = "#9ece6a"
 number_threshold = 1
-color = "#9ece6a"
 
 [kubernetes]
 format = "on [$symbol$context]($style) "
-symbol = ""
+symbol = "☸ "
 style = "#7aa2f7"
 disabled = false
 
@@ -81,25 +120,25 @@ disabled = false
 
 [nodejs]
 format = "via [$symbol($version )]($style)"
-symbol = ""
+symbol = " "
 style = "#9ece6a"
 detect_files = ["package.json", ".node-version"]
 
 [package]
 format = "via [$symbol$version]($style)"
-symbol = "📦 "
+symbol = "󰏗 "
 style = "#d4a0e0"
 
 [python]
 format = "via [$symbol($version )]($style)"
-symbol = ""
+symbol = " "
 style = "#9ece6a"
 python_binary = ["python", "python3", "py"]
 detect_files = ["pyproject.toml", "Pipfile", ".python-version", "requirements.txt", "setup.py", "__init__.py"]
 
 [rust]
 format = "via [$symbol($version )]($style)"
-symbol = ""
+symbol = " "
 style = "#e0af68"
 
 [shell]
@@ -110,14 +149,13 @@ powershell_indicator = ""
 zsh_indicator = ""
 
 [shlvl]
-max = 3
-symbol = "↕ "
+symbol = "󰜮 "
 disabled = false
 format = "$symbol$shlvl"
 
 [terraform]
 format = "via [$symbol$workspace]($style)"
-symbol = ""
+symbol = "󱁢 "
 style = "#7aa2f7"
 
 [username]
@@ -129,22 +167,35 @@ style_user = "bold #7aa2f7"
 [aws]
 format = 'on [$symbol($profile )(\[$region\] )]($style)'
 style = "#f7768e"
-symbol = "aws "
+symbol = "󰸏 "
 
 [gcloud]
 format = "on [$symbol$account]($style) "
 style = "#7dcfff"
-symbol = "gcloud "
+symbol = "󱇶 "
 
-[env_var]
-variable = "CHAMELEON"
-default = "ignore"
-format = "with [$value]($style) "
+[time]
+disabled = false
+format = "at [󰥔 $time]($style) "
+time_format = "%H:%M"
+style = "bold #bb9af7"
+
+[battery]
+full_symbol = "󰁹 "
+charging_symbol = "󰂄 "
+discharging_symbol = "󰂃 "
+unknown_symbol = "󰁽 "
+empty_symbol = "󰂎 "
+format = "[$symbol$percentage]($style) "
+
+[env_var.CHAMELEON]
+default = ""
+format = "with [󰚩 $value]($style) "
 style = "bold #e0af68"
 
 [custom.banger]
 command = "echo ${BANGERS:-''}"
 when = "true"
-symbol = " "
+symbol = "󱐋 "
 style = "bold #f7768e"
-format = "[$output]($style) "
+format = "[$symbol$output]($style) "
