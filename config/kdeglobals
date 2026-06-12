@@ -133,7 +133,7 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [General]
-BrowserApplication=google-chrome.desktop
+BrowserApplication=brave-browser.desktop
 ColorSchemeHash=2c3f86428c11011a7c64ee1e7f47c274d498ff10
 XftHintStyle=hintslight
 XftSubPixel=none
@@ -154,7 +154,7 @@ Automatically select filename extension=true
 Breadcrumb Navigation=false
 Decoration position=2
 Show Full Path=false
-Show Inline Previews=true
+Show Inline Previews=false
 Show Preview=false
 Show Speedbar=true
 Show hidden files=false

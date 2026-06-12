@@ -1,5 +1,6 @@
 [Applications][brave-browser]
 Seen=true
+ShowPopups=false
 
 [Applications][code]
 Seen=true
@@ -8,6 +9,12 @@ Seen=true
 Seen=true
 
 [Applications][google-chrome]
+Seen=true
+ShowBadges=false
+ShowInHistory=false
+ShowPopups=false
+
+[Applications][org.mozilla.Thunderbird]
 Seen=true
 
 [Applications][signal]
