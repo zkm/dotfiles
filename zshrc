@@ -1,14 +1,38 @@
 # ==============================
-# Shell Prompt Setup
+# 🛠 Custom Environment Variables
 # ==============================
-# Ensure core system binaries are always available, even if PATH was inherited in a bad state.
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
+export HSA_OVERRIDE_GFX_VERSION=10.3.0
+export DRUSH_LAUNCHER_FALLBACK="/srv/http/drupal"
+export PIP_REQUIRE_VIRTUALENV=false
+
+# ==============================
+# 🚀 PATH Configuration
+# ==============================
+# Keep PATH unique and stable across repeated shell loads.
+typeset -U path PATH
+export PYENV_ROOT="$HOME/.pyenv"
+export RBENV_ROOT="$HOME/.rbenv"
+export BUN_INSTALL="$HOME/.bun"
+export NVM_DIR="$HOME/.nvm"
+
+path=(
+  "$HOME/.local/bin"
+  "$HOME/scripts"
+  "$HOME/.config/composer/vendor/bin"
+  "$RBENV_ROOT/bin"
+  "$PYENV_ROOT/bin"
+  "$BUN_INSTALL/bin"
+  $path
+)
 
 # Print system summary before instant prompt to avoid p10k console I/O warnings.
 if [[ -o interactive ]] && command -v fastfetch >/dev/null 2>&1; then
   fastfetch
 fi
 
+# ==============================
+# Shell Prompt Setup
+# ==============================
 # Prompt backend selector.
 # Set PROMPT_BACKEND=p10k to opt into Powerlevel10k.
 PROMPT_BACKEND="${PROMPT_BACKEND:-starship}"
@@ -46,33 +70,6 @@ eval "$(dircolors -b ~/.dotfiles/dircolors)"
 
 alias icat='kitten icat'
 alias icat-clear='kitten icat --clear'
-
-# ==============================
-# 🛠 Custom Environment Variables
-# ==============================
-export HSA_OVERRIDE_GFX_VERSION=10.3.0
-export DRUSH_LAUNCHER_FALLBACK="/srv/http/drupal"
-export PIP_REQUIRE_VIRTUALENV=false
-
-# ==============================
-# 🚀 PATH Configuration
-# ==============================
-# Keep PATH unique and stable across repeated shell loads.
-typeset -U path PATH
-export PYENV_ROOT="$HOME/.pyenv"
-export RBENV_ROOT="$HOME/.rbenv"
-export BUN_INSTALL="$HOME/.bun"
-export NVM_DIR="$HOME/.nvm"
-
-path=(
-  "$HOME/.local/bin"
-  "$HOME/scripts"
-  "$HOME/.config/composer/vendor/bin"
-  "$RBENV_ROOT/bin"
-  "$PYENV_ROOT/bin"
-  "$BUN_INSTALL/bin"
-  $path
-)
 
 # Initialize version managers once per shell to avoid duplicate hook setup on re-source.
 if [[ -z "${__PYENV_INIT_DONE:-}" ]] && command -v pyenv >/dev/null 2>&1; then
