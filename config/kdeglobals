@@ -133,7 +133,7 @@ ForegroundPositive=39,174,96
 ForegroundVisited=155,89,182
 
 [General]
-BrowserApplication=chromium-browser.desktop
+BrowserApplication=brave-browser.desktop
 ColorSchemeHash=9d38eb71ded8ff549da26d57d7cbab9164da243a
 XftHintStyle=hintslight
 XftSubPixel=none
@@ -158,12 +158,12 @@ Show Inline Previews=false
 Show Preview=false
 Show Speedbar=true
 Show hidden files=false
-Sort by=Size
+Sort by=Name
 Sort directories first=true
 Sort hidden files last=false
-Sort reversed=false
+Sort reversed=true
 Speedbar Width=140
-View Style=Simple
+View Style=DetailTree
 
 [KScreen]
 ScreenScaleFactors=DisplayPort-0=1;DisplayPort-1=1;DisplayPort-2=1;HDMI-A-0=1;HDMI-A-1-1=1;DisplayPort-1-3=1;DisplayPort-1-4=1;

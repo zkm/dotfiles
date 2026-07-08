@@ -14,6 +14,9 @@ ShowBadges=false
 ShowInHistory=false
 ShowPopups=false
 
+[Applications][heroic]
+Seen=true
+
 [Applications][org.mozilla.Thunderbird]
 Seen=true
 

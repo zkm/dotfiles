@@ -1,9 +1,19 @@
 {
+    "logo": {
+        "source": "fedora",
+        "color": {
+            "1": "#51A2DA",
+            "2": "white"
+        }
+    },
     "display": {
         "separator": "  ",
         "constants": [
             "─────────────────" // {$1}, used in Custom module
         ],
+        "color": {
+            "keys": "#51A2DA"
+        },
         "key": {
             "type": "icon",
             "paddingLeft": 2
