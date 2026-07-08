@@ -1,18 +1,11 @@
 {
-    "logo": {
-        "source": "fedora",
-        "color": {
-            "1": "#51A2DA",
-            "2": "white"
-        }
-    },
     "display": {
         "separator": "  ",
         "constants": [
             "─────────────────" // {$1}, used in Custom module
         ],
         "color": {
-            "keys": "#51A2DA"
+            "keys": "#1793D1"
         },
         "key": {
             "type": "icon",
