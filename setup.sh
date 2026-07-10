@@ -477,10 +477,12 @@ EOF
 }
 
 # Downloads a self-contained installer script and runs it, skipping if the
-# tool is already on PATH. Extra args are forwarded to the installer script.
+# tool is already on PATH. expected_bin is the binary the installer should
+# produce (installers vary in where they put it, and some don't take a flag
+# to control that); extra args are forwarded to the installer script.
 curl_install_tool() {
-    local tool_name="$1" url="$2"
-    shift 2
+    local tool_name="$1" url="$2" expected_bin="$3"
+    shift 3
 
     if command -v "$tool_name" >/dev/null 2>&1; then
         echo "${tool_name} is already installed. Skipping."
@@ -488,20 +490,18 @@ curl_install_tool() {
     fi
 
     echo "Installing ${tool_name}..."
-
-    local install_dir="$HOME/.local/bin"
-    mkdir -p "$install_dir"
+    mkdir -p "$(dirname "$expected_bin")"
 
     local installer_file
     installer_file="$(mktemp)"
 
     # Check the known install path directly rather than `command -v`: PATH in
-    # this script's own process may not include $install_dir yet even though
-    # the shell rc files (not sourced here) will pick it up on next login.
+    # this script's own process may not include it yet even though the shell
+    # rc files (not sourced here) will pick it up on next login.
     if curl -fsSL "$url" -o "$installer_file" \
         && sh "$installer_file" "$@" \
-        && [[ -x "$install_dir/$tool_name" ]]; then
-        echo "${tool_name} installed to $install_dir"
+        && [[ -x "$expected_bin" ]]; then
+        echo "${tool_name} installed to $(dirname "$expected_bin")"
     else
         echo "Failed to install ${tool_name} automatically."
         echo "Install manually: curl -fsSL $url | sh"
@@ -514,15 +514,19 @@ install_opencode() {
     # macOS installs OpenCode via the Homebrew tap instead.
     [[ "$(uname)" == "Darwin" ]] && return 0
 
-    curl_install_tool opencode "https://opencode.ai/install.sh" -p "$HOME/.local/bin"
+    # The installer hardcodes ~/.opencode/bin (no flag to change it) and, by
+    # default, appends its own PATH export to ~/.zshrc/~/.bashrc. Those are
+    # repo-managed symlinks here and the PATH export is already set up in
+    # zshrc, so skip that with --no-modify-path.
+    curl_install_tool opencode "https://opencode.ai/install" "$HOME/.opencode/bin/opencode" --no-modify-path
 }
 
 install_starship() {
-    curl_install_tool starship "https://starship.rs/install.sh" -y -b "$HOME/.local/bin"
+    curl_install_tool starship "https://starship.rs/install.sh" "$HOME/.local/bin/starship" -y -b "$HOME/.local/bin"
 }
 
 install_mise() {
-    MISE_INSTALL_PATH="$HOME/.local/bin/mise" curl_install_tool mise "https://mise.run"
+    MISE_INSTALL_PATH="$HOME/.local/bin/mise" curl_install_tool mise "https://mise.run" "$HOME/.local/bin/mise"
 }
 
 install_wezterm() {
