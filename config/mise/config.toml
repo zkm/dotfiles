@@ -1,0 +1,6 @@
+[tools]
+awscli = { version = "latest", symlink_bins = "true" }
+claude = "latest"
+gh = "latest"
+glab = { version = "latest", exe = "glab" }
+python = "3.14"

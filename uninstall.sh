@@ -154,6 +154,7 @@ main() {
     remove_if_symlink_to_repo "$HOME/.zlogin"
     remove_if_symlink_to_repo "$HOME/.config/kitty"
     remove_if_symlink_to_repo "$HOME/.config/starship.toml"
+    remove_if_symlink_to_repo "$HOME/.config/mise"
     for kde_config in \
         dolphinrc \
         kcminputrc \
