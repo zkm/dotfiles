@@ -495,9 +495,12 @@ curl_install_tool() {
     local installer_file
     installer_file="$(mktemp)"
 
+    # Check the known install path directly rather than `command -v`: PATH in
+    # this script's own process may not include $install_dir yet even though
+    # the shell rc files (not sourced here) will pick it up on next login.
     if curl -fsSL "$url" -o "$installer_file" \
         && sh "$installer_file" "$@" \
-        && command -v "$tool_name" >/dev/null 2>&1; then
+        && [[ -x "$install_dir/$tool_name" ]]; then
         echo "${tool_name} installed to $install_dir"
     else
         echo "Failed to install ${tool_name} automatically."
