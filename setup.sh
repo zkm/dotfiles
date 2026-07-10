@@ -246,7 +246,7 @@ install_with_pacman() {
         core_packages+=(zsh)
     fi
 
-    sudo pacman -S --needed "${core_packages[@]}" \
+    sudo pacman -S --noconfirm --needed "${core_packages[@]}" \
       bat fd fzf jq zoxide btop
     install_opencode
 }
@@ -261,7 +261,7 @@ install_yay() {
     fi
 
     echo "Installing yay..."
-    sudo pacman -S --needed base-devel git
+    sudo pacman -S --noconfirm --needed base-devel git
 
     local aur_user build_root yay_dir install_cmd
     aur_user="${SUDO_USER:-$(id -un)}"
@@ -543,7 +543,7 @@ install_wezterm() {
     fi
 
     if [[ -x "$(command -v pacman)" ]]; then
-        sudo pacman -S --needed wezterm || true
+        sudo pacman -S --noconfirm --needed wezterm || true
     elif [[ -x "$(command -v apt-get)" ]]; then
         sudo apt-get update
         sudo apt-get install -y wezterm || {
@@ -570,7 +570,7 @@ install_papirus_icon_theme() {
     echo "Installing Papirus icon theme (best effort)..."
 
     if [[ -x "$(command -v pacman)" ]]; then
-        if ! sudo pacman -S --needed papirus-icon-theme; then
+        if ! sudo pacman -S --noconfirm --needed papirus-icon-theme; then
             echo "Skipping unavailable package: papirus-icon-theme"
         fi
     elif [[ -x "$(command -v apt-get)" ]]; then
@@ -899,10 +899,10 @@ function install_browsers() {
 
     if [[ -x "$(command -v pacman)" ]]; then
         # Arch official repos provide Firefox + Chromium. Google Chrome is in AUR.
-        sudo pacman -S --needed firefox chromium
+        sudo pacman -S --noconfirm --needed firefox chromium
         install_yay
         if [[ -x "$(command -v yay)" ]]; then
-            yay -S --needed google-chrome || true
+            yay -S --noconfirm --needed google-chrome || true
         fi
     elif [[ -x "$(command -v apt-get)" ]]; then
         sudo apt-get update
@@ -936,7 +936,7 @@ function install_vscode() {
     if [[ -x "$(command -v pacman)" ]]; then
         install_yay
         if [[ -x "$(command -v yay)" ]]; then
-            yay -S --needed visual-studio-code-bin || true
+            yay -S --noconfirm --needed visual-studio-code-bin || true
         else
             echo "Could not install yay automatically. Install Visual Studio Code manually with: yay -S visual-studio-code-bin"
         fi
@@ -983,7 +983,7 @@ function install_docker() {
     fi
 
     if [[ -x "$(command -v pacman)" ]]; then
-        sudo pacman -S --needed docker docker-compose
+        sudo pacman -S --noconfirm --needed docker docker-compose
     elif [[ -x "$(command -v apt-get)" ]]; then
         sudo apt-get update
         sudo apt-get install -y docker.io docker-compose-plugin || sudo apt-get install -y docker.io docker-compose || true
@@ -1140,7 +1140,7 @@ function install_media_tools() {
                 echo "OpenRGB is already installed. Skipping."
             else
                 set -e
-                sudo pacman -S --needed openrgb || true
+                sudo pacman -S --noconfirm --needed openrgb || true
             fi
         fi
         if [[ "$install_reaper" == "1" ]]; then
@@ -1154,7 +1154,7 @@ function install_media_tools() {
                 # REAPER is usually available via AUR.
                 install_yay
                 if [[ -x "$(command -v yay)" ]]; then
-                    yay -S --needed reaper || true
+                    yay -S --noconfirm --needed reaper || true
                 else
                     echo "yay not found; install REAPER manually."
                 fi
