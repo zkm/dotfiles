@@ -476,70 +476,50 @@ EOF
     install_pyenv_from_upstream
 }
 
-install_opencode() {
-    if command -v opencode >/dev/null 2>&1; then
+# Downloads a self-contained installer script and runs it, skipping if the
+# tool is already on PATH. Extra args are forwarded to the installer script.
+curl_install_tool() {
+    local tool_name="$1" url="$2"
+    shift 2
+
+    if command -v "$tool_name" >/dev/null 2>&1; then
+        echo "${tool_name} is already installed. Skipping."
         return 0
     fi
 
-    echo "Installing OpenCode..."
-    if [[ "$(uname)" == "Darwin" ]]; then
-        return 0
-    fi
+    echo "Installing ${tool_name}..."
 
     local install_dir="$HOME/.local/bin"
     mkdir -p "$install_dir"
 
-    local installer_url="https://opencode.ai/install.sh"
     local installer_file
     installer_file="$(mktemp)"
 
-    if curl -fsSL "$installer_url" -o "$installer_file" \
-        && sh "$installer_file" -p "$install_dir" \
-        && command -v opencode >/dev/null 2>&1; then
-        echo "OpenCode installed to $install_dir"
+    if curl -fsSL "$url" -o "$installer_file" \
+        && sh "$installer_file" "$@" \
+        && command -v "$tool_name" >/dev/null 2>&1; then
+        echo "${tool_name} installed to $install_dir"
     else
-        echo "Failed to install OpenCode. Install manually from https://opencode.ai"
+        echo "Failed to install ${tool_name} automatically."
+        echo "Install manually: curl -fsSL $url | sh"
     fi
 
     rm -f "$installer_file"
 }
 
+install_opencode() {
+    # macOS installs OpenCode via the Homebrew tap instead.
+    [[ "$(uname)" == "Darwin" ]] && return 0
+
+    curl_install_tool opencode "https://opencode.ai/install.sh" -p "$HOME/.local/bin"
+}
+
 install_starship() {
-    if command -v starship >/dev/null 2>&1; then
-        echo "Starship is already installed. Skipping."
-        return 0
-    fi
-
-    echo "Installing Starship..."
-
-    local install_dir="$HOME/.local/bin"
-    mkdir -p "$install_dir"
-
-    if curl -fsSL https://starship.rs/install.sh | sh -s -- -y -b "$install_dir"; then
-        echo "Starship installed to $install_dir"
-    else
-        echo "Failed to install Starship automatically."
-        echo "Install manually: curl -fsSL https://starship.rs/install.sh | sh"
-    fi
+    curl_install_tool starship "https://starship.rs/install.sh" -y -b "$HOME/.local/bin"
 }
 
 install_mise() {
-    if command -v mise >/dev/null 2>&1; then
-        echo "mise is already installed. Skipping."
-        return 0
-    fi
-
-    echo "Installing mise..."
-
-    local install_dir="$HOME/.local/bin"
-    mkdir -p "$install_dir"
-
-    if MISE_INSTALL_PATH="$install_dir/mise" curl -fsSL https://mise.run | sh; then
-        echo "mise installed to $install_dir"
-    else
-        echo "Failed to install mise automatically."
-        echo "Install manually: curl https://mise.run | sh"
-    fi
+    MISE_INSTALL_PATH="$HOME/.local/bin/mise" curl_install_tool mise "https://mise.run"
 }
 
 install_wezterm() {
