@@ -523,6 +523,25 @@ install_starship() {
     fi
 }
 
+install_mise() {
+    if command -v mise >/dev/null 2>&1; then
+        echo "mise is already installed. Skipping."
+        return 0
+    fi
+
+    echo "Installing mise..."
+
+    local install_dir="$HOME/.local/bin"
+    mkdir -p "$install_dir"
+
+    if MISE_INSTALL_PATH="$install_dir/mise" curl -fsSL https://mise.run | sh; then
+        echo "mise installed to $install_dir"
+    else
+        echo "Failed to install mise automatically."
+        echo "Install manually: curl https://mise.run | sh"
+    fi
+}
+
 install_wezterm() {
     if command -v wezterm >/dev/null 2>&1; then
         echo "WezTerm is already installed. Skipping."
@@ -1212,6 +1231,7 @@ function install_media_tools() {
 run_nonfatal "Install nvm" install_nvm
 run_nonfatal "Setup tmux plugins" setup_tmux_plugins
 run_nonfatal "Install Starship" install_starship
+run_nonfatal "Install mise" install_mise
 run_nonfatal "Install WezTerm" install_wezterm
 run_nonfatal "Setup starship" setup_starship
 run_nonfatal "Setup powerlevel10k" setup_p10k

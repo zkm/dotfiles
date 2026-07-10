@@ -189,4 +189,6 @@ sdk() {
 # opencode
 export PATH=$HOME/.opencode/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
-  
+
+# mise (only if installed)
+command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
