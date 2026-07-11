@@ -38,7 +38,6 @@ add_path_if_dir() {
 export PYENV_ROOT="$HOME/.pyenv"
 export RBENV_ROOT="$HOME/.rbenv"
 export BUN_INSTALL="$HOME/.bun"
-export NVM_DIR="$HOME/.nvm"
 
 export PATH="$HOME/.local/bin:$HOME/scripts:$HOME/.config/composer/vendor/bin:$PATH"
 
@@ -56,13 +55,7 @@ if command -v rbenv >/dev/null 2>&1; then
   eval "$(rbenv init - bash)"
 fi
 
-if [[ -s "$NVM_DIR/nvm.sh" ]]; then
-  source "$NVM_DIR/nvm.sh"
-fi
-
-if [[ -s "$NVM_DIR/bash_completion" ]]; then
-  source "$NVM_DIR/bash_completion"
-fi
+command -v mise >/dev/null 2>&1 && eval "$(mise activate bash)"
 
 if [[ -f "$HOME/.ghcup/env" ]]; then
   source "$HOME/.ghcup/env"

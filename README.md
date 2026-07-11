@@ -58,7 +58,7 @@ Back up anything important first.
 5. Syncs custom desktop assets when present:
    - `Icons/dark-side` -> `~/.local/share/icons/dark-side`
    - `Wallpapers` -> `~/Pictures/Wallpapers`
-6. Uses repo-managed shell configs to initialize `pyenv`, `rbenv`, and `nvm` when installed.
+6. Uses repo-managed shell configs to initialize `pyenv`, `rbenv`, and `mise` when installed.
 7. Configures Starship prompt for bash and keeps the existing zsh prompt flow.
 8. Optionally installs Powerlevel10k only when `PROMPT_BACKEND=p10k` and zsh mode is active.
 9. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
@@ -227,7 +227,7 @@ Run:
 ./uninstall.sh
 ```
 
-This removes symlinks that point to this repo, cleans up shell init lines added by setup, and removes optional components installed by setup, including the Powerlevel10k clone, the `nvm` directory, and installed font copies.
+This removes symlinks that point to this repo, cleans up shell init lines added by setup, and removes optional components installed by setup, including the Powerlevel10k clone and installed font copies.
 
 ## 💾 Backup current files
 

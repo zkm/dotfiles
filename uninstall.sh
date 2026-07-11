@@ -63,10 +63,6 @@ cleanup_zshrc_entries() {
     remove_exact_line "$zshrc" '[[ -d $RBENV_ROOT/bin ]] && export PATH="$RBENV_ROOT/bin:$PATH"'
     remove_exact_line "$zshrc" 'eval "$(rbenv init - zsh)"'
 
-    remove_exact_line "$zshrc" 'export NVM_DIR="$HOME/.nvm"'
-    remove_exact_line "$zshrc" '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
-    remove_exact_line "$zshrc" '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"'
-
     remove_exact_line "$zshrc" 'source ~/.powerlevel10k/powerlevel10k.zsh-theme'
 }
 
@@ -111,7 +107,6 @@ uninstall_homebrew_packages() {
 
 cleanup_optional_components() {
     rm -rf "$HOME/.powerlevel10k"
-    rm -rf "$HOME/.nvm"
 
     if [[ "$(uname)" == "Darwin" ]]; then
         rm -f "$HOME"/Library/Fonts/MesloLGS* "$HOME"/Library/Fonts/FiraCode* "$HOME"/Library/Fonts/Fira\ Code* 2>/dev/null || true

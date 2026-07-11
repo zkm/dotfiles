@@ -602,21 +602,6 @@ function setup_lang_envs() {
     echo "Shell language env init is managed by repo shell configs. Skipping direct rc file edits."
 }
 
-function install_nvm() {
-    echo "Installing nvm..."
-
-    if [[ ! -d "$HOME/.nvm" ]]; then
-        if ! curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash; then
-            echo "Warning: Failed to install nvm. Skipping."
-            return 0
-        fi
-    else
-        echo "nvm directory already exists. Skipping installer."
-    fi
-
-    echo "nvm init is managed by repo shell configs. Skipping direct rc file edits."
-}
-
 function create_alias_directories() {
     echo "Creating directories used by aliases..."
 
@@ -1219,7 +1204,6 @@ function install_media_tools() {
     fi
 }
 
-run_nonfatal "Install nvm" install_nvm
 run_nonfatal "Setup tmux plugins" setup_tmux_plugins
 run_nonfatal "Install Starship" install_starship
 run_nonfatal "Install mise" install_mise
