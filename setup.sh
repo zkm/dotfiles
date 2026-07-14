@@ -833,6 +833,9 @@ function install_fonts() {
         if [[ -d "fonts/MesloLGS NF" ]]; then
             cp -f fonts/MesloLGS\ NF/*.ttf ~/Library/Fonts/ 2>/dev/null || true
         fi
+        if [[ -d "fonts/JetBrainsMono" ]]; then
+            cp -f fonts/JetBrainsMono/*.ttf ~/Library/Fonts/ 2>/dev/null || true
+        fi
     else
         if [[ -d "fonts/Fira_Code" ]]; then
             mkdir -p ~/.local/share/fonts/Fira_Code
@@ -847,6 +850,11 @@ function install_fonts() {
         if [[ -d "fonts/IBMPlexMono" ]]; then
             mkdir -p ~/.local/share/fonts/IBMPlexMono
             cp -r fonts/IBMPlexMono/* ~/.local/share/fonts/IBMPlexMono/
+        fi
+
+        if [[ -d "fonts/JetBrainsMono" ]]; then
+            mkdir -p ~/.local/share/fonts/JetBrainsMono
+            cp -r fonts/JetBrainsMono/* ~/.local/share/fonts/JetBrainsMono/
         fi
 
         if [[ -x "$(command -v fc-cache)" ]]; then
