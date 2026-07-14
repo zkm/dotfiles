@@ -2,8 +2,8 @@ local wezterm = require("wezterm")
 local config = wezterm.config_builder()
 
 config.font = wezterm.font_with_fallback({
-  "JetBrainsMono Nerd Font Mono",
-  "BlexMono Nerd Font Mono",
+  "JetBrains Mono",
+  "MesloLGS NF",
   "Noto Color Emoji",
 })
 config.font_size = 11

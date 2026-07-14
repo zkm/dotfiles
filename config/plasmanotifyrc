@@ -23,5 +23,8 @@ Seen=true
 [Applications][signal]
 Seen=true
 
+[DoNotDisturb]
+NotificationSoundsMuted=true
+
 [Notifications]
 PopupPosition=BottomRight
