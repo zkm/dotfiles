@@ -1,0 +1,100 @@
+# Alacritty config for native Windows (.msi install) launching into WSL,
+# as a Windows Terminal / PowerShell replacement.
+#
+# This is NOT symlinked by setup.sh (that script only runs inside
+# Linux/macOS and manages ~/.config there). Copy this file's contents to:
+#   %APPDATA%\alacritty\alacritty.toml
+# (create the "alacritty" folder if it doesn't exist). Easiest way: open
+# \\wsl$\Fedora\<path under $HOME>\.dotfiles\config\alacritty\windows-wsl.toml
+# in File Explorer / a text editor and copy it over. <path under $HOME> is
+# just your WSL home directory's path minus the leading slash (e.g. running
+# `echo $HOME` inside WSL and dropping the leading "/" gives it).
+#
+# "Fedora" is this distro's registered WSL name, confirmed via `wsl -l -v`
+# in PowerShell. That name is assigned once at creation and does NOT track
+# in-place OS upgrades, so don't assume it matches /etc/os-release.
+#
+# Same theme/fonts/keybindings as config/alacritty/alacritty.toml (used on
+# Linux/macOS) plus a [terminal.shell] pointing at wsl.exe instead of
+# PowerShell.
+
+[general]
+live_config_reload = true
+
+[terminal]
+shell = { program = "wsl.exe", args = ["--cd", "~"] }
+
+[window]
+dimensions = { columns = 140, lines = 40 }
+padding = { x = 10, y = 10 }
+opacity = 0.96
+decorations = "Full"
+dynamic_title = true
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[font]
+size = 11.0
+
+[font.normal]
+family = "JetBrains Mono"
+style = "Regular"
+
+[font.bold]
+family = "JetBrains Mono"
+style = "Bold"
+
+[font.italic]
+family = "JetBrains Mono"
+style = "Italic"
+
+[cursor]
+style = { shape = "Beam", blinking = "On" }
+blink_interval = 450
+unfocused_hollow = true
+
+[bell]
+duration = 0
+
+[colors.primary]
+background = "#1a1b26"
+foreground = "#c0caf5"
+
+[colors.cursor]
+text = "#1a1b26"
+cursor = "#bb9af7"
+
+[colors.selection]
+text = "#c0caf5"
+background = "#394b70"
+
+[colors.normal]
+black = "#15161e"
+red = "#f7768e"
+green = "#9ece6a"
+yellow = "#e0af68"
+blue = "#7aa2f7"
+magenta = "#bb9af7"
+cyan = "#7dcfff"
+white = "#a9b1d6"
+
+[colors.bright]
+black = "#414868"
+red = "#f7768e"
+green = "#9ece6a"
+yellow = "#e0af68"
+blue = "#7aa2f7"
+magenta = "#bb9af7"
+cyan = "#7dcfff"
+white = "#c0caf5"
+
+[keyboard]
+bindings = [
+  { key = "Return", mods = "Control|Shift", action = "SpawnNewInstance" },
+  { key = "Equals", mods = "Control", action = "IncreaseFontSize" },
+  { key = "Plus", mods = "Control", action = "IncreaseFontSize" },
+  { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
+  { key = "Key0", mods = "Control", action = "ResetFontSize" },
+]

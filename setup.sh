@@ -703,6 +703,10 @@ function create_dotfiles() {
         link_repo_config_path "$repo_root" "ghostty"
     fi
 
+    if [[ -d "$repo_root/config/alacritty" ]]; then
+        link_repo_config_path "$repo_root" "alacritty"
+    fi
+
     if [[ -d "$repo_root/config/mise" ]]; then
         link_repo_config_path "$repo_root" "mise"
     fi

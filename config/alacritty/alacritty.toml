@@ -1,0 +1,89 @@
+# https://alacritty.org/config-alacritty.html
+# Alacritty's TOML config format and options are identical on Linux, macOS,
+# and Windows, so this single file works everywhere:
+#   Linux:   ~/.config/alacritty/alacritty.toml
+#   macOS:   ~/.config/alacritty/alacritty.toml
+#   Windows: %APPDATA%\alacritty\alacritty.toml
+# Colors match wezterm/kitty (Tokyo Night); fonts match wezterm (JetBrains
+# Mono with MesloLGS NF fallback), both installed by install_fonts in setup.sh.
+
+[general]
+live_config_reload = true
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+dimensions = { columns = 140, lines = 40 }
+padding = { x = 10, y = 10 }
+opacity = 0.96
+decorations = "Full"
+dynamic_title = true
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[font]
+size = 11.0
+
+[font.normal]
+family = "JetBrains Mono"
+style = "Regular"
+
+[font.bold]
+family = "JetBrains Mono"
+style = "Bold"
+
+[font.italic]
+family = "JetBrains Mono"
+style = "Italic"
+
+[cursor]
+style = { shape = "Beam", blinking = "On" }
+blink_interval = 450
+unfocused_hollow = true
+
+[bell]
+duration = 0
+
+[colors.primary]
+background = "#1a1b26"
+foreground = "#c0caf5"
+
+[colors.cursor]
+text = "#1a1b26"
+cursor = "#bb9af7"
+
+[colors.selection]
+text = "#c0caf5"
+background = "#394b70"
+
+[colors.normal]
+black = "#15161e"
+red = "#f7768e"
+green = "#9ece6a"
+yellow = "#e0af68"
+blue = "#7aa2f7"
+magenta = "#bb9af7"
+cyan = "#7dcfff"
+white = "#a9b1d6"
+
+[colors.bright]
+black = "#414868"
+red = "#f7768e"
+green = "#9ece6a"
+yellow = "#e0af68"
+blue = "#7aa2f7"
+magenta = "#bb9af7"
+cyan = "#7dcfff"
+white = "#c0caf5"
+
+[keyboard]
+bindings = [
+  { key = "Return", mods = "Control|Shift", action = "SpawnNewInstance" },
+  { key = "Equals", mods = "Control", action = "IncreaseFontSize" },
+  { key = "Plus", mods = "Control", action = "IncreaseFontSize" },
+  { key = "Minus", mods = "Control", action = "DecreaseFontSize" },
+  { key = "Key0", mods = "Control", action = "ResetFontSize" },
+]
