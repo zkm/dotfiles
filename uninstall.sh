@@ -125,6 +125,7 @@ main() {
 
     remove_if_symlink_to_repo "$HOME/.aliases"
     remove_if_symlink_to_repo "$HOME/.bash_aliases"
+    remove_if_symlink_to_repo "$HOME/.aliases.local"
     remove_if_symlink_to_repo "$HOME/.gitconfig"
     remove_if_symlink_to_repo "$HOME/.dircolors"
     remove_if_symlink_to_repo "$HOME/.zsh"

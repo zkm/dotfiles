@@ -174,7 +174,7 @@ function setup_shell() {
 function clear_old_dotfiles() {
     echo "Removing previous dotfiles..."
     rm -f ~/.aliases ~/.gitconfig ~/.zshrc ~/.tmux.conf ~/.p10k.zsh ~/.zprofile ~/.zlogin ~/.dircolors
-    rm -f ~/.bashrc ~/.bash_profile ~/.bash_aliases
+    rm -f ~/.bashrc ~/.bash_profile ~/.bash_aliases ~/.aliases.local
     rm -rf ~/.zsh ~/.bin
 }
 
@@ -640,6 +640,18 @@ function create_dotfiles() {
     ln -sfn "$repo_root/aliases" ~/.aliases
     if [[ -f "$repo_root/bash_aliases" ]]; then
         ln -sfn "$repo_root/bash_aliases" ~/.bash_aliases
+    fi
+    # Private, gitignored aliases (real hostnames/paths not meant for the
+    # public repo). aliases sources ~/.aliases.local if present. Only
+    # linked when the repo file already exists, so a fresh clone (or
+    # someone using this repo as a template) doesn't get an empty/missing
+    # symlink here — create the file at $repo_root/aliases.local yourself
+    # first if you want one. Note clear_old_dotfiles() removes any real
+    # ~/.aliases.local unconditionally on every run, same as the other
+    # optional dotfiles above, so don't keep private aliases only in
+    # ~/.aliases.local without a matching copy in the repo.
+    if [[ -f "$repo_root/aliases.local" ]]; then
+        ln -sfn "$repo_root/aliases.local" ~/.aliases.local
     fi
     ln -sfn "$repo_root/gitconfig" ~/.gitconfig
     ln -sfn "$repo_root/dircolors" ~/.dircolors

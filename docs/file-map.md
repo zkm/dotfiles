@@ -14,6 +14,7 @@ fix, and keep both sides updated together going forward.
 |---|---|---|---|
 | `aliases` | `~/.aliases` | `create_dotfiles` | `remove_if_symlink_to_repo` |
 | `bash_aliases` (if exists) | `~/.bash_aliases` | `create_dotfiles` | `remove_if_symlink_to_repo` |
+| `aliases.local` (if exists, gitignored) | `~/.aliases.local` | `create_dotfiles` | `remove_if_symlink_to_repo` |
 | `gitconfig` | `~/.gitconfig` | `create_dotfiles` | `remove_if_symlink_to_repo` |
 | `dircolors` | `~/.dircolors` | `create_dotfiles` | `remove_if_symlink_to_repo` |
 | `zsh/` | `~/.zsh` | `create_dotfiles` | `remove_if_symlink_to_repo` |
@@ -28,8 +29,19 @@ fix, and keep both sides updated together going forward.
 | `zlogin` (if exists) | `~/.zlogin` | `create_dotfiles` | `remove_if_symlink_to_repo` |
 
 `clear_old_dotfiles()` unconditionally removes real files at all of the
-above `$HOME` targets (plus `~/.bash_aliases`) before `create_dotfiles` runs
-— see [[decisions#clear-old-dotfiles]].
+above `$HOME` targets (plus `~/.bash_aliases` and `~/.aliases.local`)
+before `create_dotfiles` runs — see [[decisions#clear-old-dotfiles]].
+
+`aliases.local` is the one entry here that's gitignored — it holds
+private, machine-specific aliases (real hostnames/paths) that shouldn't be
+in the public repo. `aliases` sources `~/.aliases.local` if present.
+Because `clear_old_dotfiles()` removes `~/.aliases.local` unconditionally
+on every `setup.sh` run regardless of whether `$repo_root/aliases.local`
+exists, anyone (including someone using this repo as a template) who
+creates a real `~/.aliases.local` without also placing a copy at
+`$repo_root/aliases.local` will have it silently deleted, not
+symlinked-and-preserved, the next time they run `setup.sh`. Keep the two in
+sync (add to `$repo_root/aliases.local` first, then re-run `setup.sh`).
 
 ## App configs — `link_repo_config_path()` (only if `config/<name>` exists)
 
