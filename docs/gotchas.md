@@ -81,3 +81,41 @@ When adding a new `link_repo_config_path` call to `setup.sh`, add the
 matching `remove_if_symlink_to_repo` call to `uninstall.sh` in the same
 change — this pair drifted once already from exactly this kind of
 one-sided edit.
+
+## `mise`'s shimmed `python3` shadows the system Python, breaking pacman-installed Python CLI tools (deepthought, 2026-07-15)
+
+**Symptom:** `/opt/rocm/bin/amd-smi` (from the official `amdsmi` package,
+used for AMD GPU stats — e.g. by OpenLinkHub's `amdsmiPath` config) failed
+when run interactively:
+```
+Unhandled import error: No module named 'amdsmi'
+```
+even though `pacman -Qo /opt/rocm/bin/amd-smi` confirmed the package was
+installed and the module existed on disk at
+`/usr/lib/python3.14/site-packages/amdsmi`.
+
+**Root cause:** `amd-smi` is a `#!/usr/bin/env python3` script. `zshrc`'s
+`mise activate zsh` (see [[decisions]] — mise manages Python per
+`config/mise/config.toml`, currently `python = "3.14"`) prepends mise's
+shims to `PATH`, so in an interactive shell `python3` resolves to
+`~/.local/share/mise/installs/python/3.14/bin/python3` — a completely
+separate interpreter/site-packages tree from the system one pacman installs
+into (`/usr/lib/python3.14/site-packages`), even though both happen to be
+version 3.14. Any pacman/AUR-installed Python tool that isn't a self-
+contained venv (pipx-style) will silently miss its dependencies when run
+from an interactive shell for this reason — this isn't specific to
+`amd-smi`, it'll bite any system Python CLI tool.
+
+**Fix / diagnosis pattern:** confirm with
+`python3 -c "import sys; print(sys.executable)"` (shows the mise shim) vs
+`/usr/bin/python3 -c "import <module>"` (shows it works against the system
+interpreter). Systemd services are unaffected — they get a minimal
+systemd-supplied `PATH` that doesn't include mise's shims, so a service
+(e.g. `openlinkhub.service` calling `amdsmiPath`) invoking the same script
+will correctly resolve `env python3` to the system interpreter. Don't
+"fix" this by reordering `PATH` in `zshrc` to put `/usr/bin` first —
+that would break mise's actual job of overriding language versions for
+dev work. If a system Python CLI tool needs to be run interactively, either
+call it via its full system-python path explicitly
+(`/usr/bin/python3 /opt/rocm/bin/amd-smi ...`) or temporarily
+`PATH=/usr/bin:$PATH <tool>`.
