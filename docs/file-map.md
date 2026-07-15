@@ -92,9 +92,29 @@ uninstall.
 ## Non-managed reference config in the repo
 
 `config/btop`, `config/gtk-3.0`, `config/gtk-4.0`, `config/neofetch`,
-`config/OpenRGB`, `config/REAPER`, `config/waybar` exist under `config/` but
-have **no** `link_repo_config_path` call in `create_dotfiles` as of this
-writing — they're present in the repo (presumably as reference/backup or
-manually-applied config) but not part of the automated install. Don't
-assume every `config/*` subdirectory is live-linked; check `create_dotfiles`
-before saying a config change here will "just take effect."
+`config/OpenRGB`, `config/REAPER`, `config/waybar`, `config/GIMP` exist under
+`config/` but have **no** `link_repo_config_path` call in `create_dotfiles`
+as of this writing — they're present in the repo (presumably as
+reference/backup or manually-applied config) but not part of the automated
+install. Don't assume every `config/*` subdirectory is live-linked; check
+`create_dotfiles` before saying a config change here will "just take
+effect."
+
+`config/GIMP/3.2` is a curated subset of a live GIMP profile
+(`~/.config/GIMP/3.2`), kept for its Photoshop-like look/feel: `gimprc`,
+`sessionrc`/`dockrc` (single-window mode, dock layout), `shortcutsrc`
+(remapped keybindings), `theme.css` (dark theme), `toolrc`, `contextrc`,
+`colorrc`, `unitrc`, `modifiersrc`, `controllerrc`, `parasiterc`. Deliberately
+excluded / gitignored (see `.gitignore`'s GIMP section): `pluginrc` and
+`tags.xml` (GIMP-regenerable caches — `pluginrc`'s own header says it's safe
+to delete), `devicerc` (tablet/input-device mapping, machine-specific),
+`action-history`, `plug-in-settings`, `internal-data`, `filters` (recent/last
+-used session state), `templaterc`, `profilerc`, `extensionrc`, and the
+`tmp`/`backups`/`CrashLog` dirs. `gimprc` originally also carried
+`monitor-xresolution`/`monitor-yresolution` and a fullscreen padding-color
+with this machine's actual monitor ICC profile embedded (EDID/serial
+included) — both were stripped since they're monitor-specific, not
+"look and feel." To apply on a new machine: copy these files into
+`~/.config/GIMP/<version>/` manually (not symlinked — see
+[[decisions#clear-old-dotfiles]] for why auto-linking configs that GIMP
+also writes session/crash state into would be risky).

@@ -28,8 +28,11 @@ this summary. Consult these before re-deriving the same investigation:
 - `docs/decisions.md` — why non-obvious choices were made (fonts per
   terminal, mise vs pyenv/rbenv, starship vs p10k, opt-in media tools).
 - `docs/file-map.md` — table of repo path → `$HOME`/`~/.config` target →
-  which `setup.sh`/`uninstall.sh` function manages each side, including
-  known gaps between the two scripts.
+  which `setup.sh`/`uninstall.sh` function manages each side, and which
+  `config/*` subdirectories (e.g. `btop`, `gtk-3.0`, `OpenRGB`, `REAPER`,
+  `waybar`) are unmanaged reference files with no symlink at all — check
+  `create_dotfiles`/`link_repo_config_path` before assuming a `config/*`
+  edit takes effect.
 
 ## Architecture
 

@@ -21,6 +21,21 @@ config/REAPER/ReaPack/
 config/REAPER/reaper-recentfx.ini
 *.pyc
 
+# GIMP regenerable caches / session-machine-specific state
+config/GIMP/*/pluginrc
+config/GIMP/*/tags.xml
+config/GIMP/*/devicerc
+config/GIMP/*/action-history
+config/GIMP/*/tmp/
+config/GIMP/*/backups/
+config/GIMP/*/CrashLog/
+config/GIMP/*/plug-in-settings/
+config/GIMP/*/internal-data/
+config/GIMP/*/filters/
+config/GIMP/*/templaterc
+config/GIMP/*/profilerc
+config/GIMP/*/extensionrc
+
 # Generic temp/editor artifacts
 .vscode/
 *.tmp

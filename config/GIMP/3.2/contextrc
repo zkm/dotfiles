@@ -1,0 +1,16 @@
+# GIMP user context
+
+(tool "gimp-zoom-tool")
+(paint-info "gimp-paintbrush")
+(foreground
+    (color "R'G'B'A u8" 4 "\75\256\351\377" 0))
+(brush "2. Hardness 050")
+(dynamics "Pressure Size")
+(mybrush "100% Opaque")
+(pattern "Starfield")
+(gradient "Skyline")
+(palette "Standard")
+(font "Sans-serif")
+(tool-preset "Core Pointer")
+
+# end of user context
