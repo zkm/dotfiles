@@ -14,9 +14,14 @@
 # in PowerShell. That name is assigned once at creation and does NOT track
 # in-place OS upgrades, so don't assume it matches /etc/os-release.
 #
-# Same theme/fonts/keybindings as config/alacritty/alacritty.toml (used on
-# Linux/macOS) plus a [terminal.shell] pointing at wsl.exe instead of
-# PowerShell.
+# Same theme/keybindings as config/alacritty/alacritty.toml (used on
+# Linux/macOS), plus a [terminal.shell] pointing at wsl.exe instead of
+# PowerShell. Font is MesloLGS NF rather than JetBrains Mono here (unlike
+# wezterm, Alacritty has no per-config font-fallback list, so the primary
+# font must itself be Nerd-Font-patched or prompt/git icons render as
+# boxes) — install it on Windows first from this repo's
+# fonts/MesloLGS NF/*.ttf (right-click each > Install), since setup.sh's
+# font installer only runs on Linux/macOS.
 
 [general]
 live_config_reload = true
@@ -39,15 +44,15 @@ multiplier = 3
 size = 11.0
 
 [font.normal]
-family = "JetBrains Mono"
+family = "MesloLGS NF"
 style = "Regular"
 
 [font.bold]
-family = "JetBrains Mono"
+family = "MesloLGS NF"
 style = "Bold"
 
 [font.italic]
-family = "JetBrains Mono"
+family = "MesloLGS NF"
 style = "Italic"
 
 [cursor]
