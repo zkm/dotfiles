@@ -235,7 +235,7 @@ function install_homebrew_packages() {
     fi
 
     brew install "${brew_packages[@]}" \
-      bat fd fzf jq zoxide btop
+      bat fd fzf jq zoxide btop shellcheck
     brew install opencodeai/tap/opencode
 }
 
@@ -247,7 +247,7 @@ install_with_pacman() {
     fi
 
     sudo pacman -S --noconfirm --needed "${core_packages[@]}" \
-      bat fd fzf jq zoxide btop
+      bat fd fzf jq zoxide btop shellcheck
     install_opencode
 }
 
@@ -334,7 +334,7 @@ install_with_apt() {
     install_opencode
 
     local tool_pkg
-    for tool_pkg in bat fd-find fzf jq zoxide btop; do
+    for tool_pkg in bat fd-find fzf jq zoxide btop shellcheck; do
         if ! sudo apt-get install -y "$tool_pkg"; then
             echo "Skipping unavailable alias productivity package: $tool_pkg"
         fi
@@ -365,7 +365,7 @@ install_with_dnf() {
     install_opencode
 
     local tool_pkg
-    for tool_pkg in bat fd-find fzf jq zoxide btop; do
+    for tool_pkg in bat fd-find fzf jq zoxide btop ShellCheck; do
         if ! sudo dnf install -y "$tool_pkg"; then
             echo "Skipping unavailable alias productivity package: $tool_pkg"
         fi
@@ -403,7 +403,7 @@ install_with_yum() {
     install_opencode
 
     local tool_pkg
-    for tool_pkg in bat fd-find fzf jq zoxide btop; do
+    for tool_pkg in bat fd-find fzf jq zoxide btop ShellCheck; do
         if ! sudo yum install -y "$tool_pkg"; then
             echo "Skipping unavailable alias productivity package: $tool_pkg"
         fi
@@ -462,7 +462,7 @@ EOF
     install_opencode
 
     local tool_pkg
-    for tool_pkg in app-text/bat sys-apps/fd app-shells/fzf app-misc/jq app-shells/zoxide sys-process/btop; do
+    for tool_pkg in app-text/bat sys-apps/fd app-shells/fzf app-misc/jq app-shells/zoxide sys-process/btop dev-util/shellcheck; do
         if ! sudo emerge --noreplace "$tool_pkg"; then
             echo "Skipping unavailable alias productivity package: $tool_pkg"
         fi
