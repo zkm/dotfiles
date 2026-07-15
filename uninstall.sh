@@ -147,14 +147,20 @@ main() {
     remove_if_symlink_to_repo "$HOME/.p10k.zsh"
     remove_if_symlink_to_repo "$HOME/.zprofile"
     remove_if_symlink_to_repo "$HOME/.zlogin"
+    remove_if_symlink_to_repo "$HOME/.config/mako"
     remove_if_symlink_to_repo "$HOME/.config/kitty"
+    remove_if_symlink_to_repo "$HOME/.config/fastfetch"
     remove_if_symlink_to_repo "$HOME/.config/starship.toml"
+    remove_if_symlink_to_repo "$HOME/.config/wezterm"
+    remove_if_symlink_to_repo "$HOME/.config/ghostty"
+    remove_if_symlink_to_repo "$HOME/.config/alacritty"
     remove_if_symlink_to_repo "$HOME/.config/mise"
     for kde_config in \
         dolphinrc \
         kcminputrc \
         kdeglobals \
         plasma-org.kde.plasma.desktop-appletsrc \
+        plasmanotifyrc \
         plasmarc; do
         remove_if_symlink_to_repo "$HOME/.config/$kde_config"
     done
