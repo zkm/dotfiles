@@ -17,6 +17,20 @@ There is no test suite; CI only lints/syntax-checks `setup.sh`. When editing oth
 
 Try setup/uninstall changes in a disposable environment (container or VM) before assuming they're safe — see "Destructive behavior" below.
 
+## Reference docs
+
+This file is the index; deeper detail lives in `docs/` so it doesn't bloat
+this summary. Consult these before re-deriving the same investigation:
+- `docs/gotchas.md` — known issues log (debugging war stories, e.g. the
+  Alacritty/Windows-WSL Nerd Font cursor bug, and known stale/dead code).
+- `docs/subsystems.md` — deep dives per subsystem (shell config chain,
+  terminal configs, starship, aliases catalog, KDE/OpenRGB).
+- `docs/decisions.md` — why non-obvious choices were made (fonts per
+  terminal, mise vs pyenv/rbenv, starship vs p10k, opt-in media tools).
+- `docs/file-map.md` — table of repo path → `$HOME`/`~/.config` target →
+  which `setup.sh`/`uninstall.sh` function manages each side, including
+  known gaps between the two scripts.
+
 ## Architecture
 
 **Install flow (`setup.sh`):** single script, no external config file. Order matters:
@@ -25,7 +39,7 @@ Try setup/uninstall changes in a disposable environment (container or VM) before
 3. Package installation branches by OS/package manager: `install_with_pacman`, `install_with_apt`, `install_with_dnf`, `install_with_yum`, `install_with_emerge`, or the macOS `install_homebrew*` path. Each Linux path is independently maintained (Arch is the primary target; others are best-effort with per-package fallbacks).
 4. Remaining steps (fonts, terminal, browsers, VS Code, Docker, media tools) run via `run_nonfatal "<label>" <fn>` so a single failure doesn't abort the whole install. When adding a new setup step, wrap it in `run_nonfatal` unless it's a genuine hard prerequisite.
 
-**Shell config chain:** `zshrc` sources `~/.aliases` (→ `aliases` in repo), `zsh/configs/*.zsh` (prompt, completion), and `dircolors`. `PROMPT_BACKEND` env var (default `starship`, opt-in `p10k`) selects the prompt; Powerlevel10k is only cloned/sourced when explicitly requested via `PROMPT_BACKEND=p10k`. Version managers (`pyenv`, `rbenv`, `sdkman`) are guarded with `__*_INIT_DONE` sentinels to avoid duplicate init on re-source, and `sdk` is lazy-loaded on first call rather than at shell startup. `mise` (managing Node, Python, and other tool versions via `config/mise/config.toml`) is activated directly in `zshrc`/`bashrc` without an `__INIT_DONE` guard, since `mise activate` is idempotent.
+**Shell config chain:** `zshrc` sources `~/.aliases` (→ `aliases` in repo) and `dircolors`. `~/.zsh` (→ `zsh/` in repo) is symlinked but its `configs/*.zsh` files (prompt, completion) are currently dead code — nothing sources them; see `docs/gotchas.md`. `PROMPT_BACKEND` env var (default `starship`, opt-in `p10k`) selects the prompt; Powerlevel10k is only cloned/sourced when explicitly requested via `PROMPT_BACKEND=p10k`. Version managers (`pyenv`, `rbenv`, `sdkman`) are guarded with `__*_INIT_DONE` sentinels to avoid duplicate init on re-source, and `sdk` is lazy-loaded on first call rather than at shell startup. `mise` (managing Node, Python, and other tool versions via `config/mise/config.toml`) is activated directly in `zshrc`/`bashrc` without an `__INIT_DONE` guard, since `mise activate` is idempotent.
 
 **Config linking (`config/`):** app configs (kitty, wezterm, ghostty, mako, fastfetch, starship.toml) are symlinked into `~/.config/` via `link_repo_config_path`, and only if the corresponding directory/file exists in the repo — new configs should follow this same guarded pattern rather than being unconditionally linked. KDE Plasma dotfiles (`dolphinrc`, `kcminputrc`, `kdeglobals`, `plasmarc`, etc.) are only linked when a KDE session is detected (`is_kde_plasma_session`) or `INSTALL_KDE_CONFIG=1` is forced.
 
