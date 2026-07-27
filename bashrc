@@ -124,6 +124,9 @@ fi
 
 command -v mise >/dev/null 2>&1 && eval "$(mise activate bash)"
 
+# ruby user-installed gems (bundle, rspec, rake, motd-forge, etc.)
+command -v ruby >/dev/null 2>&1 && export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+
 if [[ -f "$HOME/.ghcup/env" ]]; then
   source "$HOME/.ghcup/env"
 fi
