@@ -4,8 +4,12 @@
 # Keep PATH sane even when inherited from constrained environments.
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
-# ruby user-installed gems (bundle, rspec, rake, motd-forge, etc.) — must run
-# before the motd-forge invocation below, which needs it on PATH already.
+# $HOME/bin and ruby user-installed gems (bundle, rspec, rake, etc.) — must
+# run before the motd-forge invocation below, which needs it on PATH already.
+# On Fedora/RHEL, gem installs executables to $HOME/bin instead of
+# Gem.user_dir/bin, but other distros (e.g. Arch) use Gem.user_dir/bin, so
+# keep both.
+export PATH="$HOME/bin:$PATH"
 command -v ruby >/dev/null 2>&1 && export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
 # Show system summary for interactive sessions when available.

@@ -15,6 +15,7 @@ export RBENV_ROOT="$HOME/.rbenv"
 export BUN_INSTALL="$HOME/.bun"
 
 path=(
+  "$HOME/bin"
   "$HOME/.local/bin"
   "$HOME/scripts"
   "$HOME/.config/composer/vendor/bin"
@@ -24,8 +25,11 @@ path=(
   $path
 )
 
-# ruby user-installed gems (bundle, rspec, rake, motd-forge, etc.) — must run
-# before the motd-forge invocation below, which needs it on PATH already.
+# ruby user-installed gems (bundle, rspec, rake, etc.) — must run before the
+# motd-forge invocation below, which needs it on PATH already. On Fedora/RHEL,
+# gem installs executables to $HOME/bin (see path array above) instead of
+# Gem.user_dir/bin, but other distros (e.g. Arch) use Gem.user_dir/bin, so
+# keep both.
 command -v ruby >/dev/null 2>&1 && export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
 # Print system summary before instant prompt to avoid p10k console I/O warnings.
