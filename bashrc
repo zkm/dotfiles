@@ -4,6 +4,10 @@
 # Keep PATH sane even when inherited from constrained environments.
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
+# ruby user-installed gems (bundle, rspec, rake, motd-forge, etc.) — must run
+# before the motd-forge invocation below, which needs it on PATH already.
+command -v ruby >/dev/null 2>&1 && export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+
 # Show system summary for interactive sessions when available.
 # motd-forge has no built-in color/distro support (v0.1.0: title + uptime/disk/mem +
 # quote only), so draw a boxed, icon'd distro header and gradient-tint the banner
@@ -123,9 +127,6 @@ if command -v rbenv >/dev/null 2>&1; then
 fi
 
 command -v mise >/dev/null 2>&1 && eval "$(mise activate bash)"
-
-# ruby user-installed gems (bundle, rspec, rake, motd-forge, etc.)
-command -v ruby >/dev/null 2>&1 && export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
 if [[ -f "$HOME/.ghcup/env" ]]; then
   source "$HOME/.ghcup/env"

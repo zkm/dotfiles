@@ -24,6 +24,10 @@ path=(
   $path
 )
 
+# ruby user-installed gems (bundle, rspec, rake, motd-forge, etc.) — must run
+# before the motd-forge invocation below, which needs it on PATH already.
+command -v ruby >/dev/null 2>&1 && export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
+
 # Print system summary before instant prompt to avoid p10k console I/O warnings.
 # motd-forge has no built-in color/distro support (v0.1.0: title + uptime/disk/mem +
 # quote only), so draw a boxed, icon'd distro header and gradient-tint the banner
@@ -248,9 +252,6 @@ sdk() {
 # opencode
 export PATH=$HOME/.opencode/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
-
-# ruby user-installed gems (bundle, rspec, rake, etc.)
-command -v ruby >/dev/null 2>&1 && export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
 # mise (only if installed)
 command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
