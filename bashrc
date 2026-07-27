@@ -130,7 +130,9 @@ if command -v rbenv >/dev/null 2>&1; then
   eval "$(rbenv init - bash)"
 fi
 
-command -v mise >/dev/null 2>&1 && eval "$(mise activate bash)"
+# mise (only if installed and actually runnable — some prebuilt binaries
+# exist but fail to exec on ABI-mismatched systems, e.g. armhf/armel Pi)
+command -v mise >/dev/null 2>&1 && mise --version >/dev/null 2>&1 && eval "$(mise activate bash)"
 
 if [[ -f "$HOME/.ghcup/env" ]]; then
   source "$HOME/.ghcup/env"

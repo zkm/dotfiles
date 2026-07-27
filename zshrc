@@ -257,5 +257,6 @@ sdk() {
 export PATH=$HOME/.opencode/bin:$PATH
 export PATH="$HOME/.local/bin:$PATH"
 
-# mise (only if installed)
-command -v mise >/dev/null 2>&1 && eval "$(mise activate zsh)"
+# mise (only if installed and actually runnable — some prebuilt binaries
+# exist but fail to exec on ABI-mismatched systems, e.g. armhf/armel Pi)
+command -v mise >/dev/null 2>&1 && mise --version >/dev/null 2>&1 && eval "$(mise activate zsh)"
