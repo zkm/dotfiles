@@ -529,6 +529,20 @@ install_mise() {
     MISE_INSTALL_PATH="$HOME/.local/bin/mise" curl_install_tool mise "https://mise.run" "$HOME/.local/bin/mise"
 }
 
+install_motd_forge() {
+    if command -v motd-forge >/dev/null 2>&1; then
+        echo "motd-forge is already installed. Skipping."
+        return 0
+    fi
+
+    if ! command -v gem >/dev/null 2>&1; then
+        echo "No 'gem' command found. Install Ruby (e.g. via rbenv) then run: gem install motd_forge"
+        return 0
+    fi
+
+    gem install motd_forge || echo "Failed to install motd_forge gem. Install manually with: gem install motd_forge"
+}
+
 install_wezterm() {
     if command -v wezterm >/dev/null 2>&1; then
         echo "WezTerm is already installed. Skipping."
@@ -1231,6 +1245,7 @@ function install_media_tools() {
 run_nonfatal "Setup tmux plugins" setup_tmux_plugins
 run_nonfatal "Install Starship" install_starship
 run_nonfatal "Install mise" install_mise
+run_nonfatal "Install motd-forge" install_motd_forge
 run_nonfatal "Install WezTerm" install_wezterm
 run_nonfatal "Setup starship" setup_starship
 run_nonfatal "Setup powerlevel10k" setup_p10k

@@ -15,8 +15,25 @@ primary target).
 1. Env vars + `PATH` (`typeset -U path PATH` keeps it deduped across
    re-sources; prepends `.local/bin`, `scripts`, composer vendor bin, rbenv,
    pyenv, bun).
-2. `fastfetch` runs before the prompt backend loads, specifically to avoid
-   p10k instant-prompt console-I/O warnings.
+2. `motd-forge` (installed via `gem install motd_forge`, see
+   `install_motd_forge` in `setup.sh`) runs before the prompt backend loads
+   as the MOTD banner, specifically to avoid p10k instant-prompt
+   console-I/O warnings. Replaced the old `fastfetch`-at-startup call;
+   `fastfetch`/`neofetch` are still available manually via the
+   `neofetch()` alias (see System Info & Utilities below). motd-forge itself
+   (v0.1.0) has no color, distro-logo, or graph support, so two helper
+   functions (defined right above the call, duplicated in `bashrc`) dress
+   up its plain-text output:
+   - `_motd_distro_line()` prints a boxed header with a Nerd Font distro
+     icon and brand color, reading `/etc/os-release` `PRETTY_NAME`/`$ID`
+     (or `sw_vers` on macOS) — arch=cyan, ubuntu=orange, debian=red,
+     fedora=blue, fallback=green with a generic Tux icon.
+   - `_motd_gradient()` pipes motd-forge's stdout through `awk`, cycling a
+     blue→cyan palette per line, and rewrites the
+     `Uptime: … | Disk: NN% used | Mem: A/B (NN%)` stats line it prints
+     into three lines with `█`/`░` bar graphs for disk/mem percentages
+     (falls back to printing the line unchanged if the values aren't
+     parseable, e.g. `system_stats.rb`'s "unknown" rescue paths).
 3. Prompt backend selector (`PROMPT_BACKEND`, default `starship`): loads
    p10k's instant-prompt cache + theme + `~/.p10k.zsh`, or `starship init
    zsh`, or (fallback branch) p10k anyway if starship isn't on PATH. See
