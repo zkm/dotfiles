@@ -4,12 +4,11 @@
 # Keep PATH sane even when inherited from constrained environments.
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:${PATH}"
 
-# $HOME/bin and ruby user-installed gems (bundle, rspec, rake, etc.) — must
-# run before the motd-forge invocation below, which needs it on PATH already.
-# On Fedora/RHEL, gem installs executables to $HOME/bin instead of
-# Gem.user_dir/bin, but other distros (e.g. Arch) use Gem.user_dir/bin, so
-# keep both.
-export PATH="$HOME/bin:$PATH"
+# $HOME/.local/bin (gem user-installs, incl. motd-forge below, are pinned
+# there by ~/.gemrc) and ruby's own gem bindir (bundle, rspec, rake, etc.) —
+# must run before the motd-forge invocation below, which needs it on PATH
+# already.
+export PATH="$HOME/.local/bin:$PATH"
 command -v ruby >/dev/null 2>&1 && export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
 # Show system summary for interactive sessions when available.
@@ -114,7 +113,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 export RBENV_ROOT="$HOME/.rbenv"
 export BUN_INSTALL="$HOME/.bun"
 
-export PATH="$HOME/.local/bin:$HOME/scripts:$HOME/.config/composer/vendor/bin:$PATH"
+export PATH="$HOME/scripts:$HOME/.config/composer/vendor/bin:$PATH"
 
 # Optional runtime manager bins.
 add_path_if_dir "$RBENV_ROOT/bin"

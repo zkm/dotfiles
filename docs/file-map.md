@@ -17,6 +17,7 @@ fix, and keep both sides updated together going forward.
 | `aliases.local` (if exists, gitignored) | `~/.aliases.local` | `create_dotfiles` | `remove_if_symlink_to_repo` |
 | `gitconfig` | `~/.gitconfig` | `create_dotfiles` | `remove_if_symlink_to_repo` |
 | `dircolors` | `~/.dircolors` | `create_dotfiles` | `remove_if_symlink_to_repo` |
+| `gemrc` | `~/.gemrc` | `create_dotfiles` | `remove_if_symlink_to_repo` |
 | `zsh/` | `~/.zsh` | `create_dotfiles` | `remove_if_symlink_to_repo` |
 | `local/bin/` (if exists) | `~/.bin` | `create_dotfiles` | `remove_if_symlink_to_repo` |
 | `local/share/applications/*.desktop` (if dir exists) | `~/.local/share/applications/*.desktop` | `create_dotfiles` | `remove_if_symlink_to_repo` (looped) |

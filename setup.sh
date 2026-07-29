@@ -174,7 +174,7 @@ function setup_shell() {
 function clear_old_dotfiles() {
     echo "Removing previous dotfiles..."
     rm -f ~/.aliases ~/.gitconfig ~/.zshrc ~/.tmux.conf ~/.p10k.zsh ~/.zprofile ~/.zlogin ~/.dircolors
-    rm -f ~/.bashrc ~/.bash_profile ~/.bash_aliases ~/.aliases.local
+    rm -f ~/.bashrc ~/.bash_profile ~/.bash_aliases ~/.aliases.local ~/.gemrc
     rm -rf ~/.zsh ~/.bin
 }
 
@@ -669,6 +669,7 @@ function create_dotfiles() {
     fi
     ln -sfn "$repo_root/gitconfig" ~/.gitconfig
     ln -sfn "$repo_root/dircolors" ~/.dircolors
+    ln -sfn "$repo_root/gemrc" ~/.gemrc
     ln -sfn "$repo_root/zsh" ~/.zsh
     if [[ -d "$repo_root/local/bin" ]]; then
         ln -sfn "$repo_root/local/bin" ~/.bin

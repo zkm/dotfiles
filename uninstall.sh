@@ -128,6 +128,7 @@ main() {
     remove_if_symlink_to_repo "$HOME/.aliases.local"
     remove_if_symlink_to_repo "$HOME/.gitconfig"
     remove_if_symlink_to_repo "$HOME/.dircolors"
+    remove_if_symlink_to_repo "$HOME/.gemrc"
     remove_if_symlink_to_repo "$HOME/.zsh"
     remove_if_symlink_to_repo "$HOME/.bin"
     if [[ -d "$repo_root/local/share/applications" ]]; then

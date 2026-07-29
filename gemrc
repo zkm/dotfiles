@@ -1,0 +1,7 @@
+---
+# Force user-installed gem executables (e.g. motd-forge) into ~/.local/bin.
+# Without this, the bindir for `gem install --user-install` varies by distro
+# packaging: Fedora/RHEL's RubyGems patches the default to ~/bin, while
+# others (e.g. Arch) use Gem.user_dir/bin. ~/.local/bin is already on PATH
+# via zshrc/bashrc, so this keeps gem installs consistent across machines.
+install: --bindir ~/.local/bin
