@@ -19,12 +19,10 @@ Seen=true
 
 [Applications][org.mozilla.Thunderbird]
 Seen=true
+ShowPopups=false
 
 [Applications][signal]
 Seen=true
-
-[DoNotDisturb]
-NotificationSoundsMuted=true
 
 [Notifications]
 PopupPosition=BottomRight
