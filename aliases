@@ -423,6 +423,7 @@ alias tl='tmux list-sessions'
 alias tk='tmux kill-session -t'
 alias ta='tmux attach -t'
 alias tn='tmux new-session -s'
+alias t5="$HOME/.bin/tmux-5pane.sh"
 
 # ==============================
 # 🛠 Git Shortcuts
