@@ -157,15 +157,6 @@ main() {
     remove_if_symlink_to_repo "$HOME/.config/ghostty"
     remove_if_symlink_to_repo "$HOME/.config/alacritty"
     remove_if_symlink_to_repo "$HOME/.config/mise"
-    for kde_config in \
-        dolphinrc \
-        kcminputrc \
-        kdeglobals \
-        plasma-org.kde.plasma.desktop-appletsrc \
-        plasmanotifyrc \
-        plasmarc; do
-        remove_if_symlink_to_repo "$HOME/.config/$kde_config"
-    done
 
     cleanup_zshrc_entries
     cleanup_optional_components

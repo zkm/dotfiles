@@ -54,7 +54,6 @@ Back up anything important first.
 4. Symlinks repo-managed dotfiles into `$HOME`.
    - Includes bash files (`~/.bashrc`, `~/.bash_profile`, `~/.bash_aliases`) and zsh files.
    - Includes app config such as `~/.config/kitty` and `~/.config/starship.toml` when present in-repo.
-   - Links KDE Plasma config files only when setup is run in a KDE session, or when overridden with `INSTALL_KDE_CONFIG=1`.
 5. Syncs custom desktop assets when present:
    - `Icons/dark-side` -> `~/.local/share/icons/dark-side`
    - `Wallpapers` -> `~/Pictures/Wallpapers`
@@ -204,9 +203,7 @@ Notes:
 
 ### Linux
 
-- KDE/GTK configs are primarily Linux-targeted.
-- `setup.sh` only links Plasma config files when KDE is detected from the current session environment.
-- Override detection with `INSTALL_KDE_CONFIG=1 ./setup.sh` or force-skip with `INSTALL_KDE_CONFIG=0 ./setup.sh`.
+- GTK configs are primarily Linux-targeted. KDE Plasma dotfiles (`dolphinrc`, `kdeglobals`, etc.) are not managed by this repo — they change too often from live desktop state to be worth tracking in git.
 - Package install paths are tuned mostly for Arch first, with `dnf`/`apt`/`yum` fallbacks.
 - On Debian Bookworm (including Raspberry Pi OS Bookworm), `fastfetch` may be unavailable in default APT repositories. Setup now treats it as optional and continues.
 - Shell startup shows a [motd-forge](https://rubygems.org/gems/motd_forge) banner instead of running `fastfetch`/`neofetch` automatically (those are still available manually via the `neofetch` alias). `setup.sh` installs the gem with `gem install motd_forge` if a `gem` command is on `PATH`; otherwise install Ruby (e.g. via `rbenv`) first and run that command yourself.

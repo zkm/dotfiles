@@ -65,16 +65,13 @@ Windows-native Alacritty install, which reads `%APPDATA%\alacritty\
 alacritty.toml` — a manual copy-paste, not a symlink, per that file's own
 header comment.
 
-## KDE Plasma configs — gated by `should_install_kde_config()`
+## KDE Plasma configs
 
-| Repo path | `~/.config` target | Removed by `uninstall.sh`? |
-|---|---|---|
-| `config/dolphinrc` | `~/.config/dolphinrc` | Yes |
-| `config/kcminputrc` | `~/.config/kcminputrc` | Yes |
-| `config/kdeglobals` | `~/.config/kdeglobals` | Yes |
-| `config/plasma-org.kde.plasma.desktop-appletsrc` | `~/.config/plasma-org.kde.plasma.desktop-appletsrc` | Yes |
-| `config/plasmanotifyrc` | `~/.config/plasmanotifyrc` | Yes |
-| `config/plasmarc` | `~/.config/plasmarc` | Yes |
+KDE Plasma dotfiles (`dolphinrc`, `kcminputrc`, `kdeglobals`,
+`plasma-org.kde.plasma.desktop-appletsrc`, `plasmanotifyrc`, `plasmarc`) are
+**not managed by this repo.** They used to be symlinked from `config/` via a
+KDE-detection gate, but they drift too often from live desktop state to be
+worth tracking in git; `setup.sh`/`uninstall.sh` no longer touch them at all.
 
 ## Other synced assets (copied, not symlinked)
 

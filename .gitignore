@@ -14,8 +14,15 @@ config/REAPER/reaper-reginfo2.ini
 
 # Runtime/cache artifacts from synced app configs
 config/btop/btop.log
-config/plasma-org.kde.plasma.desktop-appletsrc
 config/gtk-3.0/settings.ini.*
+
+# KDE Plasma configs — not managed by this repo, drift too fast from live state
+config/dolphinrc
+config/kcminputrc
+config/kdeglobals
+config/plasma-org.kde.plasma.desktop-appletsrc
+config/plasmanotifyrc
+config/plasmarc
 config/REAPER/MetadataCaches/
 config/REAPER/ReaPack/
 config/REAPER/reaper-recentfx.ini

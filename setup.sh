@@ -178,34 +178,6 @@ function clear_old_dotfiles() {
     rm -rf ~/.zsh ~/.bin
 }
 
-is_kde_plasma_session() {
-    [[ "$(uname)" == "Linux" ]] || return 1
-
-    local current_desktop desktop_session
-    current_desktop="${XDG_CURRENT_DESKTOP:-}"
-    desktop_session="${DESKTOP_SESSION:-}"
-
-    [[ "$current_desktop" == *KDE* ]] \
-        || [[ "$current_desktop" == *Plasma* ]] \
-        || [[ "$desktop_session" == *kde* ]] \
-        || [[ "$desktop_session" == *plasma* ]] \
-        || [[ "${KDE_FULL_SESSION:-}" == "true" ]] \
-        || [[ -n "${KDE_SESSION_VERSION:-}" ]]
-}
-
-should_install_kde_config() {
-    case "${INSTALL_KDE_CONFIG:-auto}" in
-        1|true|TRUE|yes|YES)
-            return 0
-            ;;
-        0|false|FALSE|no|NO)
-            return 1
-            ;;
-    esac
-
-    is_kde_plasma_session
-}
-
 link_repo_config_path() {
     local repo_root="$1"
     local config_path="$2"
@@ -737,22 +709,6 @@ function create_dotfiles() {
     if [[ -d "$repo_root/config/mise" ]]; then
         link_repo_config_path "$repo_root" "mise"
     fi
-
-    if should_install_kde_config; then
-        echo "Detected KDE Plasma. Linking KDE config files..."
-        for kde_config in \
-            dolphinrc \
-            kcminputrc \
-            kdeglobals \
-            plasma-org.kde.plasma.desktop-appletsrc \
-            plasmanotifyrc \
-            plasmarc; do
-            link_repo_config_path "$repo_root" "$kde_config"
-        done
-    else
-        echo "KDE Plasma not detected. Skipping KDE-specific config links."
-    fi
-
 }
 
 function setup_tmux_plugins() {

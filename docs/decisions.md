@@ -75,17 +75,21 @@ existence checks, backups, or confirmation prompts to
 `clear_old_dotfiles()` — that would change documented, relied-upon behavior
 (see README "Important behavior").
 
-## Media tools (OpenRGB/REAPER) and KDE config are opt-in/conditional, not default-on
+## Media tools (OpenRGB/REAPER) are opt-in/conditional, not default-on
 
 `install_media_tools()` requires an explicit `INSTALL_MEDIA_TOOLS=1` (or the
 per-tool `INSTALL_OPENRGB=1`/`INSTALL_REAPER=1`) and, per its own comment,
 skips outright in non-interactive mode with none of those set rather than
 prompting — an earlier interactive-prompt version was found to hang some
-terminal emulators. KDE Plasma dotfiles are auto-linked only when a KDE
-session is actually detected (`is_kde_plasma_session`), overridable via
-`INSTALL_KDE_CONFIG`. Both follow the general env-var-driven-optional-step
+terminal emulators. This follows the general env-var-driven-optional-step
 pattern in `CLAUDE.md`; preserve it for any new optional install step rather
 than defaulting new opt-in features to on.
+
+KDE Plasma dotfiles (`dolphinrc`, `kdeglobals`, etc.) were previously
+auto-linked the same way (`is_kde_plasma_session`/`INSTALL_KDE_CONFIG`), but
+that management was removed — see [[subsystems#kde-plasma-configs-unmanaged]]
+— because those files churn too fast from live desktop state to track in
+git.
 
 ## `opencode` install uses `--no-modify-path`
 

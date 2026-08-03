@@ -151,14 +151,14 @@ these — banners use a consistent double-line `# ===` box):
 When adding aliases, find the matching banner rather than appending at the
 end — the file is read top-to-bottom by section, not alphabetically.
 
-## KDE Plasma config linking
+## KDE Plasma configs (unmanaged)
 
-Gated by `is_kde_plasma_session()` (checks `XDG_CURRENT_DESKTOP`,
-`DESKTOP_SESSION`, `KDE_FULL_SESSION`, `KDE_SESSION_VERSION`) or forced via
-`INSTALL_KDE_CONFIG=1`. Links (as of this writing): `dolphinrc`,
-`kcminputrc`, `kdeglobals`, `plasma-org.kde.plasma.desktop-appletsrc`,
-`plasmanotifyrc`, `plasmarc`. See [[gotchas#setup-uninstall-drift]] for the
-current mismatch with `uninstall.sh`'s KDE cleanup list.
+`setup.sh`/`uninstall.sh` used to symlink `dolphinrc`, `kcminputrc`,
+`kdeglobals`, `plasma-org.kde.plasma.desktop-appletsrc`, `plasmanotifyrc`,
+and `plasmarc` from `config/` when a KDE session was detected
+(`is_kde_plasma_session()`) or `INSTALL_KDE_CONFIG=1` was forced. That
+linking was removed — these files churn from live desktop state too often
+to be worth tracking in git, so they're no longer part of this repo at all.
 
 ## OpenRGB / REAPER (media tools)
 

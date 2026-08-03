@@ -74,7 +74,10 @@ scripts' lists had stopped matching 1:1. Fixed gaps (now closed in
 - `create_dotfiles`'s KDE config loop links `plasmanotifyrc` in addition to
   `dolphinrc`, `kcminputrc`, `kdeglobals`,
   `plasma-org.kde.plasma.desktop-appletsrc`, `plasmarc` — but
-  `uninstall.sh`'s KDE loop was missing `plasmanotifyrc`. Added.
+  `uninstall.sh`'s KDE loop was missing `plasmanotifyrc`. Added. (That whole
+  KDE config-linking feature was later removed entirely — see
+  [[decisions#media-tools-openrgb-reaper-are-opt-in-conditional-not-default-on]]
+  — so this bullet is historical only.)
 
 See [[file-map]] for the current correspondence table (now fully matched).
 When adding a new `link_repo_config_path` call to `setup.sh`, add the
