@@ -1085,28 +1085,129 @@ ollama-clean() {
 # ==============================
 # Comprehensive RAID status viewer
 raidview() {
-  local mddev=$(grep -Eo '^md[0-9]+' /proc/mdstat | head -n1)
-  if [ -z "$mddev" ]; then
+  local c_reset c_bold c_dim c_cyan c_green c_yellow c_red
+  if [ -z "$NO_COLOR" ] && [ -t 1 ] && command -v tput &>/dev/null \
+    && [ "$(tput colors 2>/dev/null || echo 0)" -ge 8 ]; then
+    c_reset=$(tput sgr0)
+    c_bold=$(tput bold)
+    c_dim=$(tput dim)
+    c_cyan=$(tput setaf 6)
+    c_green=$(tput setaf 2)
+    c_yellow=$(tput setaf 3)
+    c_red=$(tput setaf 1)
+  fi
+
+  local mddev=""
+  [ -e /proc/mdstat ] && mddev=$(grep -Eo '^md[0-9]+' /proc/mdstat | head -n1)
+  if [ -z "$mddev" ] && command -v lsblk &>/dev/null; then
     mddev=$(lsblk -rno NAME,TYPE | awk '$2=="raid5"{print $1; exit}')
   fi
-  
-  echo "📊 === RAID Status Overview ==="
-  echo "📋 == mdstat =="
-  cat /proc/mdstat
-  
-  if [ -n "$mddev" ]; then
-    echo -e "\n🔍 == RAID Detail (/dev/$mddev) =="
-    sudo mdadm --detail /dev/"$mddev" | grep -E "Raid Level|Array Size|State|Active Devices|Working|Failed|Spare|RaidDevice"
+
+  local title="RAID Status"
+  [ -n "$mddev" ] && title="RAID Status — /dev/$mddev"
+  local border
+  border=$(printf '─%.0s' $(seq 1 $((${#title} + 2))))
+  echo "${c_bold}${c_cyan}╭${border}╮${c_reset}"
+  echo "${c_bold}${c_cyan}│ ${title} │${c_reset}"
+  echo "${c_bold}${c_cyan}╰${border}╯${c_reset}"
+
+  if [ ! -e /proc/mdstat ]; then
+    echo "${c_yellow}⚠️  No Linux md RAID subsystem detected (/proc/mdstat missing).${c_reset}"
   else
-    echo -e "\n⚠️  == RAID Detail =="
-    echo "No md raid device detected."
+    echo "${c_bold}📋 mdstat${c_reset}"
+    sed -E \
+      -e "s/\[U+\]/${c_green}&${c_reset}/" \
+      -e "s/\[[U_]*_[U_]*\]/${c_red}&${c_reset}/" \
+      -e "s/^(.*(resync|recovery|check|reshape) =.*)$/${c_yellow}\1${c_reset}/" \
+      /proc/mdstat
+
+    if [ -z "$mddev" ]; then
+      echo -e "\n${c_yellow}⚠️  No md raid device detected.${c_reset}"
+    elif ! command -v mdadm &>/dev/null; then
+      echo -e "\n${c_yellow}⚠️  mdadm is not installed; can't show detail for /dev/$mddev.${c_reset}"
+    else
+      local detail
+      detail=$(sudo mdadm --detail /dev/"$mddev" 2>/dev/null)
+
+      local state_line badge badge_color
+      state_line=$(echo "$detail" | grep -m1 "State :" | sed -E 's/^ *State : *//')
+      case "$state_line" in
+        clean|"clean ") badge="HEALTHY"; badge_color=$c_green ;;
+        *degraded*|*recovering*) badge="DEGRADED"; badge_color=$c_red ;;
+        *checking*|*resync*) badge="CHECKING"; badge_color=$c_yellow ;;
+        *) badge="$state_line"; badge_color=$c_yellow ;;
+      esac
+      echo -e "\n${c_bold}●${c_reset} ${badge_color}${c_bold}${badge}${c_reset} ${c_dim}(${state_line})${c_reset}"
+
+      echo -e "\n${c_bold}${c_cyan}🔍 Array Detail${c_reset}"
+      echo "$detail" \
+        | grep -E "Raid Level|Array Size|State :|Active Devices|Working|Failed|Spare" \
+        | while IFS= read -r line; do
+            case "$line" in
+              *State*clean*|*State*active*)
+                printf '  %s%s%s\n' "$c_green" "$line" "$c_reset" ;;
+              *State*degraded*|*State*recovering*|*State*resync*|*State*checking*)
+                printf '  %s%s%s\n' "$c_yellow" "$line" "$c_reset" ;;
+              *"Failed Devices"*': 0')
+                printf '  %s%s%s\n' "$c_green" "$line" "$c_reset" ;;
+              *"Failed Devices"*)
+                printf '  %s%s%s\n' "$c_red" "$line" "$c_reset" ;;
+              *)
+                printf '  %s\n' "$line" ;;
+            esac
+          done
+
+      local disk_table
+      disk_table=$(echo "$detail" | awk '/Number +Major +Minor +RaidDevice +State/{f=1} f && NF')
+      if [ -n "$disk_table" ]; then
+        echo -e "\n${c_bold}${c_cyan}💿 Member Disks${c_reset}"
+        echo "$disk_table" | while IFS= read -r line; do
+          case "$line" in
+            *Number*Major*Minor*RaidDevice*State*)
+              printf '  %s%s%s\n' "$c_dim" "$line" "$c_reset" ;;
+            *faulty*|*removed*)
+              printf '  %s%s%s\n' "$c_red" "$line" "$c_reset" ;;
+            *spare*|*rebuilding*|*recovering*)
+              printf '  %s%s%s\n' "$c_yellow" "$line" "$c_reset" ;;
+            *active*sync*)
+              printf '  %s%s%s\n' "$c_green" "$line" "$c_reset" ;;
+            *)
+              printf '  %s\n' "$line" ;;
+          esac
+        done
+      fi
+
+      local df_line
+      df_line=$(df -h --output=size,used,avail,pcent,target "/dev/$mddev" 2>/dev/null | tail -n1)
+      if [ -n "$df_line" ]; then
+        local size used avail pcent target pct_num filled empty bar bar_color
+        read -r size used avail pcent target <<< "$df_line"
+        pct_num=${pcent%\%}
+        filled=$((pct_num / 10))
+        empty=$((10 - filled))
+        bar=$(printf '█%.0s' $(seq 1 "$filled") 2>/dev/null)
+        bar+=$(printf '░%.0s' $(seq 1 "$empty") 2>/dev/null)
+        bar_color=$c_green
+        [ "$pct_num" -ge 80 ] && bar_color=$c_yellow
+        [ "$pct_num" -ge 95 ] && bar_color=$c_red
+        echo -e "\n${c_bold}${c_cyan}📦 Array Capacity${c_reset} ${c_dim}($target)${c_reset}"
+        printf '  %s[%s]%s %s  (%s used, %s free of %s)\n' \
+          "$bar_color" "$bar" "$c_reset" "$pcent" "$used" "$avail" "$size"
+      fi
+    fi
   fi
-  
-  echo -e "\n💽 == Storage Devices =="
-  lsblk -o NAME,SIZE,TYPE,FSTYPE,LABEL,MOUNTPOINT
-  
-  echo -e "\n📈 == Disk Usage =="
-  df -h -x tmpfs -x devtmpfs
+
+  if command -v lsblk &>/dev/null; then
+    echo -e "\n${c_bold}${c_cyan}💽 Storage Devices${c_reset}"
+    lsblk -o NAME,SIZE,TYPE,FSTYPE,LABEL,MOUNTPOINT
+  fi
+
+  echo -e "\n${c_bold}${c_cyan}📈 Disk Usage${c_reset}"
+  if [[ "$(uname)" == "Darwin" ]]; then
+    df -h
+  else
+    df -h -x tmpfs -x devtmpfs
+  fi
 }
 
 # RAID5 health check (read-only)
@@ -1160,6 +1261,55 @@ raid5-monitor() {
   
   echo "📈 === Real-Time RAID Monitor (Ctrl+C to exit) ==="
   sudo mdadm --monitor --delay=60 /dev/md127
+}
+
+# Start RAID parity consistency check (read-only kernel scrub, runs in background)
+raid5-parity-check() {
+  local sync_action_file=/sys/block/md127/md/sync_action
+  local mismatch_file=/sys/block/md127/md/mismatch_cnt
+
+  if [ ! -e /dev/md127 ]; then
+    echo "❌ No RAID device found at /dev/md127" >&2
+    return 1
+  fi
+
+  if [ ! -e "$sync_action_file" ]; then
+    echo "❌ $sync_action_file not found." >&2
+    return 1
+  fi
+
+  local current_action
+  current_action=$(cat "$sync_action_file" 2>/dev/null)
+  if [ "$current_action" != "idle" ]; then
+    echo "⚠️  RAID is already busy (sync_action: $current_action). Aborting." >&2
+    return 1
+  fi
+
+  echo "🔎 === Starting RAID Parity Check (/dev/md127, full array, read-only) ==="
+  echo check | sudo tee "$sync_action_file" >/dev/null
+
+  echo "✅ Check started in the background."
+  echo "   Monitor progress: raid5-sync  (or cat /proc/mdstat)"
+  echo "   Mismatch count when finished: cat $mismatch_file"
+}
+
+# Friendly wrapper: bare `raid6check` (no args) points at our RAID-5 array
+# instead of dead-ending on the real binary's "not a RAID-6" error.
+# Called with explicit args, it passes straight through to the real tool.
+raid6check() {
+  if ! command -v raid6check &>/dev/null; then
+    echo "❌ raid6check is not installed." >&2
+    return 1
+  fi
+
+  if [ "$#" -eq 0 ]; then
+    echo "ℹ️  raid6check only supports RAID-6; /dev/md127 is RAID-5."
+    echo "   Running raid5-parity-check instead..."
+    raid5-parity-check
+    return
+  fi
+
+  command raid6check "$@"
 }
 
 # ==============================
