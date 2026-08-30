@@ -99,6 +99,38 @@ if [[ -f "$HOME/.bash_aliases" ]]; then
   source "$HOME/.bash_aliases"
 fi
 
+# Programmable completion (git branches/flags, systemctl units, docker, etc.).
+# Non-login interactive shells don't read /etc/profile, so distros that wire
+# bash-completion up there (e.g. Fedora's /etc/profile.d/bash_completion.sh)
+# need it sourced here too — this custom bashrc replaces the stock skeleton
+# that would otherwise pull it in via /etc/bashrc.
+if [[ -f /etc/profile.d/bash_completion.sh ]]; then
+  source /etc/profile.d/bash_completion.sh
+elif [[ -f /usr/share/bash-completion/bash_completion ]]; then
+  source /usr/share/bash-completion/bash_completion
+elif [[ -f /etc/bash_completion ]]; then
+  source /etc/bash_completion
+fi
+
+# fzf's completion script (/etc/bash_completion.d/fzf) claims `git` for plain
+# fuzzy path matching before git's own lazy-loaded completion gets a chance
+# to register — reload git's real subcommand/branch-aware completion over
+# that, and extend it to the `g` alias (aliases:git section), since bash
+# doesn't propagate a command's completion to its aliases automatically.
+for _git_completion in \
+  /usr/share/bash-completion/completions/git \
+  /usr/share/git-core/contrib/completion/git-completion.bash \
+  /etc/bash_completion.d/git; do
+  if [[ -f "$_git_completion" ]]; then
+    source "$_git_completion"
+    break
+  fi
+done
+unset _git_completion
+if command -v git >/dev/null 2>&1 && type __git_complete >/dev/null 2>&1; then
+  __git_complete g git
+fi
+
 # ===== PATH and Runtime Managers =====
 # Helper: prepend a directory to PATH only when it exists.
 add_path_if_dir() {
