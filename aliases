@@ -444,7 +444,7 @@ alias gd="git diff"
 # 🎵 Music Library Management
 # ==============================
 # Navidrome sync operations
-alias sync-local-music='rsync -avh --progress ~/Music/ /mnt/zombie/navidrome/Music/ | tee ~/syncmusic.log'
+alias sync-local-music='rsync -avh --progress ~/Music/ /mnt/mars/navidrome/Music/ | tee ~/syncmusic.log'
 alias naviscan='docker restart navidrome && sleep 5 && docker exec navidrome /app/navidrome scan'
 alias naviscan-server="ssh do-navipi 'docker restart navidrome && sleep 5 && docker exec navidrome /app/navidrome scan'"
 alias naviscan-full-server="ssh do-navipi 'docker exec navidrome /app/navidrome scan --full'"
@@ -454,12 +454,12 @@ alias naviscan-full-server="ssh do-navipi 'docker exec navidrome /app/navidrome 
 # Handles different naming conventions (e.g., "01 - Title.mp3" vs "01 Title.flac")
 # Usage: navidrome-cleanup-duplicates [path] [--force]
 # Examples:
-#   navidrome-cleanup-duplicates                    # Dry-run: zombie backup
-#   navidrome-cleanup-duplicates --force            # Delete: zombie backup
+#   navidrome-cleanup-duplicates                    # Dry-run: mars backup
+#   navidrome-cleanup-duplicates --force            # Delete: mars backup
 #   navidrome-cleanup-duplicates do-navipi:/media/zkm/NapsterX/Music  # Dry-run: remote server
 #   navidrome-cleanup-duplicates do-navipi:/media/zkm/NapsterX/Music --force  # Delete: remote server
 navidrome-cleanup-duplicates() {
-  local music_dir="${1:-/mnt/zombie/navidrome/Music}"
+  local music_dir="${1:-/mnt/mars/navidrome/Music}"
   local dry_run=true
   local force_flag="${2:-}"
   local log_dir="${XDG_STATE_HOME:-$HOME/.local/state}/navidrome"
@@ -607,7 +607,7 @@ alias navi-logs-latest='cat $(ls -t ${XDG_STATE_HOME:-$HOME/.local/state}/navidr
 #   navidrome-rebuild-playlists --force
 #   navidrome-rebuild-playlists do-navipi:/media/zkm/NapsterX/Music --force
 navidrome-rebuild-playlists() {
-  local music_dir="${1:-/mnt/zombie/navidrome/Music}"
+  local music_dir="${1:-/mnt/mars/navidrome/Music}"
   local dry_run=true
   local log_dir="${XDG_STATE_HOME:-$HOME/.local/state}/navidrome"
   local timestamp=$(date +%Y%m%d_%H%M%S)
@@ -619,7 +619,7 @@ navidrome-rebuild-playlists() {
     dry_run=false
   elif [ "${1:-}" = "--force" ]; then
     dry_run=false
-    music_dir="/mnt/zombie/navidrome/Music"
+    music_dir="/mnt/mars/navidrome/Music"
   fi
 
   {
@@ -723,10 +723,10 @@ alias navi-playlists-rebuild-server-force='navidrome-rebuild-playlists "do-navip
 # List album directories that contain MP3s but no FLAC files (upgrade candidates)
 # Usage: navi-mp3-only [path]
 # Examples:
-#   navi-mp3-only                                           # Local zombie backup
+#   navi-mp3-only                                           # Local mars backup
 #   navi-mp3-only "do-navipi:/media/zkm/NapsterX/Music"    # Remote server
 navi-mp3-only() {
-  local music_dir="${1:-/mnt/zombie/navidrome/Music}"
+  local music_dir="${1:-/mnt/mars/navidrome/Music}"
 
   if [[ "$music_dir" == *":"* ]]; then
     local remote_host="${music_dir%:*}"
@@ -758,14 +758,14 @@ navi-mp3-only() {
 alias navi-mp3-only-server='navi-mp3-only "do-navipi:/media/zkm/NapsterX/Music"'
 
 # iPod sync operations
-#alias syncipod='rsync -avh --progress --ignore-existing /mnt/zombie/navidrome/Music_iPod/ /run/media/$USER/IPOD/Music/'
-alias syncipod='rsync -avh --progress --ignore-existing --delete /mnt/zombie/navidrome/Music_iPod/ /run/media/$USER/IPOD/Music/'
+#alias syncipod='rsync -avh --progress --ignore-existing /mnt/mars/navidrome/Music_iPod/ /run/media/$USER/IPOD/Music/'
+alias syncipod='rsync -avh --progress --ignore-existing --delete /mnt/mars/navidrome/Music_iPod/ /run/media/$USER/IPOD/Music/'
 
 
 # Remote music sync operations  
-# alias dryrun-music='rsync -avh --progress --delete --dry-run /mnt/zombie/navidrome/Music/ do-navipi:/media/zkm/NapsterX/Music/'
-alias dryrun-music='rsync -avh --progress --delete --dry-run /mnt/zombie/NapsterX/Music/ do-navipi:/media/zkm/NapsterX/Music/'
-alias sync-music='rsync -avh --progress --delete /mnt/zombie/NapsterX/Music/ do-navipi:/media/zkm/NapsterX/Music/'
+# alias dryrun-music='rsync -avh --progress --delete --dry-run /mnt/mars/navidrome/Music/ do-navipi:/media/zkm/NapsterX/Music/'
+alias dryrun-music='rsync -avh --progress --delete --dry-run /mnt/mars/NapsterX/Music/ do-navipi:/media/zkm/NapsterX/Music/'
+alias sync-music='rsync -avh --progress --delete /mnt/mars/NapsterX/Music/ do-navipi:/media/zkm/NapsterX/Music/'
 
 # ==============================
 # 🐳 Docker
