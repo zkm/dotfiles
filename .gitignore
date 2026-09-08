@@ -56,3 +56,9 @@ backups/
 
 # Machine-specific aliases
 aliases.local
+config/fish/aliases.local.fish
+
+# fish's own auto-generated universal-variable state — written directly into
+# this directory because ~/.config/fish is symlinked here, same class of
+# problem as KDE Plasma's live desktop-state churn (see docs/decisions.md).
+config/fish/fish_variables

@@ -56,6 +56,7 @@ sync (add to `$repo_root/aliases.local` first, then re-run `setup.sh`).
 | `config/ghostty` | `~/.config/ghostty` | Yes |
 | `config/alacritty` | `~/.config/alacritty` | Yes |
 | `config/mise` | `~/.config/mise` | Yes |
+| `config/fish` | `~/.config/fish` | Yes |
 
 Note: `config/alacritty/windows-wsl.toml` inside `config/alacritty/` is
 never itself deployed by this mechanism — the whole `config/alacritty`
@@ -64,6 +65,19 @@ Linux/macOS/WSL use, but `windows-wsl.toml`'s actual consumer is the
 Windows-native Alacritty install, which reads `%APPDATA%\alacritty\
 alacritty.toml` — a manual copy-paste, not a symlink, per that file's own
 header comment.
+
+`config/fish` (added 2026-09-08, see
+[[decisions#fish-shell-support]]) {#config-fish} is a hand-ported fish translation of
+`aliases`/`zshrc`/`bashrc`, laid out the idiomatic fish way rather than as
+one file: `config.fish` (env vars, PATH, prompt, motd, dircolors, version
+managers), `conf.d/10-aliases.fish` (the simple one-line aliases,
+auto-sourced), and `functions/*.fish` (one file per non-trivial function,
+autoloaded by fish on first call — mirrors every function/complex alias in
+`aliases` 1:1). Keep `aliases` and `config/fish/` in sync by hand when
+adding/removing something — there's no shared source of truth between
+them. A gitignored `config/fish/aliases.local.fish` (parallel to
+`aliases.local`) is picked up automatically if present, since the whole
+directory is one symlink target.
 
 ## KDE Plasma configs
 
@@ -90,13 +104,24 @@ uninstall.
 ## Non-managed reference config in the repo
 
 `config/btop`, `config/gtk-3.0`, `config/gtk-4.0`, `config/neofetch`,
-`config/OpenRGB`, `config/REAPER`, `config/waybar`, `config/GIMP` exist under
-`config/` but have **no** `link_repo_config_path` call in `create_dotfiles`
-as of this writing — they're present in the repo (presumably as
-reference/backup or manually-applied config) but not part of the automated
-install. Don't assume every `config/*` subdirectory is live-linked; check
-`create_dotfiles` before saying a config change here will "just take
-effect."
+`config/OpenRGB`, `config/REAPER`, `config/waybar`, `config/GIMP`,
+`config/hypr` exist under `config/` but have **no** `link_repo_config_path`
+call in `create_dotfiles` as of this writing — they're present in the repo
+(presumably as reference/backup or manually-applied config) but not part of
+the automated install. Don't assume every `config/*` subdirectory is
+live-linked; check `create_dotfiles` before saying a config change here will
+"just take effect."
+
+`config/hypr` is a snapshot of CachyOS's stock default Hyprland config
+(`~/.config/hypr`, using CachyOS's Lua-based `hyprland.lua` +
+`config/*.lua` module layout, not plain `hyprland.conf`). It's deliberately
+**not** wired into `create_dotfiles`/`link_repo_config_path` — CachyOS ships
+and updates this config via its own packages, so symlinking it from the
+repo would fight package upgrades the same way live-linking KDE Plasma
+configs used to (see the KDE Plasma section below and
+[[decisions#hyprland-reference-only]]). Treat it as copy-in/copy-out only:
+when you tweak `~/.config/hypr` on the Hyprland machine, copy the changed
+file(s) back into `config/hypr` manually to keep the snapshot current.
 
 `config/GIMP/3.2` is a curated subset of a live GIMP profile
 (`~/.config/GIMP/3.2`), kept for its Photoshop-like look/feel: `gimprc`,

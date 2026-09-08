@@ -122,3 +122,32 @@ dev work. If a system Python CLI tool needs to be run interactively, either
 call it via its full system-python path explicitly
 (`/usr/bin/python3 /opt/rocm/bin/amd-smi ...`) or temporarily
 `PATH=/usr/bin:$PATH <tool>`.
+
+## `eza --icons` silently stopped showing icons after an eza upgrade — it's not a font/terminal problem (2026-09-08)
+
+**Symptom:** no file-type icons in `l`/`ll`/`la`/`lt`/`lat`/`tree`/`ls`
+output in kitty, on a fresh CachyOS install. Looked exactly like a missing
+Nerd Font — but the font was fine: `fc-match "MesloLGS NF"` resolved
+correctly, `kitty --debug-font-fallback` confirmed kitty was using the
+right patched font file for Normal/Bold/Italic, the fontconfig cache was
+fresh, and killing/relaunching kitty (confirmed via a new PID) changed
+nothing.
+
+**Root cause:** eza (`v0.23.5` here) changed `--icons` from an old-style
+boolean flag to `--icons [<WHEN>]` (`always`/`auto`/`never`), and bare
+`--icons` (no `=value`) means `auto`. `auto`'s terminal-capability
+detection isn't reliable — reproduced zero icon codepoints in the output
+even under a real pty (`script -qec "eza --icons ~" /dev/null`), while
+`--icons=always` produced them immediately. The alias catalog (`aliases`
+and its fish port `config/fish/conf.d/10-aliases.fish` /
+`functions/ls.fish`) was written back when bare `--icons` always meant
+"on" — it silently became `auto` (and effectively "off" here) purely from
+upgrading the `eza` package, no local config change needed to trigger it.
+
+**Fix:** all `--icons` usages changed to `--icons=always` in both
+`aliases` and the fish port, so this doesn't depend on eza's terminal
+detection at all. If icons vanish again after some future eza upgrade,
+check `eza --help | grep -A2 icon` for another flag semantics change
+before assuming it's a font or terminal issue — verify by piping through a
+byte inspector for the `U+E000`–`U+F8FF` Private Use Area range rather than
+by eye, since a missing glyph and a suppressed glyph look identical.

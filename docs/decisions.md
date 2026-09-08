@@ -48,19 +48,86 @@ starship as the actively-developed path (see `bdec36ae` "icon candy via
 starship" for the most recent prompt-icon work) but don't strip p10k support
 without checking whether the user still wants that opt-in path.
 
-## Fish shell and Hyprland were tried and fully removed, not just deprioritized
+## Fish shell was removed once, then genuinely re-added {#fish-shell-support}
 
 Commits `b32df95a` ("Adding the option to choose bash, zsh, fish") →
 `abb9d63a`/`cb3fbc22` ("no fish for you" / "So long and thanks for all of
 the fish") show fish was added as a third `SHELL_MODE` option and then
 completely removed (setup.sh support, `config/fish/config.fish`, the
-starship fish-specific line). Similarly, `56d4f081` ("removed hyprland")
-deleted the entire `config/hypr/` tree, Hyprland-specific `setup.sh` steps,
-and trimmed `config/waybar` to match. Neither commit message states a
-reason. Treat both as settled subtractions (don't re-add fish as a
-`SHELL_MODE` option or restore `config/hypr/` speculatively) but if the user
-asks for either back, there's no documented blocker — it's just currently
-unsupported, not deliberately forbidden.
+starship fish-specific line). Neither commit message states a reason.
+
+Fish came back for real on 2026-09-08, prompted by a fresh CachyOS+Hyprland
+install whose account's login shell was already fish (`getent passwd`
+showed `/bin/fish`) — running `setup.sh` unmodified would have silently
+`chsh`'d it to bash, since `detect_current_shell_mode()` only recognized
+`*/zsh` and fell through to `"bash"` for anything else. Fixed properly
+rather than patched around:
+
+- `detect_current_shell_mode()` recognizes `*/fish` and the interactive
+  menu (`shell_mode_prompt_decision`) offers `3) fish` as a real, selectable
+  target — not just "leave it alone if already fish". `SHELL_MODE=fish` env
+  var works the same as `bash`/`zsh`.
+- `setup_shell()`'s `fish)` case actually `chsh`'s to fish when selected and
+  the current shell isn't already fish (mirrors the bash/zsh branches
+  exactly — no more special-cased no-op).
+- `should_use_fish()` (mirrors `should_use_zsh()`) gates a `fish` package
+  add-on in every `install_with_*`/Homebrew function.
+- `config/fish/` is a full hand-ported translation of `aliases`/
+  `zshrc`/`bashrc` — see [[file-map#config-fish]] for the layout. Every
+  function/complex alias in `aliases` was translated and syntax-checked
+  with `fish -n`; the multi-function ones (`navidrome-cleanup-duplicates`,
+  `navidrome-rebuild-playlists`, `raidview`) were also exercised against
+  synthetic test data (temp directories, fake `$detail`/`$df_line` blobs) to
+  catch fish-specific gotchas that don't show up as syntax errors — e.g.
+  `read -r` isn't valid in fish (`-r` doesn't exist, breaks the read
+  entirely), quoting a fish list variable joins it with spaces not
+  newlines (`"$listvar"` in a filter pipeline silently searches the wrong
+  text), and `"${$var}suffix"`-style bash suffix-concatenation greedily
+  swallows the suffix into the variable name unless split into adjacent
+  quoted segments. The remote-SSH payloads inside the two `navidrome-*`
+  functions are still literally bash (executed on the remote host, not
+  fish) and were verified byte-identical to the original by rendering them
+  through a fake `ssh` function rather than guessed at — not
+  live-tested against a real remote host.
+- `raidview`'s RAID-detail-parsing branch (the part that needs a real
+  `/dev/mdX` array) could only be sanity-checked piecewise with synthetic
+  `mdadm --detail`-shaped text, not run end-to-end — there's no RAID
+  hardware on the machine this was written on.
+- One pre-existing bash bug was found and *not* replicated: the original
+  `navidrome-rebuild-playlists`' local-path branch pipes `find | while
+  read; do ... done`, which runs in a subshell in bash — so `rebuilt`/
+  `skipped` counters reset outside the loop and the final summary always
+  printed "0 playlists, skipped 0" regardless of real counts. Fish doesn't
+  run piped `while` loops in a subshell, so the fish version reports real
+  counts. The bash version was left as-is (out of scope to fix here) but
+  don't be surprised if the two disagree on that one line.
+
+Hyprland followed the same arc once (`177500f1` → `56d4f081` "removed
+hyprland", which deleted `config/hypr/`, Hyprland-specific `setup.sh`
+install steps, and trimmed `config/waybar`) but was reintroduced in
+2026-09-08 — see the next entry. That earlier removal was of a hand-rolled
+Hyprland config with its own package-install path; don't use it as a
+template for the current reference-only approach.
+
+## Hyprland config is a reference-only snapshot, not repo-managed {#hyprland-reference-only}
+
+`config/hypr` holds a copy of CachyOS's *stock default* Hyprland config
+(installed on a fresh CachyOS+Hyprland system, dual-booted with Windows —
+added 2026-09-08). Unlike the old, fully hand-rolled `config/hypr/` that was
+removed in `56d4f081`, this one is deliberately **not** wired into
+`setup.sh`/`uninstall.sh` at all — no `link_repo_config_path` call, no
+`INSTALL_HYPRLAND` env var, no package-install function. Reason: CachyOS
+owns and updates this config via its own packages (it uses CachyOS's
+Lua-based `hyprland.lua`/`config/*.lua` module system, not a plain
+`hyprland.conf`), so symlinking it from the repo would fight package
+upgrades — the exact problem that got KDE Plasma config pulled from this
+repo entirely (see [[subsystems#kde-plasma-configs-unmanaged]]). Keep it
+copy-in/copy-out, the same pattern already used for `config/GIMP`: edit
+`~/.config/hypr` live, then manually copy changed files back into
+`config/hypr` to keep the snapshot current. Don't add automation here
+without re-confirming with the user first — this was an explicit choice
+after discussing the fresh-install/dual-boot risk, not an oversight to
+"complete."
 
 ## `clear_old_dotfiles` unconditionally deletes real files — this is intentional, not a bug
 

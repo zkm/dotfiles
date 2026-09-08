@@ -48,7 +48,7 @@ this summary. Consult these before re-deriving the same investigation:
 
 **Alias catalog (`aliases`, 1300+ lines):** organized into banner-delimited sections (navigation/eza, directory shortcuts, editing/bat, modern CLI shortcuts incl. kitty image helpers and OpenRGB lighting effects, git, tmux, music library management, docker/nginx/CakePHP service management, Ollama model shortcuts, RAID management, machine-specific local-only aliases). When adding aliases, put them in the matching section rather than appending at the end.
 
-**Environment-variable-driven behavior:** several install choices are controlled by env vars rather than prompts in non-interactive mode: `SHELL_MODE` (auto/bash/zsh), `PROMPT_BACKEND` (starship/p10k), `INSTALL_MEDIA_TOOLS`/`INSTALL_OPENRGB`/`INSTALL_REAPER` (opt-in, default off). Preserve this pattern for new optional/interactive steps — auto-detect in a TTY, require an explicit env var otherwise.
+**Environment-variable-driven behavior:** several install choices are controlled by env vars rather than prompts in non-interactive mode: `SHELL_MODE` (auto/bash/zsh/fish), `PROMPT_BACKEND` (starship/p10k, zsh-only — fish always uses starship), `INSTALL_MEDIA_TOOLS`/`INSTALL_OPENRGB`/`INSTALL_REAPER` (opt-in, default off). Preserve this pattern for new optional/interactive steps — auto-detect in a TTY, require an explicit env var otherwise.
 
 ## Destructive behavior — read before touching `setup.sh`/`uninstall.sh`
 

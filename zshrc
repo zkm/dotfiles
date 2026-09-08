@@ -31,6 +31,14 @@ path=(
 # which varies (e.g. Fedora/RHEL defaults to ~/bin).
 command -v ruby >/dev/null 2>&1 && export PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"
 
+# CachyOS ships its own oh-my-zsh/p10k/plugin bundle (zsh-syntax-highlighting,
+# zsh-autosuggestions, pkgfile command-not-found, and some pacman aliases) via
+# this file. It's not present on non-CachyOS machines, so this is a no-op
+# there. Its own header says it should stay close to the top of ~/.zshrc for
+# its p10k instant-prompt block to work, hence sourcing it before the motd
+# banner below.
+[[ -f /usr/share/cachyos-zsh-config/cachyos-config.zsh ]] && source /usr/share/cachyos-zsh-config/cachyos-config.zsh
+
 # Print system summary before instant prompt to avoid p10k console I/O warnings.
 # motd-forge has no built-in color/distro support (v0.1.0: title + uptime/disk/mem +
 # quote only), so draw a boxed, icon'd distro header and gradient-tint the banner

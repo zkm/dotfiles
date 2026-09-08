@@ -29,14 +29,14 @@ if command -v eza &>/dev/null; then
         return
       fi
     done
-    eza --icons --group-directories-first "$@"
+    eza --icons=always --group-directories-first "$@"
   }
-  alias l='eza --icons --group-directories-first --all'
-  alias ll='eza -lh --icons --group-directories-first'
-  alias la='eza -la --icons --group-directories-first'
-  alias lt='eza -la --icons --group-directories-first --sort=modified'
-  alias lat='eza -la --icons --group-directories-first --sort=modified'
-  alias tree='eza --tree --icons --group-directories-first'
+  alias l='eza --icons=always --group-directories-first --all'
+  alias ll='eza -lh --icons=always --group-directories-first'
+  alias la='eza -la --icons=always --group-directories-first'
+  alias lt='eza -la --icons=always --group-directories-first --sort=modified'
+  alias lat='eza -la --icons=always --group-directories-first --sort=modified'
+  alias tree='eza --tree --icons=always --group-directories-first'
 else
   alias ls='ls --color=auto'
   alias ll='ls --color=auto -l'

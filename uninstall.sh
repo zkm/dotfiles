@@ -157,6 +157,7 @@ main() {
     remove_if_symlink_to_repo "$HOME/.config/ghostty"
     remove_if_symlink_to_repo "$HOME/.config/alacritty"
     remove_if_symlink_to_repo "$HOME/.config/mise"
+    remove_if_symlink_to_repo "$HOME/.config/fish"
 
     cleanup_zshrc_entries
     cleanup_optional_components
