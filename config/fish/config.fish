@@ -1,3 +1,6 @@
+# Suppress fish's built-in greeting; motd-forge below prints our own banner.
+set -g fish_greeting ''
+
 # ==============================
 # Custom Environment Variables
 # ==============================
@@ -96,6 +99,14 @@ end
 # Keybindings: fish defaults to emacs-style; switch to vi-style to match
 # the zsh/bash config (`bindkey -v`).
 fish_vi_key_bindings
+
+# fzf ships its own fish key-binding function (vendored automatically by the
+# fzf package into vendor_functions.d) for Ctrl-R/Ctrl-T/Alt-C, matching
+# zshrc's `source ~/.fzf.zsh` — but unlike the vendored zsh/bash scripts,
+# nothing calls it automatically, so it has to be invoked explicitly here.
+if status is-interactive && functions -q fzf_key_bindings
+    fzf_key_bindings
+end
 
 set -gx EDITOR nvim
 set -gx VISUAL nvim
