@@ -6,5 +6,5 @@ function yay --description 'System Python for yay (Arch Linux) — real function
         echo "❌ yay is not installed." >&2
         return 1
     end
-    env PATH="/usr/bin:"(string join ':' $PATH) command yay $argv
+    env PATH="/usr/bin:"(string join ':' $PATH) yay $argv
 end
