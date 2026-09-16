@@ -9,49 +9,49 @@ config.font = wezterm.font_with_fallback({
 config.font_size = 11
 config.line_height = 1.15
 
-config.color_scheme = "Tokyo Night"
-
+-- Colors match kitty/alacritty/ghostty (noctalia — see
+-- config/kitty/themes/noctalia.conf for the canonical hex values).
 config.colors = {
-  cursor_bg = "#bb9af7",
-  cursor_fg = "#1a1b26",
-  selection_bg = "#394b70",
-  selection_fg = "#c0caf5",
-  foreground = "#c0caf5",
-  background = "#1a1b26",
+  cursor_bg = "#e1e2e8",
+  cursor_fg = "#111418",
+  selection_bg = "#43474e",
+  selection_fg = "#c3c6cf",
+  foreground = "#e1e2e8",
+  background = "#111418",
   tab_bar = {
-    background = "#15161e",
+    background = "#111418",
     active_tab = {
-      bg_color = "#1a1b26",
-      fg_color = "#c0caf5",
+      bg_color = "#a3c9fe",
+      fg_color = "#00315b",
     },
     inactive_tab = {
-      bg_color = "#15161e",
-      fg_color = "#565f89",
+      bg_color = "#43474e",
+      fg_color = "#c3c6cf",
     },
     inactive_tab_hover = {
-      bg_color = "#1a1b26",
-      fg_color = "#7aa2f7",
+      bg_color = "#111418",
+      fg_color = "#a3c9fe",
     },
   },
   ansi = {
-    "#15161e",
-    "#f7768e",
-    "#9ece6a",
-    "#e0af68",
-    "#7aa2f7",
-    "#bb9af7",
-    "#7dcfff",
-    "#a9b1d6",
+    "#43474e",
+    "#ffb4ab",
+    "#a3c9fe",
+    "#bcc7db",
+    "#d8bde3",
+    "#a3c9fe",
+    "#bcc7db",
+    "#e1e2e8",
   },
   brights = {
-    "#414868",
-    "#f7768e",
-    "#9ece6a",
-    "#e0af68",
-    "#7aa2f7",
-    "#bb9af7",
-    "#7dcfff",
-    "#c0caf5",
+    "#8d9199",
+    "#ffb4ab",
+    "#a3c9fe",
+    "#bcc7db",
+    "#d8bde3",
+    "#a3c9fe",
+    "#bcc7db",
+    "#e1e2e8",
   },
 }
 

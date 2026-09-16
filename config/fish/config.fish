@@ -29,11 +29,6 @@ if command -v ruby >/dev/null 2>&1
     fish_add_path -p (ruby -e 'print Gem.user_dir')/bin
 end
 
-# CachyOS ships its own fish greeting/config in some builds; nothing to
-# re-source here the way zshrc does for cachyos-config.zsh — CachyOS's fish
-# integration (if any) lives in /etc/fish/conf.d, which fish already sources
-# on its own before this file.
-
 # ==============================
 # System summary banner (motd-forge)
 # ==============================

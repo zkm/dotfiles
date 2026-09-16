@@ -82,12 +82,19 @@ manages `config/alacritty/alacritty.toml`, the Linux-side config used when
 launching Alacritty *from* WSL rather than launching *into* WSL from
 Windows).
 
-Shared visual identity across all four: Tokyo Night-derived color palette
-(`#1a1b26` background, `#c0caf5` foreground, `#bb9af7` cursor, etc. — same
-hex values appear in `alacritty.toml`, `windows-wsl.toml`, and presumably
-wezterm/ghostty/kitty configs, so a palette tweak needs to be applied in up
-to 5 places: 4 real terminal configs + `config/starship.toml` for the
-prompt's own accent colors, which use a related but not identical palette).
+Shared visual identity across all four: a "noctalia" color palette (`#111418`
+background, `#e1e2e8` foreground, `#a3c9fe` accent, etc.). Kitty and
+Alacritty source it from a dedicated theme file (`config/kitty/themes/
+noctalia.conf`, `config/alacritty/themes/noctalia.toml`, loaded via kitty's
+`include`/Alacritty's `import`); wezterm and ghostty inline the same hex
+values directly in `wezterm.lua`/`config.ghostty` since neither of those two
+formats has an equivalent import mechanism wired up here.
+`windows-wsl.toml` also inlines the same palette (it's copied standalone to
+Windows, so it can't reach the `themes/` file either). A palette tweak
+therefore needs to be applied in up to 5 places: the two theme files, the
+two inlined configs, and `windows-wsl.toml` — plus `config/starship.toml`
+for the prompt's own accent colors, which use a related but not identical
+palette.
 
 Font handling differs by terminal specifically because Alacritty has no
 font-fallback list:

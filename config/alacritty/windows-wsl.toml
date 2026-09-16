@@ -14,7 +14,9 @@
 # in PowerShell. That name is assigned once at creation and does NOT track
 # in-place OS upgrades, so don't assume it matches /etc/os-release.
 #
-# Same theme/keybindings as config/alacritty/alacritty.toml (used on
+# Same theme (noctalia, inlined below since this file is copied standalone
+# rather than through setup.sh's config/alacritty/themes/ import) and
+# keybindings as config/alacritty/alacritty.toml (used on
 # Linux/macOS), plus a [terminal.shell] pointing at wsl.exe instead of
 # PowerShell. Font is MesloLGS NF rather than JetBrains Mono here (unlike
 # wezterm, Alacritty has no per-config font-fallback list, so the primary
@@ -64,36 +66,40 @@ unfocused_hollow = true
 duration = 0
 
 [colors.primary]
-background = "#1a1b26"
-foreground = "#c0caf5"
+background = "#111418"
+foreground = "#e1e2e8"
 
 [colors.cursor]
-text = "#1a1b26"
-cursor = "#bb9af7"
+text = "#111418"
+cursor = "#e1e2e8"
+
+[colors.vi_mode_cursor]
+text = "#111418"
+cursor = "#a3c9fe"
 
 [colors.selection]
-text = "#c0caf5"
-background = "#394b70"
+text = "#c3c6cf"
+background = "#43474e"
 
 [colors.normal]
-black = "#15161e"
-red = "#f7768e"
-green = "#9ece6a"
-yellow = "#e0af68"
-blue = "#7aa2f7"
-magenta = "#bb9af7"
-cyan = "#7dcfff"
-white = "#a9b1d6"
+black = "#43474e"
+red = "#ffb4ab"
+green = "#a3c9fe"
+yellow = "#bcc7db"
+blue = "#d8bde3"
+magenta = "#a3c9fe"
+cyan = "#bcc7db"
+white = "#e1e2e8"
 
 [colors.bright]
-black = "#414868"
-red = "#f7768e"
-green = "#9ece6a"
-yellow = "#e0af68"
-blue = "#7aa2f7"
-magenta = "#bb9af7"
-cyan = "#7dcfff"
-white = "#c0caf5"
+black = "#8d9199"
+red = "#ffb4ab"
+green = "#a3c9fe"
+yellow = "#bcc7db"
+blue = "#d8bde3"
+magenta = "#a3c9fe"
+cyan = "#bcc7db"
+white = "#e1e2e8"
 
 [keyboard]
 bindings = [

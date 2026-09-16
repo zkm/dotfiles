@@ -1,13 +1,36 @@
 # https://ghostty.org/docs/config
 
-theme = Monokai Pro
+# Colors match kitty/alacritty/wezterm (noctalia — see
+# config/kitty/themes/noctalia.conf for the canonical hex values).
+background = #111418
+foreground = #e1e2e8
+selection-background = #43474e
+selection-foreground = #c3c6cf
+cursor-color = #e1e2e8
+
+palette = 0=#43474e
+palette = 1=#ffb4ab
+palette = 2=#a3c9fe
+palette = 3=#bcc7db
+palette = 4=#d8bde3
+palette = 5=#a3c9fe
+palette = 6=#bcc7db
+palette = 7=#e1e2e8
+palette = 8=#8d9199
+palette = 9=#ffb4ab
+palette = 10=#a3c9fe
+palette = 11=#bcc7db
+palette = 12=#d8bde3
+palette = 13=#a3c9fe
+palette = 14=#bcc7db
+palette = 15=#e1e2e8
 
 font-family = MesloLGS NF
 font-size = 12
 gtk-titlebar = true
 
 cursor-style = block
-cursor-text = white
+cursor-text = #111418
 cursor-style-blink = true
 
 window-width = 120
