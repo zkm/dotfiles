@@ -1,5 +1,15 @@
 # dotfiles
 
+[![CI](https://github.com/zkm/dotfiles/actions/workflows/ci.yml/badge.svg)](https://github.com/zkm/dotfiles/actions/workflows/ci.yml)
+
+![Arch Linux](https://img.shields.io/badge/Arch%20Linux-1793D1?logo=archlinux&logoColor=white)
+![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white)
+![Zsh](https://img.shields.io/badge/Zsh-F15A24?logo=zsh&logoColor=white)
+![Bash](https://img.shields.io/badge/Bash-4EAA25?logo=gnubash&logoColor=white)
+![Starship](https://img.shields.io/badge/Starship-DD0B78?logo=starship&logoColor=white)
+![tmux](https://img.shields.io/badge/tmux-1BB91F?logo=tmux&logoColor=white)
+![KDE Plasma](https://img.shields.io/badge/KDE%20Plasma-1D99F3?logo=kdeplasma&logoColor=white)
+
 Personal dotfiles for Linux, mainly Arch, and macOS.
 
 Includes config for Bash, Zsh, Git, tmux, kitty, KDE/GTK theming, OpenRGB, REAPER, and related tools.
