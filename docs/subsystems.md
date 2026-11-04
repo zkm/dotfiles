@@ -44,10 +44,9 @@ primary target).
 6. `compinit`, cached via a same-day zcompdump check (`EPOCHSECONDS -
    zcompdump_mtime < 86400`) to keep startup fast; falls back to a fresh
    `compinit` otherwise.
-7. Vi-mode keybindings (`bindkey -v`) plus a `zle-keymap-select` hook that
-   prefixes the prompt with `[NORMAL]`/`[INSERT]` — but only when
-   `PROMPT_BACKEND == starship` (p10k has its own native vi-mode indicator,
-   so this would double up).
+7. Vi-mode keybindings (`bindkey -v`). The mode is shown by starship's
+   `character` module (`❯` insert / `❮` normal, per `config/starship.toml`);
+   p10k has its own native vi-mode indicator.
 8. Version manager init, each guarded by a `__*_INIT_DONE` sentinel so
    re-sourcing `zshrc` (e.g. from a nested shell) doesn't redo `eval
    "$(pyenv init - zsh)"` / rbenv repeatedly: pyenv, rbenv inline; SDKMAN is

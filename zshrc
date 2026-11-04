@@ -194,37 +194,7 @@ fi
 bindkey -v
 bindkey "^[[H" beginning-of-line
 bindkey "^[[F" end-of-line
-
-# ==============================
-# 🎯 Vi Mode Prompt Indicator
-# ==============================
-# Keep this lightweight indicator only for Starship.
-# p10k has native vi mode support in its own config.
-if [[ "$PROMPT_BACKEND" == "starship" ]]; then
-  # The indicator lives in a variable that PROMPT references (promptsubst is
-  # on via starship), so PROMPT is set once and re-sourcing doesn't stack
-  # prefixes. Every new line starts in insert mode, so precmd resets it —
-  # otherwise a command run from NORMAL mode leaves a stale [NORMAL] on the
-  # next prompt, and the very first prompt would have no indicator at all.
-  : "${ORIGINAL_PROMPT:=$PROMPT}"
-  PROMPT='${__VI_MODE_INDICATOR}'"$ORIGINAL_PROMPT"
-  __VI_MODE_INSERT='%F{blue}[INSERT]%f '
-  __VI_MODE_NORMAL='%F{green}[NORMAL]%f '
-  __VI_MODE_INDICATOR="$__VI_MODE_INSERT"
-
-  __vi_mode_reset() { __VI_MODE_INDICATOR="$__VI_MODE_INSERT" }
-  autoload -Uz add-zsh-hook
-  add-zsh-hook precmd __vi_mode_reset
-
-  function zle-keymap-select {
-    case $KEYMAP in
-      vicmd) __VI_MODE_INDICATOR="$__VI_MODE_NORMAL" ;;
-      *)     __VI_MODE_INDICATOR="$__VI_MODE_INSERT" ;;
-    esac
-    zle reset-prompt
-  }
-  zle -N zle-keymap-select
-fi
+# Vi mode is shown by starship's character module (❯ insert / ❮ normal).
 
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env" # ghcup-env
 export EDITOR=nvim
