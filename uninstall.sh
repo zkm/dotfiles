@@ -121,7 +121,6 @@ cleanup_optional_components() {
 
 main() {
     log "Uninstalling dotfiles setup managed by this repo..."
-    local kde_config
 
     remove_if_symlink_to_repo "$HOME/.aliases"
     remove_if_symlink_to_repo "$HOME/.bash_aliases"

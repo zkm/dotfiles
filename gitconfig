@@ -2,7 +2,9 @@
 	email = me@zachschneider.com
 	name = Zach Schneider
 [credential]
-	helper = store
+	# In-memory only; no plaintext ~/.git-credentials. A persistent, OS-specific
+	# helper (libsecret on Linux) goes in ~/.gitconfig.local, included below.
+	helper = cache --timeout=28800
 [init]
 	defaultBranch = main
 [credential "https://github.com"]
@@ -29,3 +31,8 @@
 	path = ~/.gitconfig-drupal
 [includeIf "hasconfig:remote.*.url:ssh://git@git.drupalcode.org/**"]
 	path = ~/.gitconfig-drupal
+# Machine-specific overrides (not tracked), e.g.:
+#   [credential]
+#   	helper = /usr/lib/git-core/git-credential-libsecret
+[include]
+	path = ~/.gitconfig.local

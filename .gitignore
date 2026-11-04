@@ -62,3 +62,22 @@ config/fish/aliases.local.fish
 # this directory because ~/.config/fish is symlinked here, same class of
 # problem as KDE Plasma's live desktop-state churn (see docs/decisions.md).
 config/fish/fish_variables
+
+# pipx-generated launchers (chirp, wxPython tools): absolute symlinks into
+# ~/.local/share/pipx/venvs on one machine. pipx already exposes them in
+# ~/.local/bin, so they are not tracked here.
+local/bin/chirp
+local/bin/chirpc
+local/bin/experttune
+local/bin/helpviewer
+local/bin/img2png
+local/bin/img2py
+local/bin/img2xpm
+local/bin/pycrust
+local/bin/pyshell
+local/bin/pyslices
+local/bin/pyslicesshell
+local/bin/pywxrc
+local/bin/wxdemo
+local/bin/wxdocs
+local/bin/wxget

@@ -4,7 +4,7 @@ claude = "latest"
 gh = "latest"
 glab = "latest"
 node = "26"
-php = "latest"
+php = "8.5"
 python = "3.15"
 
 [settings]
