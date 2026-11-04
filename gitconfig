@@ -21,9 +21,10 @@
 	from = Zach Schneider <me@zachschneider.com>
 	confirm = always
 # Drupal GitLab repos use the drupalcode noreply address; everything else uses the [user] email above
-[includeIf "hasconfig:remote.*.url:git@git.drupal.org:**"]
+# scp-style URLs need ":*/**": a bare ":**" after ":" acts like "*" and never matches the "/" in project/foo.git
+[includeIf "hasconfig:remote.*.url:git@git.drupal.org:*/**"]
 	path = ~/.gitconfig-drupal
-[includeIf "hasconfig:remote.*.url:git@git.drupalcode.org:**"]
+[includeIf "hasconfig:remote.*.url:git@git.drupalcode.org:*/**"]
 	path = ~/.gitconfig-drupal
 [includeIf "hasconfig:remote.*.url:https://git.drupalcode.org/**"]
 	path = ~/.gitconfig-drupal
