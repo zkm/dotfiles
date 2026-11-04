@@ -65,8 +65,8 @@ particular lines in `zshrc` are not — if the repo is ever cloned elsewhere,
 these fallbacks silently do nothing (the primary `~/.dircolors`/`~/.p10k.zsh`
 symlink paths still work fine since those come from `create_dotfiles`).
 
-**Known dead code:** `zsh/configs/prompt.zsh` and
-`zsh/configs/whole_line_completion.zsh` are not sourced by anything. See
+`~/.zsh` (→ `zsh/`) now only holds `functions/g`, which nothing adds to
+`fpath`. The old `zsh/configs/*.zsh` dead code was removed; see
 [[gotchas#zsh-configs-dead-code]].
 
 ## Terminal emulator configs (`config/{alacritty,wezterm,ghostty,kitty}`)

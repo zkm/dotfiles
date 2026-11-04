@@ -166,3 +166,14 @@ specifically because that installer's default behavior is to append its own
 symlinks back into the repo itself, and the `PATH` export is already present
 in `zshrc`. Without this flag the installer would dirty a tracked,
 symlinked file on every fresh install.
+
+## Git credentials: `cache` in the repo, a persistent helper per machine {#git-credentials}
+
+`gitconfig` used `credential.helper = store`, which writes passwords and
+tokens in plain text to `~/.git-credentials`. It now uses
+`cache --timeout=28800` (memory only) and `[include]`s an untracked
+`~/.gitconfig.local` for the persistent helper, because that helper differs
+per OS: `/usr/lib/git-core/git-credential-libsecret` on Arch (needs a running
+Secret Service such as KWallet or gnome-keyring), `osxkeychain` on macOS
+(already set in Apple/Homebrew git's system config). GitHub and gists keep
+using `gh auth git-credential`.

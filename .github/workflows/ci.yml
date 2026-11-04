@@ -15,13 +15,29 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install shellcheck
+      - name: Install shellcheck and fish
         run: |
           sudo apt-get update
-          sudo apt-get install -y shellcheck
+          sudo apt-get install -y shellcheck fish
 
       - name: ShellCheck setup script
         run: shellcheck --severity=error setup.sh
 
       - name: Bash syntax check
         run: bash -n setup.sh
+
+      - name: ShellCheck other bash scripts
+        run: |
+          # uninstall.sh plus every non-symlink bash script in local/bin
+          files=(uninstall.sh)
+          for f in local/bin/*; do
+            [[ -f "$f" && ! -L "$f" ]] || continue
+            head -1 "$f" | grep -qE '^#!.*\b(bash|sh)\b' && files+=("$f")
+          done
+          printf '%s\n' "${files[@]}"
+          shellcheck --severity=error "${files[@]}"
+          for f in "${files[@]}"; do bash -n "$f"; done
+
+      - name: Fish syntax check
+        run: |
+          find config/fish -name '*.fish' -print0 | xargs -0 -n1 fish --no-execute

@@ -30,7 +30,8 @@ alias c 'clear'
 # ==============================
 alias work 'cd ~/Documents/work/'
 alias dev 'cd ~/Developer/'
-# ".." / "..." are already fish defaults (cd .. / cd ../..); no alias needed.
+# ".." already works through fish's implicit cd; "..." does not, so add it.
+abbr -a -- ... 'cd ../..'
 
 if command -v zoxide >/dev/null 2>&1
     zoxide init fish --cmd j | source

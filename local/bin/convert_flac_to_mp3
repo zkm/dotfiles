@@ -25,14 +25,14 @@ find "$SOURCE_DIR" -type f -iname "*.flac" -print0 | while IFS= read -r -d '' fi
   cover="$(dirname "$file")/cover.jpg"
 
   if [[ -f "$cover" ]]; then
-    ffmpeg -hide_banner -loglevel error -i "$file" -i "$cover" \
+    ffmpeg -nostdin -hide_banner -loglevel error -i "$file" -i "$cover" \
       -map 0:a -map 1:v -c:a libmp3lame -q:a 0 -c:v mjpeg \
       -metadata:s:v title="Album cover" -metadata:s:v comment="Cover (front)" \
       "$mp3_path"
     echo "🖼  Embedded cover: $cover" | tee -a "$LOG_FILE"
   else
     echo "⚠️  No cover.jpg found — embedding skipped: $file" | tee -a "$LOG_FILE"
-    ffmpeg -hide_banner -loglevel error -i "$file" -q:a 0 -map_metadata 0 "$mp3_path"
+    ffmpeg -nostdin -hide_banner -loglevel error -i "$file" -q:a 0 -map_metadata 0 "$mp3_path"
   fi
 
   echo "✅ Success: $mp3_path" | tee -a "$LOG_FILE"

@@ -44,21 +44,19 @@ no fallback list to lean on like there is in `config/wezterm`.
 
 See also: [[decisions#fonts-per-terminal]].
 
-## `zsh/configs/prompt.zsh` and `zsh/configs/whole_line_completion.zsh` are dead code
+## `zsh/configs/*.zsh` were dead code (removed 2026-11-04) {#zsh-configs-dead-code}
 
-`CLAUDE.md`'s architecture section says `zshrc sources ... zsh/configs/*.zsh
-(prompt, completion)`, but as of this writing **`zshrc` does not source
-either file**, and nothing else in the repo does either (confirmed via
-`grep -rn "whole_line_completion\|configs/prompt"`). `~/.zsh` is symlinked
-to the repo's `zsh/` directory by `create_dotfiles`, but nothing adds it to
-`fpath` or sources its `configs/*.zsh` contents.
+`zsh/configs/prompt.zsh` (a pre-starship `git_prompt_info` PS1) and
+`zsh/configs/whole_line_completion.zsh` were never sourced by `zshrc` or
+anything else, and were deleted with the user's OK. `zsh/functions/g` is
+still in the repo and still not on `fpath`.
 
-`prompt.zsh` defines a `git_prompt_info`-based `PS1` — an older, pre-starship
-prompt that's now entirely superseded by `zshrc`'s starship/p10k selector
-logic. It's very likely safe to delete, but hasn't been removed in case it's
-kept intentionally as a reference/fallback. Confirm with the user before
-deleting `zsh/configs/prompt.zsh` or `whole_line_completion.zsh`, and correct
-the `CLAUDE.md` claim either way once resolved.
+## `shellcheck` SC1112 in `local/bin/fix_filenames.sh` is a false positive
+
+The script's `sed` expressions deliberately contain curly quotes (`’`, `“`,
+`”`) as patterns to replace with straight quotes. Don't "fix" the warning by
+retyping them; that breaks the script. CI runs at `--severity=error`, which
+doesn't flag it.
 
 ## `setup.sh` / `uninstall.sh` symlink lists had drifted out of sync (fixed 2026-07-15)
 
