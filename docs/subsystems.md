@@ -56,7 +56,7 @@ primary target).
 9. `mise activate zsh` — **not** guarded by an `__INIT_DONE` sentinel,
    unlike the others, because `mise activate` is documented as idempotent.
    Manages Node/Python/other tool versions per `config/mise/config.toml`
-   (currently: awscli, claude, gh, glab, node 26, python 3.14).
+   (currently: awscli, claude, gh, glab, node 26, php, python 3.15).
 
 **Caveat:** `zshrc` sources `~/.dotfiles/dircolors` and falls back to
 `~/.dotfiles/p10k.zsh` by hardcoded path in a couple of places, which

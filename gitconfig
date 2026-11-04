@@ -11,3 +11,21 @@
 [credential "https://gist.github.com"]
 	helper =
 	helper = !gh auth git-credential
+[sendemail]
+	smtpServer = smtp.protonmail.ch
+	smtpServerPort = 587
+	smtpEncryption = tls
+	smtpUser = me@zachschneider.com
+	from = Zach Schneider <me@zachschneider.com>
+	confirm = always
+# Drupal GitLab repos use the drupalcode noreply address; everything else uses the [user] email above
+[includeIf "hasconfig:remote.*.url:git@git.drupal.org:**"]
+	path = ~/.gitconfig-drupal
+[includeIf "hasconfig:remote.*.url:git@git.drupalcode.org:**"]
+	path = ~/.gitconfig-drupal
+[includeIf "hasconfig:remote.*.url:https://git.drupalcode.org/**"]
+	path = ~/.gitconfig-drupal
+[includeIf "hasconfig:remote.*.url:ssh://git@git.drupal.org/**"]
+	path = ~/.gitconfig-drupal
+[includeIf "hasconfig:remote.*.url:ssh://git@git.drupalcode.org/**"]
+	path = ~/.gitconfig-drupal
