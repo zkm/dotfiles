@@ -31,22 +31,17 @@ cd ~/.dotfiles
 
 `setup.sh` is intentionally destructive for managed dotfiles.
 
-Before it creates fresh symlinks, it removes existing files and directories such as:
+Before it creates fresh symlinks, it removes these files and directories in your home directory:
 
-- `~/.aliases`
-- `~/.gitconfig`
-- `~/.dircolors`
-- `~/.zshrc`
-- `~/.zsh`
-- `~/.tmux.conf`
-- `~/.p10k.zsh`
-- `~/.zprofile`
-- `~/.bashrc`
-- `~/.bash_profile`
-- `~/.bash_aliases`
-- `~/.bin`
+- Shell: `~/.bashrc`, `~/.bash_profile`, `~/.bash_aliases`, `~/.zshrc`, `~/.zprofile`, `~/.zlogin`, `~/.zsh`, `~/.p10k.zsh`
+- Aliases: `~/.aliases` and `~/.aliases.local`
+- Other: `~/.gitconfig`, `~/.gemrc`, `~/.tmux.conf`, `~/.dircolors`, `~/.bin`
 
-Back up anything important first.
+It also replaces each of these in `~/.config` with a link to the repo's copy, deleting whatever was there:
+
+- `fish`, `mise`, `starship.toml`, `kitty`, `wezterm`, `ghostty`, `alacritty`, `mako`, `fastfetch`
+
+Back up anything important first. To keep machine-only aliases, put them in `~/.dotfiles/aliases.local` (bash/zsh) or `~/.dotfiles/config/fish/aliases.local.fish` (fish). Both are gitignored, and setup links the first one to `~/.aliases.local`.
 
 ## 🧩 Setup
 
@@ -59,7 +54,7 @@ Back up anything important first.
    - The chosen shell is installed if needed and set as your login shell with `chsh`.
 2. Installs core packages:
    - macOS: Homebrew + packages
-   - Linux: `pacman`, `dnf`, `apt`, or `yum`
+   - Linux: `pacman`, `dnf`, `apt`, `yum` or `emerge` (Gentoo)
    - Installs `starship` when available and uses it as the default prompt backend.
    - Linux: tries to install `papirus-icon-theme` (best effort; skipped if unavailable)
 3. Creates directories used by shortcuts (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
