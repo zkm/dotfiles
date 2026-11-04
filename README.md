@@ -6,16 +6,18 @@
 ![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white)
 ![Zsh](https://img.shields.io/badge/Zsh-F15A24?logo=zsh&logoColor=white)
 ![Bash](https://img.shields.io/badge/Bash-4EAA25?logo=gnubash&logoColor=white)
+![Fish](https://img.shields.io/badge/Fish-34C534?logo=fishshell&logoColor=white)
 ![Starship](https://img.shields.io/badge/Starship-DD0B78?logo=starship&logoColor=white)
 ![tmux](https://img.shields.io/badge/tmux-1BB91F?logo=tmux&logoColor=white)
 ![KDE Plasma](https://img.shields.io/badge/KDE%20Plasma-1D99F3?logo=kdeplasma&logoColor=white)
+![Hyprland](https://img.shields.io/badge/Hyprland-58E1FF?logo=hyprland&logoColor=black)
 
 Personal dotfiles for Linux, mainly Arch, and macOS.
 
-Includes config for Bash, Zsh, Git, tmux, kitty, KDE/GTK theming, OpenRGB, REAPER, and related tools.
+Includes config for Bash, Zsh, Fish, Git, tmux, kitty, mise, KDE/GTK theming, OpenRGB, REAPER, and related tools, plus a reference snapshot of a Hyprland setup.
 
 Neovim configuration now lives in a separate repository: [zkm/nvim-config](https://github.com/zkm/nvim-config).
-Prompt setup defaults to Starship for both bash and zsh.
+Starship is the prompt for bash, zsh and fish.
 
 ## ⚙️ Install
 
@@ -51,10 +53,10 @@ Back up anything important first.
 `setup.sh` does the following:
 
 1. Detects your shell mode.
-   - Interactive terminals: prompts for `bash` or `zsh`, defaulting to your current shell.
-   - Default (`SHELL_MODE=auto`) in non-interactive mode: keeps zsh users on zsh and falls back to bash otherwise.
-   - Force zsh: `SHELL_MODE=zsh ./setup.sh`
-   - Force bash: `SHELL_MODE=bash ./setup.sh`
+   - Interactive terminals: asks for `bash`, `zsh` or `fish`, defaulting to your current shell.
+   - Non-interactive (`SHELL_MODE=auto`, the default): keeps your current shell if it's zsh or fish, otherwise uses bash.
+   - Force a shell: `SHELL_MODE=bash ./setup.sh`, `SHELL_MODE=zsh ./setup.sh` or `SHELL_MODE=fish ./setup.sh`
+   - The chosen shell is installed if needed and set as your login shell with `chsh`.
 2. Installs core packages:
    - macOS: Homebrew + packages
    - Linux: `pacman`, `dnf`, `apt`, or `yum`
@@ -63,12 +65,13 @@ Back up anything important first.
 3. Creates directories used by shortcuts (`~/Documents/work`, `~/Developer`, OpenRGB dirs).
 4. Symlinks repo-managed dotfiles into `$HOME`.
    - Includes bash files (`~/.bashrc`, `~/.bash_profile`, `~/.bash_aliases`) and zsh files.
-   - Includes app config such as `~/.config/kitty` and `~/.config/starship.toml` when present in-repo.
+   - Includes `~/.config/fish` (see [Fish](#-fish) below).
+   - Includes app config such as `~/.config/kitty`, `~/.config/mise` and `~/.config/starship.toml` when present in-repo.
 5. Syncs custom desktop assets when present:
    - `Icons/dark-side` -> `~/.local/share/icons/dark-side`
    - `Wallpapers` -> `~/Pictures/Wallpapers`
 6. Uses repo-managed shell configs to initialize `pyenv`, `rbenv`, and `mise` when installed.
-7. Configures Starship prompt for bash and keeps the existing zsh prompt flow.
+7. Uses Starship as the prompt. The init hooks are already in `bashrc`, `zshrc` and `config/fish/config.fish`.
 8. Optionally installs Powerlevel10k only when `PROMPT_BACKEND=p10k` and zsh mode is active.
 9. Installs fonts (MesloLGS Nerd Font + Fira Code Nerd Font, with local file fallback).
 10. Sets the default Terminal.app profile on macOS to `Pro`.
@@ -82,7 +85,7 @@ Back up anything important first.
 
 ## Useful shortcuts
 
-The full shell catalog lives in `aliases`, but these are the shortcuts I use most.
+The full catalog lives in `aliases` for bash and zsh, and in `config/fish/conf.d/10-aliases.fish` plus `config/fish/functions/` for fish. The shortcuts below work in all three shells.
 
 ### Navigation and files
 
@@ -143,6 +146,32 @@ The full shell catalog lives in `aliases`, but these are the shortcuts I use mos
 | `ai`, `chat`, `code-ai`, `fast-ai`, `chill-ai` | Start common Ollama sessions |
 | `llama3`, `codellama`, `mistral`, `gemma` | Launch specific Ollama models |
 | `ollama-list`, `ollama-remove`, `ollama-clean`, `ollama-clean-safe` | Manage Ollama models |
+
+## 🐟 Fish
+
+`config/fish` is linked to `~/.config/fish` and is a full port of the bash/zsh setup:
+
+- `config.fish`: PATH, mise, Starship, fzf key bindings (`Ctrl-R`, `Ctrl-T`, `Alt-C`) and the motd banner.
+- `conf.d/10-aliases.fish` and `functions/`: the alias catalog, including zoxide's `j`. Longer helpers (Navidrome, RAID, OpenRGB, Docker) are fish functions.
+- Plugins are managed by [fisher](https://github.com/jorgebucaran/fisher) and listed in `fish_plugins`: [autopair.fish](https://github.com/jorgebucaran/autopair.fish) and [done](https://github.com/franciscolourenco/done) (a desktop notification when a long command finishes). The plugin files are committed, so they work right after setup. Run `fisher update` to refresh them.
+- Machine-specific aliases go in `~/.config/fish/aliases.local.fish`, which is gitignored.
+- `fish_variables` (fish's own universal-variable state) is gitignored too.
+
+Powerlevel10k is zsh-only, so `PROMPT_BACKEND=p10k` has no effect in fish.
+
+## 🔐 Git credentials
+
+`gitconfig` keeps credentials in memory for 8 hours (`credential.helper = cache`) instead of writing them to a plaintext `~/.git-credentials`. GitHub uses `gh auth git-credential`.
+
+For a persistent store, add the helper for your OS to `~/.gitconfig.local`, which `gitconfig` includes and git doesn't track:
+
+```ini
+# Linux with a Secret Service (KWallet, gnome-keyring)
+[credential]
+	helper = /usr/lib/git-core/git-credential-libsecret
+```
+
+On macOS, Apple's and Homebrew's git already use the keychain (`osxkeychain`). The libsecret helper's path differs by distro, so check where your git package installs it.
 
 ## 🐳 Docker install notes
 
@@ -217,7 +246,8 @@ Notes:
 - Package install paths are tuned mostly for Arch first, with `dnf`/`apt`/`yum` fallbacks.
 - On Debian Bookworm (including Raspberry Pi OS Bookworm), `fastfetch` may be unavailable in default APT repositories. Setup now treats it as optional and continues.
 - Shell startup shows a [motd-forge](https://rubygems.org/gems/motd_forge) banner instead of running `fastfetch`/`neofetch` automatically (those are still available manually via the `neofetch` alias). `setup.sh` installs the gem with `gem install motd_forge` if a `gem` command is on `PATH`; otherwise install Ruby (e.g. via `rbenv`) first and run that command yourself.
-- Shell setup is bash/zsh-focused, and the alias catalog is bash/zsh-oriented.
+- bash, zsh and fish are all supported, with the same aliases in each.
+- Hyprland: `config/hypr` (CachyOS's Lua-based config) and `config/waybar` are reference snapshots and setup doesn't install them. CachyOS manages that config through its own packages, so linking it from here would fight package upgrades. Edit `~/.config/hypr` directly and copy changes back into the repo. `update_waybar.sh` copies the Waybar config into `~/.config/waybar`.
 - Tested environments are listed below.
 
 ### macOS
@@ -271,6 +301,7 @@ Notes:
 - Debian + GNOME
 - Rocky Linux + GNOME
 - CachyOS + GNOME 50
+- CachyOS + Hyprland (fish as login shell)
 - macOS (Homebrew-based path)
 
 ## 🧹 Ignored runtime files
@@ -278,6 +309,8 @@ Notes:
 The repo ignores generated and runtime artifacts, including:
 
 - OpenRGB logs/cache/venv and backup JSON files
+- fish's `fish_variables` and the local-only `aliases.local.fish`
+- pipx launcher symlinks in `local/bin`
 - REAPER license/registration artifacts
 - Runtime logs and editor temp files
 
