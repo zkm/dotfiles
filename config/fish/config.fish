@@ -22,6 +22,7 @@ fish_add_path -p $RBENV_ROOT/bin
 fish_add_path -p $HOME/.config/composer/vendor/bin
 fish_add_path -p $HOME/scripts
 fish_add_path -p $HOME/.local/bin
+fish_add_path -p $HOME/.cargo/bin
 
 # Ruby's own gem bindir (bundle, rspec, rake, etc.) — gem user-installs are
 # pinned to ~/.local/bin by ~/.gemrc rather than the distro-default bindir.
@@ -120,6 +121,11 @@ fish_add_path -p $HOME/.local/bin
 # exist but fail to exec on ABI-mismatched systems, e.g. armhf/armel Pi)
 if command -v mise >/dev/null 2>&1 && mise --version >/dev/null 2>&1
     mise activate fish | source
+end
+
+# Drush lives per-project in vendor/bin (Drupal composer projects).
+if status is-interactive
+    abbr -a drush vendor/bin/drush
 end
 
 # Machine-specific aliases that won't be tracked in git.
