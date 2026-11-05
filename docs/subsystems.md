@@ -150,9 +150,8 @@ these — banners use a consistent double-line `# ===` box):
 | Docker | 770–960 | |
 | Web Server Management (nginx) | 961–1028 | |
 | CakePHP Development (Docker) | 1029–1035 | |
-| Ollama (GPU + CPU) | 1036–1082 | Model management / quick shortcuts / direct model aliases / streaming / info / cleanup, as sub-`# ---` groups |
-| RAID Management | 1083–1164 | `raidview()` — resolves the md device via `/proc/mdstat` first, falls back to `lsblk` scanning for a `raid5` type |
-| OpenRGB lighting effects | 1165–1172 | |
+| RAID Management | 1036–1267 | `raidview()` — resolves the md device via `/proc/mdstat` first, falls back to `lsblk` scanning for a `raid5` type |
+| Machine-Specific Aliases (Local Only) | 1268–1278 | Sources `~/.aliases.local` |
 
 When adding aliases, find the matching banner rather than appending at the
 end — the file is read top-to-bottom by section, not alphabetically.

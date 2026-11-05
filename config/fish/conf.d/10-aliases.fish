@@ -210,34 +210,3 @@ alias fpm 'docker-compose exec -u (id -u):(id -g) php-fpm'
 alias cake 'docker-compose exec -u (id -u):(id -g) php-fpm bin/cake'
 alias composer-fpm 'docker-compose exec -u (id -u):(id -g) php-fpm composer'
 
-# ==============================
-# OLLAMA aliases (GPU + CPU)
-# ==============================
-# `nocorrect` is a zsh-ism (autocorrect prefix) with no fish equivalent —
-# fish has no command autocorrection to suppress, so it's omitted.
-alias ollama-list 'ollama list'
-alias ollama-remove 'ollama rm'
-alias ollama-clean-safe 'ollama list | awk "NR>1 {print \$1}" | fzf --multi | xargs -r -n1 ollama rm'
-
-alias ai 'env OLLAMA_NUM_GPU=0 ollama run llama3'
-alias chat 'env OLLAMA_NUM_GPU=0 ollama run llama3'
-alias code-ai 'env OLLAMA_NUM_GPU=0 ollama run codellama'
-alias fast-ai 'env OLLAMA_NUM_GPU=0 ollama run mistral'
-alias chill-ai 'env OLLAMA_NUM_GPU=0 ollama run gemma3'
-
-alias llama3 'env OLLAMA_NUM_GPU=0 ollama run llama3'
-alias codellama 'env OLLAMA_NUM_GPU=0 ollama run codellama'
-alias mistral 'env OLLAMA_NUM_GPU=0 ollama run mistral'
-alias gemma 'env OLLAMA_NUM_GPU=0 ollama run gemma3'
-
-alias llama3-stream 'env OLLAMA_NUM_GPU=0 ollama run --stream llama3'
-alias codellama-stream 'env OLLAMA_NUM_GPU=0 ollama run --stream codellama'
-alias mistral-stream 'env OLLAMA_NUM_GPU=0 ollama run --stream mistral'
-alias gemma-stream 'env OLLAMA_NUM_GPU=0 ollama run --stream gemma3'
-
-alias llama3-info 'ollama show llama3'
-alias codellama-info 'ollama show codellama'
-alias mistral-info 'ollama show mistral'
-alias gemma-info 'ollama show gemma3'
-
-alias ollama-gpu 'ollama ps && rocm-smi --showuse --showmemuse'
