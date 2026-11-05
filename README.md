@@ -138,9 +138,6 @@ The full catalog lives in `aliases` for bash and zsh, and in `config/fish/conf.d
 | `rgb-blizzard`, `rgb-matrix`, `rgb-rainbow`, `rgb-off` | Start or stop OpenRGB lighting effects |
 | `rgb-stop` | Stop running RGB scripts and turn the lights off |
 | `sync-local-music`, `syncipod`, `dryrun-music`, `sync-music` | Run music library sync workflows |
-| `ai`, `chat`, `code-ai`, `fast-ai`, `chill-ai` | Start common Ollama sessions |
-| `llama3`, `codellama`, `mistral`, `gemma` | Launch specific Ollama models |
-| `ollama-list`, `ollama-remove`, `ollama-clean`, `ollama-clean-safe` | Manage Ollama models |
 
 ## 🐟 Fish
 

@@ -72,7 +72,7 @@ unalias \
   openrgb-sdk-running openrgb-sdk-ensure reload rgb-stop \
   rgb-stop-current-effect rgb-effect docker-start docker-stop \
   docker-restart docker-status docker-log plex-start plex-stop \
-  plex-status ollama-clean raidview 2>/dev/null
+  plex-status raidview 2>/dev/null
 
 # Smart vim/nvim fallback
 vim() {
@@ -1032,53 +1032,6 @@ alias mysql-restore='mariadb -u root -p < ~/mariadb_backup.sql'
 alias fpm='docker-compose exec -u $(id -u):$(id -g) php-fpm'
 alias cake='docker-compose exec -u $(id -u):$(id -g) php-fpm bin/cake'
 alias composer-fpm='docker-compose exec -u $(id -u):$(id -g) php-fpm composer'
-
-# ==============================
-# 🤖 OLLAMA ALIASES (GPU + CPU)
-# ==============================
-
-if [[ -n "${ZSH_VERSION:-}" ]]; then
-  alias ollama='nocorrect ollama'
-fi
-
-# --- Model management ---
-alias ollama-list="ollama list"
-alias ollama-remove="ollama rm"
-alias ollama-clean-safe='ollama list | awk "NR>1 {print \$1}" | fzf --multi | xargs -r -n1 ollama rm'
-
-# --- Quick shortcuts (CPU) ---
-alias ai="OLLAMA_NUM_GPU=0 ollama run llama3"          # general chat / reasoning (CPU)
-alias chat="OLLAMA_NUM_GPU=0 ollama run llama3"        # interactive chat (CPU)
-alias code-ai="OLLAMA_NUM_GPU=0 ollama run codellama"  # code model (CPU)
-alias fast-ai="OLLAMA_NUM_GPU=0 ollama run mistral"    # fast helper (CPU)
-alias chill-ai="OLLAMA_NUM_GPU=0 ollama run gemma3"    # friendly conversational (CPU)
-
-# --- Direct model aliases (CPU) ---
-alias llama3="OLLAMA_NUM_GPU=0 ollama run llama3"
-alias codellama="OLLAMA_NUM_GPU=0 ollama run codellama"
-alias mistral="OLLAMA_NUM_GPU=0 ollama run mistral"
-alias gemma="OLLAMA_NUM_GPU=0 ollama run gemma3"
-
-# --- Streaming versions (CPU) ---
-alias llama3-stream="OLLAMA_NUM_GPU=0 ollama run --stream llama3"
-alias codellama-stream="OLLAMA_NUM_GPU=0 ollama run --stream codellama"
-alias mistral-stream="OLLAMA_NUM_GPU=0 ollama run --stream mistral"
-alias gemma-stream="OLLAMA_NUM_GPU=0 ollama run --stream gemma3"
-
-# --- Info ---
-alias llama3-info="ollama show llama3"
-alias codellama-info="ollama show codellama"
-alias mistral-info="ollama show mistral"
-alias gemma-info="ollama show gemma3"
-
-alias ollama-gpu="ollama ps && rocm-smi --showuse --showmemuse"
-
-# --- Cleanup (interactive, no fzf required) ---
-ollama-clean() {
-  echo "🗑️  Removing model: $1"
-  [ -z "$1" ] && echo "Usage: ollama-clean <model_name>" && return 1
-  ollama rm "$1"
-}
 
 # ==============================
 # 💾 RAID Management
